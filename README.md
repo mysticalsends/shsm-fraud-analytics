@@ -1,6 +1,6 @@
 # SHSM Fraud Analytics Dashboard Suite
 
-Interactive data dashboards covering SEC whistleblower enforcement and DOJ False Claims Act fraud recoveries, built for the Law Offices of Shaun Rosenthal.
+Interactive data dashboards covering SEC whistleblower enforcement and DOJ False Claims Act fraud recoveries, built for Sanford Heisler Sharp McKnight.
 
 **Live site:** https://mysticalsends.github.io/shsm-fraud-analytics/
 
@@ -61,4 +61,4 @@ Comprehensive view of SEC enforcement from 2011–2026: 2,479 Notices of Covered
 
 ---
 
-*Law Offices of Shaun Rosenthal — Analytics & Data · March 2026*
+*Sanford Heisler Sharp McKnight — Analytics & Data · March 2026*
