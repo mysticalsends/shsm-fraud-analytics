@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEC Whistleblower Program Analysis</title>
+<link rel="stylesheet" href="css/shared.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="js/chart-utils.js"></script>
+<style>
+  /* ── SEC Macro additional tokens ── */
+  :root {
+    --award:  #00d4ff;
+    --denial: #a78bfa;
+    --noca:   #f59e0b;
+    --green:  #22c55e;
+    --red:    #ef4444;
+  }
+
+  /* Active button uses cyan tint */
+  .btn.active { background: rgba(0, 212, 255, 0.08); }
+
+  /* Methodology callout */
+  .methodology {
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid var(--denial);
+    padding: 16px 20px; margin: 24px 0;
+    font-size: 10px; color: var(--muted); line-height: 1.9;
+  }
+  .methodology strong { color: var(--text); }
+
+  /* Stat card color variants */
+  .stat-card.noca::after   { background: var(--noca); }
+  .stat-card.award::after  { background: var(--award); }
+  .stat-card.denial::after { background: var(--denial); }
+  .stat-card.rate::after   { background: var(--green); }
+
+  .stat-value { font-size: 32px; }
+  .stat-value.noca   { color: var(--noca); }
+  .stat-value.award  { color: var(--award); }
+  .stat-value.denial { color: var(--denial); }
+  .stat-value.rate   { color: var(--green); }
+
+  /* Chart description paragraph */
+  .chart-desc {
+    font-size: 10px; color: var(--muted); line-height: 1.8;
+    margin: 0 0 16px;
+  }
+
+  /* Chart sub-title */
+  .chart-sub { font-size: 9px; color: var(--muted); font-style: italic; margin-bottom: 16px; }
+
+  /* Section dividers */
+  .section-divider { margin: 36px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+  .section-divider h2 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 400; color: var(--text); }
+  .section-divider p  { font-size: 10px; color: var(--muted); margin-top: 6px; line-height: 1.8; }
+
+  /* Summary of Findings */
+  .summary-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid var(--award);
+    padding: 20px 24px; margin: 8px 0 32px;
+  }
+  .summary-box p { font-size: 11px; color: var(--muted); line-height: 1.85; margin: 0 0 10px; }
+  .summary-box p:last-child { margin-bottom: 0; }
+  .summary-box strong { color: var(--text); }
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="back-link" href="index.html">&#8592; Back to Dashboard Hub</a>
+  <header>
+    <div class="tag">SEC / Whistleblower Program</div>
+    <h1>SEC Whistleblower Program <em>Analysis</em></h1>
+    <p class="subtitle">Notice of Covered Actions and Final Orders to Whistleblowers &nbsp;·&nbsp; Sources: <a href="https://www.sec.gov/enforcement-litigation/whistleblower-program/whistleblower-program-notices-covered-action" target="_blank">SEC NOCAs</a>, <a href="https://www.sec.gov/enforcement-litigation/whistleblower-program/final-orders-whistleblower-award-determinations" target="_blank">Final Orders</a>, <a href="https://www.sec.gov/whistleblower/annual-reports" target="_blank">Annual Reports</a></p>
+  </header>
+
+  <div class="methodology">
+    <strong>Methodology note:</strong> This report analyzes SEC's notices of covered actions and the final orders, published on the SEC's website.
+  </div>
+
+  <div class="stats">
+    <div class="stat-card noca"><div class="stat-label">Total NOCAs</div><div class="stat-value noca" id="statNoca">—</div><div class="stat-sub" id="statNocaSub">all-time total</div></div>
+    <div class="stat-card award"><div class="stat-label">Avg NOCAs (2025)</div><div class="stat-value award" id="statAward">—</div><div class="stat-sub" id="statAwardSub">per month, 2025</div></div>
+    <div class="stat-card denial"><div class="stat-label">Total Final Orders</div><div class="stat-value denial" id="statDenial">—</div><div class="stat-sub" id="statDenialSub">awards + denials</div></div>
+    <div class="stat-card rate"><div class="stat-label">Award Rate</div><div class="stat-value rate" id="statRate">—</div><div class="stat-sub">awards ÷ total final orders</div></div>
+  </div>
+
+  <div class="controls">
+    <span class="date-label">From</span>
+    <input type="month" id="dateFrom" value="2012-01">
+    <span class="date-label">To</span>
+    <input type="month" id="dateTo" value="2026-03">
+    <button class="btn active" id="btnMonthly" onclick="setView('monthly')">Monthly</button>
+    <button class="btn" id="btnYearly" onclick="setView('yearly')">Yearly</button>
+    <button class="btn" onclick="setQuickRange(1)">1Y</button>
+    <button class="btn" onclick="setQuickRange(3)">3Y</button>
+    <button class="btn" onclick="setQuickRange(5)">5Y</button>
+    <button class="btn" onclick="resetDates()">Reset</button>
+  </div>
+
+  <!-- CHART 1 -->
+  <div class="chart-panel">
+    <div class="chart-title">NOCAs by Month / Year</div>
+    <p class="chart-desc">This chart shows the number of SEC Notice of Covered Actions issued per year. Use the controls above to adjust the date range or toggle between monthly and yearly views.</p>
+    <div class="chart-wrapper"><canvas id="chart1"></canvas></div>
+  </div>
+
+  <!-- CHART 2 -->
+  <div class="chart-panel">
+    <div class="chart-title">
+      Final Orders by Month / Year
+      <span id="awardRateLabel" style="font-size:9px;color:var(--green);margin-left:12px;"></span>
+    </div>
+    <p class="chart-desc">This chart shows the number of Final Orders issued by the SEC for a specified time period. Award orders (cyan) and denial orders (purple) are shown as stacked bars.</p>
+    <div class="chart-wrapper"><canvas id="chart2"></canvas></div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section-divider">
+    <h2>By SEC Commissioner</h2>
+    <p>Actions grouped by the chair in office when each order was published. Acting chairs marked (A). Transition months assigned to the chair holding office for the majority of that month.</p>
+  </div>
+
+  <div id="commissionerLegend" class="legend-row" style="margin-bottom:16px;flex-wrap:wrap;gap:10px;"></div>
+
+  <div class="two-col">
+    <div class="chart-panel" style="margin-bottom:0">
+      <div class="chart-title">Chart 3a-i — NOCAs by Commissioner</div>
+      <div class="chart-wrapper short"><canvas id="chart3a1"></canvas></div>
+    </div>
+    <div class="chart-panel" style="margin-bottom:0">
+      <div class="chart-title">Chart 3a-ii — Final Orders by Commissioner</div>
+      <div class="chart-sub">Stacked: Awards (solid) + Denials (muted)</div>
+      <div class="chart-wrapper short"><canvas id="chart3a2"></canvas></div>
+    </div>
+  </div>
+  <div style="margin-bottom:20px"></div>
+
+  <div class="chart-panel">
+    <div class="chart-title">Chart 3b — Totals &amp; Monthly Rate by Commissioner</div>
+    <div class="chart-sub">Grouped bars: total NOCAs, Award Orders, Denial Orders per commissioner · Per-month rate shown in parentheses in labels</div>
+    <div class="chart-wrapper tall"><canvas id="chart3b"></canvas></div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section-divider">
+    <h2>By Presidential Administration</h2>
+    <p>Actions grouped by the U.S. president in office when each order was published. Inauguration-month actions assigned to the outgoing president (who held office for the majority of January).</p>
+  </div>
+
+  <div id="presidentLegend" class="legend-row" style="margin-bottom:16px;flex-wrap:wrap;gap:10px;"></div>
+
+  <div class="two-col">
+    <div class="chart-panel" style="margin-bottom:0">
+      <div class="chart-title">Chart 4a-i — NOCAs by President</div>
+      <div class="chart-wrapper short"><canvas id="chart4a1"></canvas></div>
+    </div>
+    <div class="chart-panel" style="margin-bottom:0">
+      <div class="chart-title">Chart 4a-ii — Final Orders by President</div>
+      <div class="chart-sub">Stacked: Awards (solid) + Denials (muted)</div>
+      <div class="chart-wrapper short"><canvas id="chart4a2"></canvas></div>
+    </div>
+  </div>
+  <div style="margin-bottom:20px"></div>
+
+  <div class="chart-panel">
+    <div class="chart-title">Chart 4b — Totals &amp; Monthly Rate by President</div>
+    <div class="chart-wrapper" style="height:260px"><canvas id="chart4b"></canvas></div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="section-divider">
+    <h2>The Tips Pipeline</h2>
+    <p>Annual whistleblower tip submissions (fiscal year Oct–Sep) compared against annual NOCA and final order counts (calendar year). The lag between tips and enforcement outcomes is typically 1–3 years, meaning high tip years predict future enforcement activity, not same-year activity.</p>
+  </div>
+
+  <div class="chart-panel">
+    <div class="chart-title">Chart 5 — Annual Tips vs. NOCAs vs. Final Orders</div>
+    <div class="chart-sub">Bars: tip submissions (left axis, fiscal year) · Lines: annual NOCAs and final orders (right axis, calendar year) · FY2024 pending SEC Annual Report</div>
+    <div class="chart-wrapper"><canvas id="chart5"></canvas></div>
+  </div>
+
+  <!-- SUMMARY OF FINDINGS -->
+  <div class="section-divider">
+    <h2>Summary of Findings</h2>
+  </div>
+  <div class="summary-box">
+    <p id="summaryOverview">—</p>
+    <p id="summaryTrend">—</p>
+    <p id="summaryOrders">—</p>
+  </div>
+
+  <footer>
+    <span>SEC Whistleblower Program data sourced from SEC.gov &nbsp;·&nbsp; Tips data from SEC Annual Reports to Congress</span>
+    <span>Data updated on March 29, 2026.</span>
+  </footer>
+</div>
+
+<script>
+// =====================================================================
+// DATA  (loaded async from data/*.json)
+// =====================================================================
+
+let NOCA_MONTHLY    = {};
+let AWARDS_MONTHLY  = {};
+let DENIALS_MONTHLY = {};
+let TIPS            = [];
+let COMMISSIONERS   = [];
+let PRESIDENTS      = [];
+
+// =====================================================================
+// STATE
+// =====================================================================
+let viewMode = 'monthly';
+const chartInstances = {};
+
+function setView(v) {
+  viewMode = v;
+  document.getElementById('btnMonthly').classList.toggle('active', v === 'monthly');
+  document.getElementById('btnYearly').classList.toggle('active', v === 'yearly');
+  renderAll();
+}
+
+function resetDates() {
+  document.getElementById('dateFrom').value = '2012-01';
+  document.getElementById('dateTo').value = '2026-03';
+  renderAll();
+}
+
+function setQuickRange(years) {
+  const now = new Date();
+  const toY = now.getFullYear();
+  const toM = now.getMonth() + 1;
+  const toStr  = `${toY}-${String(toM).padStart(2,'0')}`;
+  const fromStr = `${toY - years}-${String(toM).padStart(2,'0')}`;
+  document.getElementById('dateFrom').value = fromStr;
+  document.getElementById('dateTo').value   = toStr;
+  renderAll();
+}
+
+function getDateRange() {
+  return {
+    from: document.getElementById('dateFrom').value || '2012-01',
+    to:   document.getElementById('dateTo').value   || '2026-03'
+  };
+}
+
+// =====================================================================
+// HELPERS
+// =====================================================================
+function monthsInRange(from, to) {
+  const out = [];
+  let [y, m] = from.split('-').map(Number);
+  const [ey, em] = to.split('-').map(Number);
+  while (y < ey || (y === ey && m <= em)) {
+    out.push(`${y}-${String(m).padStart(2,'0')}`);
+    if (++m > 12) { m = 1; y++; }
+  }
+  return out;
+}
+
+function yearsInRange(from, to) {
+  const y1 = parseInt(from), y2 = parseInt(to);
+  const out = [];
+  for (let y = y1; y <= y2; y++) out.push(y);
+  return out;
+}
+
+function entityForMonth(ym, list) {
+  const [y, m] = ym.split('-').map(Number);
+  const monthStart = new Date(y, m-1, 1);
+  const monthEnd   = new Date(y, m, 0);
+  let best = null, bestDays = -1;
+  for (const e of list) {
+    const eStart = new Date(e.start);
+    const eEnd   = new Date(e.end);
+    const oStart = eStart > monthStart ? eStart : monthStart;
+    const oEnd   = eEnd   < monthEnd   ? eEnd   : monthEnd;
+    if (oStart <= oEnd) {
+      const days = (oEnd - oStart) / 86400000 + 1;
+      if (days > bestDays) { bestDays = days; best = e; }
+    }
+  }
+  if (best) return best;
+  const mid = new Date(y, m-1, 15);
+  let nearest = list[0], minDist = Infinity;
+  for (const e of list) {
+    const d = Math.min(
+      Math.abs(mid - new Date(e.start)),
+      Math.abs(mid - new Date(e.end))
+    );
+    if (d < minDist) { minDist = d; nearest = e; }
+  }
+  return nearest;
+}
+
+function majorityEntityForYear(year, list) {
+  const counts = {};
+  for (let m = 1; m <= 12; m++) {
+    const ym = `${year}-${String(m).padStart(2,'0')}`;
+    const e = entityForMonth(ym, list);
+    counts[e.name] = (counts[e.name] || 0) + 1;
+  }
+  let best = list[0];
+  for (const e of list) if ((counts[e.name]||0) > (counts[best.name]||0)) best = e;
+  return best;
+}
+
+function sumMonths(map, months) { return months.reduce((s, m) => s + (map[m]||0), 0); }
+
+function destroyChart(id) {
+  if (chartInstances[id]) { chartInstances[id].destroy(); delete chartInstances[id]; }
+}
+
+const DARK_OPTS = {
+  color: '#5a6a82',
+  grid: { color: '#1a2540' }
+};
+
+function baseChartOpts(extra = {}) {
+  return {
+    responsive: true, maintainAspectRatio: false,
+    animation: { duration: 300 },
+    plugins: { legend: { labels: { color: '#5a6a82', font: { family: 'Space Mono', size: 10 }, boxWidth: 12 } } },
+    scales: {
+      x: { ticks: { color: '#5a6a82', font: { family: 'Space Mono', size: 9 }, maxRotation: 45 }, grid: { color: '#1a2540' } },
+      ...extra
+    }
+  };
+}
+
+// Custom plugin: draws colored background bands for commissioner/president periods
+const periodBandPlugin = {
+  id: 'periodBands',
+  beforeDatasetsDraw(chart) {
+    const periods = chart.options.plugins?.periodBands?.periods;
+    if (!periods) return;
+    const { ctx, chartArea, scales } = chart;
+    if (!scales.x || !chartArea) return;
+    const labels = chart.data.labels;
+    ctx.save();
+    periods.forEach(p => {
+      const pStart = new Date(p.start);
+      const pEnd   = new Date(p.end);
+      let x1Idx = -1, x2Idx = -1;
+      labels.forEach((lbl, i) => {
+        const [y, mo] = String(lbl).split('-').map(Number);
+        const lblStart = new Date(y, mo-1, 1);
+        const lblEnd   = new Date(y, mo, 0);
+        if (pStart <= lblEnd && pEnd >= lblStart) {
+          if (x1Idx === -1) x1Idx = i;
+          x2Idx = i;
+        }
+      });
+      if (x1Idx === -1) return;
+      const bw = scales.x.width / labels.length;
+      const [sy, sm] = String(labels[x1Idx]).split('-').map(Number);
+      const firstDays  = new Date(sy, sm, 0).getDate();
+      const firstStart = new Date(sy, sm-1, 1);
+      const startFrac  = pStart > firstStart
+        ? Math.min((pStart - firstStart) / (firstDays * 86400000), 1) : 0;
+      const [ey, em] = String(labels[x2Idx]).split('-').map(Number);
+      const lastDays  = new Date(ey, em, 0).getDate();
+      const lastStart = new Date(ey, em-1, 1);
+      const endFrac   = pEnd < new Date(ey, em, 0)
+        ? Math.min((pEnd - lastStart) / (lastDays * 86400000), 1) : 1;
+      const px1 = scales.x.getPixelForValue(x1Idx) - bw * 0.5 + bw * startFrac;
+      const px2 = scales.x.getPixelForValue(x2Idx) - bw * 0.5 + bw * endFrac;
+      ctx.fillStyle = p.color + '22';
+      ctx.fillRect(px1, chartArea.top, px2 - px1, chartArea.bottom - chartArea.top);
+    });
+    ctx.restore();
+  }
+};
+Chart.register(periodBandPlugin);
+
+// =====================================================================
+// CHART 1 — NOCAs by Month / Year
+// =====================================================================
+function renderChart1(months, years) {
+  destroyChart('chart1');
+  const isYearly = viewMode === 'yearly';
+  const labels = isYearly ? years.map(String) : months;
+  const nocaVals = labels.map(lbl => {
+    if (isYearly) return sumMonths(NOCA_MONTHLY, months.filter(m => m.startsWith(lbl)));
+    return NOCA_MONTHLY[lbl] || 0;
+  });
+
+  chartInstances['chart1'] = new Chart(document.getElementById('chart1'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'NOCAs',
+        data: nocaVals,
+        backgroundColor: 'rgba(245,158,11,0.7)',
+        borderColor: 'rgba(245,158,11,0.9)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      ...baseChartOpts(),
+      plugins: {
+        ...baseChartOpts().plugins,
+        tooltip: { mode: 'index', intersect: false }
+      },
+      scales: {
+        x: baseChartOpts().scales.x,
+        y: { ...DARK_OPTS, position: 'left', title: { display: true, text: 'NOCA Count', color: '#5a6a82', font: { family: 'Space Mono', size: 9 } } }
+      }
+    }
+  });
+}
+
+// =====================================================================
+// CHART 2 — Final Orders by Month / Year
+// =====================================================================
+function renderChart2(months, years) {
+  destroyChart('chart2');
+  const isYearly = viewMode === 'yearly';
+  const labels = isYearly ? years.map(String) : months;
+  const awardVals  = labels.map(lbl => isYearly ? sumMonths(AWARDS_MONTHLY,  months.filter(m => m.startsWith(lbl))) : AWARDS_MONTHLY[lbl]||0);
+  const denialVals = labels.map(lbl => isYearly ? sumMonths(DENIALS_MONTHLY, months.filter(m => m.startsWith(lbl))) : DENIALS_MONTHLY[lbl]||0);
+
+  const totalA = awardVals.reduce((s,v) => s+v, 0);
+  const totalD = denialVals.reduce((s,v) => s+v, 0);
+  const rate = totalA + totalD > 0 ? ((totalA / (totalA + totalD)) * 100).toFixed(1) : '—';
+  document.getElementById('awardRateLabel').textContent = `Award rate in range: ${rate}%`;
+
+  chartInstances['chart2'] = new Chart(document.getElementById('chart2'), {
+    data: {
+      labels,
+      datasets: [
+        {
+          type: 'bar', label: 'Award Orders',
+          data: awardVals, backgroundColor: 'rgba(0,212,255,0.75)',
+          stack: 'orders', yAxisID: 'y', order: 1
+        },
+        {
+          type: 'bar', label: 'Denial Orders',
+          data: denialVals, backgroundColor: 'rgba(167,139,250,0.65)',
+          stack: 'orders', yAxisID: 'y', order: 1
+        }
+      ]
+    },
+    options: {
+      ...baseChartOpts(),
+      plugins: {
+        ...baseChartOpts().plugins,
+        tooltip: { mode: 'index', intersect: false }
+      },
+      scales: {
+        x: baseChartOpts().scales.x,
+        y: { ...DARK_OPTS, position: 'left', stacked: true, title: { display: true, text: 'Order Count', color: '#5a6a82', font: { family: 'Space Mono', size: 9 } } }
+      }
+    }
+  });
+}
+
+// =====================================================================
+// LEGENDS — Commissioner & President color keys
+// =====================================================================
+function buildLegends() {
+  document.getElementById('commissionerLegend').innerHTML = COMMISSIONERS.map(c =>
+    `<div class="chip">
+      <div class="chip-dot" style="background:${c.color};border-radius:2px;"></div>
+      <span>${c.name}${c.acting ? ' <span style="color:var(--muted);font-size:8px;">(acting)</span>' : ''}</span>
+    </div>`
+  ).join('');
+
+  document.getElementById('presidentLegend').innerHTML = PRESIDENTS.map(p =>
+    `<div class="chip">
+      <div class="chip-dot" style="background:${p.color};border-radius:2px;"></div>
+      <span>${p.name}</span>
+    </div>`
+  ).join('');
+}
+
+// =====================================================================
+// CHART 3a — Time series by Commissioner
+// =====================================================================
+function renderChart3a(months, years) {
+  ['chart3a1','chart3a2'].forEach(id => destroyChart(id));
+  const isYearly = viewMode === 'yearly';
+  const labels  = isYearly ? years.map(String) : months;
+
+  const barColors = labels.map(lbl => {
+    const e = isYearly ? majorityEntityForYear(parseInt(lbl), COMMISSIONERS)
+                       : entityForMonth(lbl, COMMISSIONERS);
+    return e.color;
+  });
+
+  const nocaVals = labels.map(lbl => {
+    if (isYearly) return sumMonths(NOCA_MONTHLY, months.filter(m => m.startsWith(lbl)));
+    return NOCA_MONTHLY[lbl] || 0;
+  });
+
+  chartInstances['chart3a1'] = new Chart(document.getElementById('chart3a1'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'NOCAs', data: nocaVals,
+        backgroundColor: barColors.map(c => c + 'cc'),
+        borderColor: barColors, borderWidth: 1
+      }]
+    },
+    options: {
+      ...baseChartOpts({ y: { ...DARK_OPTS } }),
+      plugins: {
+        legend: { display: false },
+        periodBands: { periods: COMMISSIONERS }
+      }
+    }
+  });
+
+  const awardVals  = labels.map(lbl => isYearly ? sumMonths(AWARDS_MONTHLY,  months.filter(m => m.startsWith(lbl))) : AWARDS_MONTHLY[lbl]||0);
+  const denialVals = labels.map(lbl => isYearly ? sumMonths(DENIALS_MONTHLY, months.filter(m => m.startsWith(lbl))) : DENIALS_MONTHLY[lbl]||0);
+
+  chartInstances['chart3a2'] = new Chart(document.getElementById('chart3a2'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Awards', data: awardVals,
+          backgroundColor: barColors.map(c => c + 'dd'),
+          borderColor: barColors, borderWidth: 1, stack: 'orders'
+        },
+        {
+          label: 'Denials', data: denialVals,
+          backgroundColor: barColors.map(c => c + '66'),
+          borderColor: barColors.map(c => c + '88'), borderWidth: 1, stack: 'orders'
+        }
+      ]
+    },
+    options: {
+      ...baseChartOpts({ y: { ...DARK_OPTS, stacked: true } }),
+      plugins: {
+        legend: {
+          labels: { color: '#5a6a82', font: { family: 'Space Mono', size: 9 },
+            generateLabels: () => [
+              {text:'Awards (solid)',fillStyle:'#ffffff99',strokeStyle:'#fff',lineWidth:1},
+              {text:'Denials (muted)',fillStyle:'#ffffff44',strokeStyle:'#fff',lineWidth:1}
+            ]
+          }
+        },
+        periodBands: { periods: COMMISSIONERS }
+      }
+    }
+  });
+}
+
+// =====================================================================
+// CHART 3b — Summary by Commissioner (grouped horizontal bars)
+// =====================================================================
+function renderChart3b(months) {
+  destroyChart('chart3b');
+  const stats = COMMISSIONERS.map(c => {
+    const cms = months.filter(m => entityForMonth(m, COMMISSIONERS) === c);
+    const n = sumMonths(NOCA_MONTHLY, cms);
+    const a = sumMonths(AWARDS_MONTHLY, cms);
+    const d = sumMonths(DENIALS_MONTHLY, cms);
+    const mo = cms.length || 1;
+    return { c, n, a, d, mo, label: `${c.name} (${mo}mo)` };
+  }).filter(s => s.n + s.a + s.d > 0);
+
+  chartInstances['chart3b'] = new Chart(document.getElementById('chart3b'), {
+    type: 'bar',
+    data: {
+      labels: stats.map(s => s.label),
+      datasets: [
+        { label: 'NOCAs',          data: stats.map(s => s.n), backgroundColor: '#f59e0bcc', borderColor: '#f59e0b', borderWidth: 1 },
+        { label: 'Award Orders',   data: stats.map(s => s.a), backgroundColor: '#00d4ffcc', borderColor: '#00d4ff', borderWidth: 1 },
+        { label: 'Denial Orders',  data: stats.map(s => s.d), backgroundColor: '#a78bfacc', borderColor: '#a78bfa', borderWidth: 1 }
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      animation: { duration: 300 },
+      plugins: {
+        legend: { labels: { color: '#5a6a82', font: { family: 'Space Mono', size: 9 }, boxWidth: 12 } },
+        tooltip: {
+          callbacks: {
+            afterLabel: (ctx) => {
+              const s = stats[ctx.dataIndex];
+              const perMo = (ctx.raw / s.mo).toFixed(1);
+              return `  ${perMo}/month avg`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: { ...DARK_OPTS, ticks: { color: '#5a6a82', font: { family: 'Space Mono', size: 9 } }, grid: { color: '#1a2540' } },
+        y: { ticks: { color: '#5a6a82', font: { family: 'Space Mono', size: 9 } }, grid: { color: '#1a2540' } }
+      }
+    }
+  });
+}
+
+// =====================================================================
+// CHART 4a — Time series by President
+// =====================================================================
+function renderChart4a(months, years) {
+  ['chart4a1','chart4a2'].forEach(id => destroyChart(id));
+  const isYearly = viewMode === 'yearly';
+  const labels = isYearly ? years.map(String) : months;
+
+  const barColors = labels.map(lbl => {
+    const e = isYearly ? majorityEntityForYear(parseInt(lbl), PRESIDENTS)
+                       : entityForMonth(lbl, PRESIDENTS);
+    return e.color;
+  });
+
+  const nocaVals = labels.map(lbl =>
+    isYearly ? sumMonths(NOCA_MONTHLY, months.filter(m => m.startsWith(lbl))) : NOCA_MONTHLY[lbl]||0
+  );
+
+  chartInstances['chart4a1'] = new Chart(document.getElementById('chart4a1'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{ label: 'NOCAs', data: nocaVals,
+        backgroundColor: barColors.map(c => c + 'cc'), borderColor: barColors, borderWidth: 1 }]
+    },
+    options: {
+      ...baseChartOpts({ y: { ...DARK_OPTS } }),
+      plugins: { legend: { display: false }, periodBands: { periods: PRESIDENTS } }
+    }
+  });
+
+  const awardVals  = labels.map(lbl => isYearly ? sumMonths(AWARDS_MONTHLY,  months.filter(m => m.startsWith(lbl))) : AWARDS_MONTHLY[lbl]||0);
+  const denialVals = labels.map(lbl => isYearly ? sumMonths(DENIALS_MONTHLY, months.filter(m => m.startsWith(lbl))) : DENIALS_MONTHLY[lbl]||0);
+
+  chartInstances['chart4a2'] = new Chart(document.getElementById('chart4a2'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Awards', data: awardVals,
+          backgroundColor: barColors.map(c => c + 'dd'), borderColor: barColors, borderWidth: 1, stack: 'orders' },
+        { label: 'Denials', data: denialVals,
+          backgroundColor: barColors.map(c => c + '66'), borderColor: barColors.map(c => c + '88'), borderWidth: 1, stack: 'orders' }
+      ]
+    },
+    options: {
+      ...baseChartOpts({ y: { ...DARK_OPTS, stacked: true } }),
+      plugins: {
+        legend: {
+          labels: { color: '#5a6a82', font: { family: 'Space Mono', size: 9 },
+            generateLabels: () => [
+              {text:'Awards (solid)',   fillStyle:'#ffffff99', strokeStyle:'#fff', lineWidth:1},
+              {text:'Denials (muted)', fillStyle:'#ffffff44', strokeStyle:'#fff', lineWidth:1}
+            ]
+          }
+        },
+        periodBands: { periods: PRESIDENTS }
+      }
+    }
+  });
+}
+
+// =====================================================================
+// CHART 4b — Summary by President
+// =====================================================================
+function renderChart4b(months) {
+  destroyChart('chart4b');
+  const stats = PRESIDENTS.map(p => {
+    const pms = months.filter(m => entityForMonth(m, PRESIDENTS) === p);
+    const n = sumMonths(NOCA_MONTHLY, pms);
+    const a = sumMonths(AWARDS_MONTHLY, pms);
+    const d = sumMonths(DENIALS_MONTHLY, pms);
+    const mo = pms.length || 1;
+    return { p, n, a, d, mo };
+  }).filter(s => s.n + s.a + s.d > 0);
+
+  chartInstances['chart4b'] = new Chart(document.getElementById('chart4b'), {
+    type: 'bar',
+    data: {
+      labels: stats.map(s => `${s.p.name} (${s.mo}mo)`),
+      datasets: [
+        { label: 'NOCAs',         data: stats.map(s => s.n), backgroundColor: '#f59e0bcc', borderColor: '#f59e0b', borderWidth: 1 },
+        { label: 'Award Orders',  data: stats.map(s => s.a), backgroundColor: '#00d4ffcc', borderColor: '#00d4ff', borderWidth: 1 },
+        { label: 'Denial Orders', data: stats.map(s => s.d), backgroundColor: '#a78bfacc', borderColor: '#a78bfa', borderWidth: 1 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, animation: { duration: 300 },
+      plugins: {
+        legend: { labels: { color: '#5a6a82', font: { family: 'Space Mono', size: 9 }, boxWidth: 12 } },
+        tooltip: {
+          callbacks: {
+            afterLabel: (ctx) => {
+              const s = stats[ctx.dataIndex];
+              return `  ${(ctx.raw / s.mo).toFixed(1)}/month avg`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: { ticks: { color: '#5a6a82', font: { family: 'Space Mono', size: 10 } }, grid: { color: '#1a2540' } },
+        y: { ...DARK_OPTS, ticks: { color: '#5a6a82', font: { family: 'Space Mono', size: 9 } } }
+      }
+    }
+  });
+}
+
+// =====================================================================
+// CHART 5 — Annual Tips Pipeline (fixed, not date-range filtered)
+// =====================================================================
+function renderChart5() {
+  destroyChart('chart5');
+  const fyYears = TIPS.map(t => `FY${t.fy}`);
+  const tipCounts = TIPS.map(t => t.count);
+
+  const nocaByYear  = TIPS.map(t => {
+    const ms = monthsInRange(`${t.fy}-01`, `${t.fy}-12`);
+    return sumMonths(NOCA_MONTHLY, ms);
+  });
+  const ordersByYear = TIPS.map(t => {
+    const ms = monthsInRange(`${t.fy}-01`, `${t.fy}-12`);
+    return sumMonths(AWARDS_MONTHLY, ms) + sumMonths(DENIALS_MONTHLY, ms);
+  });
+
+  chartInstances['chart5'] = new Chart(document.getElementById('chart5'), {
+    data: {
+      labels: fyYears,
+      datasets: [
+        {
+          type: 'bar', label: 'Tips Submitted (FY)',
+          data: tipCounts,
+          backgroundColor: 'rgba(99,102,241,0.6)',
+          borderColor: '#6366f1', borderWidth: 1,
+          yAxisID: 'y'
+        },
+        {
+          type: 'line', label: 'NOCAs (CY)',
+          data: nocaByYear,
+          borderColor: '#f59e0b', borderWidth: 2,
+          pointRadius: 4, fill: false, tension: 0.3,
+          yAxisID: 'y1'
+        },
+        {
+          type: 'line', label: 'Final Orders (CY)',
+          data: ordersByYear,
+          borderColor: '#00d4ff', borderWidth: 2,
+          pointRadius: 4, fill: false, tension: 0.3, borderDash: [4,3],
+          yAxisID: 'y1'
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, animation: { duration: 300 },
+      plugins: {
+        legend: { labels: { color: '#5a6a82', font: { family: 'Space Mono', size: 10 }, boxWidth: 12 } },
+        tooltip: { mode: 'index', intersect: false }
+      },
+      scales: {
+        x: { ticks: { color: '#5a6a82', font: { family: 'Space Mono', size: 10 } }, grid: { color: '#1a2540' } },
+        y:  { ...DARK_OPTS, position: 'left',  title: { display: true, text: 'Tips Submitted', color: '#5a6a82', font: { family: 'Space Mono', size: 9 } } },
+        y1: { ...DARK_OPTS, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'NOCAs / Orders', color: '#5a6a82', font: { family: 'Space Mono', size: 9 } } }
+      }
+    }
+  });
+}
+
+// =====================================================================
+// STATS — all-time figures (not range-filtered)
+// =====================================================================
+function updateStats() {
+  const totalNoca  = Object.values(NOCA_MONTHLY).reduce((s,v) => s+v, 0);
+  const totalA     = Object.values(AWARDS_MONTHLY).reduce((s,v) => s+v, 0);
+  const totalD     = Object.values(DENIALS_MONTHLY).reduce((s,v) => s+v, 0);
+  const totalOrders = totalA + totalD;
+  const awardPct   = totalOrders > 0 ? ((totalA / totalOrders) * 100).toFixed(1) + '%' : '—';
+
+  // Average NOCAs per month across all 12 months of 2025
+  const months2025 = Array.from({length: 12}, (_, i) => `2025-${String(i+1).padStart(2,'0')}`);
+  const noca2025   = months2025.reduce((s, m) => s + (NOCA_MONTHLY[m] || 0), 0);
+  const avg2025    = (noca2025 / 12).toFixed(1);
+
+  document.getElementById('statNoca').textContent     = totalNoca.toLocaleString();
+  document.getElementById('statNocaSub').textContent  = 'all-time total';
+  document.getElementById('statAward').textContent    = avg2025;
+  document.getElementById('statAwardSub').textContent = 'avg NOCAs/month (2025)';
+  document.getElementById('statDenial').textContent   = totalOrders.toLocaleString();
+  document.getElementById('statDenialSub').textContent = 'awards + denials';
+  document.getElementById('statRate').textContent     = awardPct;
+}
+
+// =====================================================================
+// SUMMARY OF FINDINGS
+// =====================================================================
+function updateSummary() {
+  const allKeys   = Object.keys(NOCA_MONTHLY).sort();
+  const firstYr   = allKeys[0]?.substring(0, 4) || '2011';
+  const lastYr    = allKeys[allKeys.length - 1]?.substring(0, 4) || '2026';
+  const totalNoca = Object.values(NOCA_MONTHLY).reduce((s,v) => s+v, 0);
+
+  const totalA     = Object.values(AWARDS_MONTHLY).reduce((s,v) => s+v, 0);
+  const totalD     = Object.values(DENIALS_MONTHLY).reduce((s,v) => s+v, 0);
+  const totalOrders = totalA + totalD;
+  const awardPct   = totalOrders > 0 ? ((totalA / totalOrders) * 100).toFixed(1) : '—';
+  const denialPct  = totalOrders > 0 ? (100 - parseFloat(awardPct)).toFixed(1) : '—';
+
+  // 2025 vs prior 3-year annual average (2022–2024)
+  const months2025  = Array.from({length: 12}, (_, i) => `2025-${String(i+1).padStart(2,'0')}`);
+  const noca2025    = months2025.reduce((s, m) => s + (NOCA_MONTHLY[m] || 0), 0);
+  const prior3Total = ['2022','2023','2024'].reduce((s, y) => {
+    return s + Array.from({length: 12}, (_, i) => `${y}-${String(i+1).padStart(2,'0')}`)
+               .reduce((ss, m) => ss + (NOCA_MONTHLY[m] || 0), 0);
+  }, 0);
+  const priorAvg = Math.round(prior3Total / 3);
+  const trend    = noca2025 > priorAvg ? 'an increase' : noca2025 < priorAvg ? 'a decline' : 'no change';
+
+  document.getElementById('summaryOverview').innerHTML =
+    `<strong>Program Overview:</strong> The SEC Whistleblower Program has issued <strong>${totalNoca.toLocaleString()}</strong> Notices of Covered Actions from ${firstYr} through ${lastYr}, spanning the tenures of multiple SEC Commissioners and presidential administrations.`;
+
+  document.getElementById('summaryTrend').innerHTML =
+    `<strong>Current Trends:</strong> In 2025, the SEC issued <strong>${noca2025}</strong> NOCAs, compared to an annual average of <strong>${priorAvg}</strong> over the prior three years (2022–2024), reflecting ${trend} in covered action activity under the current administration.`;
+
+  document.getElementById('summaryOrders').innerHTML =
+    `<strong>Final Orders:</strong> Of <strong>${totalOrders.toLocaleString()}</strong> total final orders issued through the data period, <strong>${totalA.toLocaleString()}</strong> (${awardPct}%) resulted in whistleblower award grants and <strong>${totalD.toLocaleString()}</strong> (${denialPct}%) were denials.`;
+}
+
+// =====================================================================
+// RENDER ALL
+// =====================================================================
+function renderAll() {
+  const { from, to } = getDateRange();
+  const months = monthsInRange(from, to);
+  const years  = yearsInRange(from.substring(0,4), to.substring(0,4));
+  updateStats();
+  renderChart1(months, years);
+  renderChart2(months, years);
+  renderChart3a(months, years);
+  renderChart3b(months);
+  renderChart4a(months, years);
+  renderChart4b(months);
+  renderChart5();
+  updateSummary();
+}
+
+document.getElementById('dateFrom').addEventListener('change', renderAll);
+document.getElementById('dateTo').addEventListener('change', renderAll);
+
+(async () => {
+  try {
+    const [macroRes, ordersRes, commRes, presRes] = await Promise.all([
+      fetch('data/sec_macro.json'),
+      fetch('data/sec_final_orders.json'),
+      fetch('data/sec_commissioners.json'),
+      fetch('data/us_presidents.json'),
+    ]);
+    if (!macroRes.ok)  throw new Error(`sec_macro.json: HTTP ${macroRes.status}`);
+    if (!ordersRes.ok) throw new Error(`sec_final_orders.json: HTTP ${ordersRes.status}`);
+    if (!commRes.ok)   throw new Error(`sec_commissioners.json: HTTP ${commRes.status}`);
+    if (!presRes.ok)   throw new Error(`us_presidents.json: HTTP ${presRes.status}`);
+    const macro  = await macroRes.json();
+    const orders = await ordersRes.json();
+    const comm   = await commRes.json();
+    const pres   = await presRes.json();
+    NOCA_MONTHLY    = macro.nocaMonthly;
+    TIPS            = macro.tips;
+    AWARDS_MONTHLY  = orders.awardsMonthly;
+    DENIALS_MONTHLY = orders.denialsMonthly;
+    COMMISSIONERS   = comm.records;
+    PRESIDENTS      = pres.records;
+    buildLegends();
+  } catch(e) {
+    console.error('Could not load dashboard data:', e);
+  }
+  renderAll();
+})();
+</script>
+</body>
+</html>

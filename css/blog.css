@@ -1,0 +1,265 @@
+/*
+ * blog.css — SHSM Blog / Document Pages
+ * Light editorial theme for long-form content and printable reports.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Source+Sans+Pro:wght@300;400;600;700&display=swap');
+
+/* ── Reset ──────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Base ───────────────────────────────────────────────────────────────── */
+body {
+  background: #f8f7f4;
+  color: #1a1a1a;
+  font-family: 'Merriweather', Georgia, serif;
+  font-size: 17px;
+  line-height: 1.85;
+}
+
+/* ── Page wrapper (mimics printed page) ─────────────────────────────────── */
+.page {
+  max-width: 780px;
+  margin: 48px auto 80px;
+  background: #fff;
+  padding: 72px 80px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 860px) {
+  .page { padding: 40px 28px; margin: 24px auto 48px; }
+}
+
+@media print {
+  body { background: #fff; }
+  .page { box-shadow: none; margin: 0; padding: 48px 64px; }
+  .no-print { display: none; }
+}
+
+/* ── Print bar ──────────────────────────────────────────────────────────── */
+.print-bar {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 12px 0;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 12px;
+  color: #888;
+}
+
+.print-bar button {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 12px;
+  padding: 6px 16px;
+  background: #111;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  margin-right: 8px;
+}
+.print-bar button:hover { background: #333; }
+
+/* ── Meta / byline ──────────────────────────────────────────────────────── */
+.meta {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+/* ── Typography ─────────────────────────────────────────────────────────── */
+h1 {
+  font-family: 'Merriweather', serif;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #111;
+  margin-bottom: 12px;
+}
+
+.deck {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 19px;
+  font-weight: 300;
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 36px;
+  padding-bottom: 36px;
+  border-bottom: 2px solid #111;
+}
+
+h2 {
+  font-family: 'Merriweather', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #111;
+  margin: 52px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+h3 {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #555;
+  margin: 32px 0 10px;
+}
+
+p { margin-bottom: 18px; }
+
+a { color: #1a56db; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Pull stats row ─────────────────────────────────────────────────────── */
+.stat-row {
+  display: flex;
+  gap: 0;
+  margin: 28px 0;
+  border-top: 2px solid #111;
+  border-bottom: 2px solid #111;
+  padding: 20px 0;
+}
+
+.stat-item {
+  flex: 1;
+  text-align: center;
+  padding: 0 16px;
+  border-right: 1px solid #ddd;
+}
+.stat-item:last-child { border-right: none; }
+
+.stat-number {
+  font-family: 'Merriweather', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #111;
+  display: block;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #888;
+}
+
+/* ── Callout / pull quote ───────────────────────────────────────────────── */
+.callout {
+  border-left: 4px solid #1a56db;
+  background: #f0f4ff;
+  padding: 16px 20px;
+  margin: 24px 0;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 15px;
+  color: #333;
+  line-height: 1.7;
+}
+.callout strong { color: #111; }
+
+/* ── Finding boxes ──────────────────────────────────────────────────────── */
+.finding {
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-left: 4px solid #111;
+  padding: 14px 18px;
+  margin: 12px 0;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+}
+.finding .label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #999;
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* ── Limitation boxes ───────────────────────────────────────────────────── */
+.limitation {
+  background: #fff9f0;
+  border: 1px solid #f0d9b5;
+  padding: 12px 16px;
+  margin: 8px 0;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #555;
+}
+.limitation::before { content: '⚠ '; color: #c07800; }
+
+/* ── Future exploration items ───────────────────────────────────────────── */
+.future-item {
+  display: flex;
+  gap: 14px;
+  margin: 12px 0;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.future-num {
+  font-family: 'Merriweather', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ccc;
+  flex-shrink: 0;
+  width: 28px;
+  padding-top: 2px;
+}
+
+/* ── Section divider tag ────────────────────────────────────────────────── */
+.section-tag {
+  display: inline-block;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: #111;
+  color: #fff;
+  padding: 3px 10px;
+  margin-bottom: 8px;
+  margin-top: 52px;
+}
+
+/* ── Table ──────────────────────────────────────────────────────────────── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 14px;
+  margin: 20px 0;
+}
+th {
+  background: #111;
+  color: #fff;
+  text-align: left;
+  padding: 9px 12px;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e8e8e8;
+  vertical-align: top;
+}
+tr:nth-child(even) td { background: #fafafa; }
+
+/* ── Post footer ────────────────────────────────────────────────────────── */
+.post-footer {
+  margin-top: 60px;
+  padding-top: 24px;
+  border-top: 1px solid #ddd;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 12px;
+  color: #999;
+  line-height: 1.7;
+}

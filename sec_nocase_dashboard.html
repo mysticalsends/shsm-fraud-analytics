@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEC NoCAs Dashboard</title>
+<link rel="stylesheet" href="css/shared.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="js/chart-utils.js"></script>
+<style>
+  /* accent matches default --accent in shared.css (#00d4ff) */
+
+  header { margin-bottom: 36px; }
+
+  /* Larger input padding on this page */
+  select, input[type="month"] { padding: 10px 14px; }
+  .btn { padding: 10px 16px; }
+
+  /* Status bar */
+  .status-bar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 16px; background: var(--surface);
+    border: 1px solid var(--border); border-left: 3px solid var(--accent);
+    font-size: 11px; color: var(--muted); margin-bottom: 24px;
+  }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; flex-shrink: 0; }
+
+  /* Stat card accent override */
+  .stat-value { font-size: 36px; }
+
+  /* Heatmap */
+  .heatmap-panel {
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 24px; margin-bottom: 20px; overflow-x: auto;
+  }
+  .heatmap-grid { display: grid; grid-template-columns: 50px repeat(12, 1fr); gap: 3px; min-width: 500px; }
+  .hm-header { color: var(--muted); text-align: center; padding: 4px 2px; font-size: 9px; }
+  .hm-year   { color: var(--muted); display: flex; align-items: center; font-size: 10px; }
+  .hm-cell {
+    height: 28px; border-radius: 2px; display: flex; align-items: center;
+    justify-content: center; font-size: 8px; cursor: default;
+    position: relative; transition: transform 0.1s;
+  }
+  .hm-cell:hover { transform: scale(1.15); z-index: 10; }
+  .hm-cell.dimmed { opacity: 0.25; }
+  .hm-tooltip {
+    position: absolute; bottom: calc(100% + 6px); left: 50%;
+    transform: translateX(-50%); background: var(--bg);
+    border: 1px solid var(--accent); padding: 4px 8px; font-size: 9px;
+    white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.15s; z-index: 100;
+  }
+  .hm-cell:hover .hm-tooltip { opacity: 1; }
+
+  /* Badge */
+  .badge {
+    display: inline-block; padding: 2px 8px; font-size: 9px;
+    background: var(--surface2); border: 1px solid var(--border); color: var(--accent);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="back-link" href="index.html">&#8592; Back to Dashboard Hub</a>
+  <header>
+    <div class="tag">SEC / Whistleblower Program</div>
+    <h1>Notices of <em>Covered Action</em></h1>
+    <p class="subtitle">Enforcement actions with monetary sanctions &gt; $1M &nbsp;·&nbsp; <a href="https://www.sec.gov/enforcement-litigation/whistleblower-program/whistleblower-program-notices-covered-action" target="_blank">Source: SEC.gov</a></p>
+  </header>
+
+  <div class="controls">
+    <select id="viewMode" onchange="renderAll()">
+      <option value="monthly">View: Monthly</option>
+      <option value="yearly">View: Yearly</option>
+    </select>
+    <select id="chartType" onchange="renderAll()">
+      <option value="bar">Chart: Bar</option>
+      <option value="line">Chart: Line</option>
+    </select>
+  </div>
+
+  <div class="date-range-row">
+    <span class="date-label">From</span>
+    <input type="month" id="dateFrom" onchange="onDateChange()">
+    <span class="date-label">To</span>
+    <input type="month" id="dateTo" onchange="onDateChange()">
+    <button class="btn" id="btnAll"   onclick="setPreset('all')">All Time</button>
+    <button class="btn" id="btnY1"    onclick="setPreset('1y')">1 Year</button>
+    <button class="btn" id="btnY3"    onclick="setPreset('3y')">3 Years</button>
+    <button class="btn" id="btnY5"    onclick="setPreset('5y')">5 Years</button>
+    <button class="btn" id="btnYTD"   onclick="setPreset('ytd')">YTD</button>
+  </div>
+
+  <div class="status-bar">
+    <div class="status-dot"></div>
+    <span id="statusText">Loading...</span>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card"><div class="stat-label">NoCAs in Range</div><div class="stat-value" id="valTotal">—</div></div>
+    <div class="stat-card"><div class="stat-label">Years Covered</div><div class="stat-value" id="valYears">—</div></div>
+    <div class="stat-card"><div class="stat-label">Peak Month</div><div class="stat-value" id="valPeak" style="font-size:20px">—</div></div>
+    <div class="stat-card"><div class="stat-label">Avg / Month</div><div class="stat-value" id="valAvg">—</div></div>
+  </div>
+
+  <div class="chart-panel">
+    <div class="chart-title">
+      <span id="chartTitleText">NoCAs over time</span>
+      <span id="dataRange" style="color:var(--accent);font-size:9px"></span>
+    </div>
+    <div class="chart-wrapper"><canvas id="mainChart"></canvas></div>
+  </div>
+
+  <div class="heatmap-panel">
+    <div class="chart-title">Monthly Heatmap by Year <span style="font-size:9px;color:var(--accent)" id="heatmapNote"></span></div>
+    <div class="heatmap-grid" id="heatmapGrid"></div>
+  </div>
+
+  <div class="table-panel">
+    <div class="table-header">
+      <span>Top Months by Volume</span>
+      <span id="tableCount" style="color:var(--accent)"></span>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>#</th><th>Month</th><th>Year</th><th>NoCAs</th><th>Share of Range</th></tr></thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <footer>
+    <span>Source: <a href="https://www.sec.gov/enforcement-litigation/whistleblower-program/whistleblower-program-notices-covered-action" target="_blank">SEC.gov Whistleblower Program</a></span>
+    <span>Data fetched: February 25, 2026 at 07:37 PM</span>
+  </footer>
+</div>
+
+<script>
+let RAW_DATA = [];
+let filteredData = [];
+let mainChart = null;
+
+window.addEventListener('DOMContentLoaded', async () => {
+  const statusEl = document.getElementById('statusText');
+  try {
+    statusEl.textContent = 'Loading data…';
+    const res = await fetch('data/sec_nocas.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    RAW_DATA = json.records || json;
+    statusEl.textContent = `✓ ${RAW_DATA.length.toLocaleString()} NoCAs loaded · Source: SEC_NoCA_Dashboard.xlsm`;
+    const dates = RAW_DATA.map(d => d.date).sort();
+    const minMonth = dates[0].slice(0,7);
+    const maxMonth = dates[dates.length-1].slice(0,7);
+    const fromEl = document.getElementById('dateFrom');
+    const toEl   = document.getElementById('dateTo');
+    fromEl.min = toEl.min = minMonth;
+    fromEl.max = toEl.max = maxMonth;
+    fromEl.value = minMonth;
+    toEl.value   = maxMonth;
+    setPreset('all');
+  } catch (e) {
+    statusEl.textContent = `⚠ Could not load data: ${e.message} — run server.py first.`;
+    statusEl.style.color = '#ef4444';
+  }
+});
+
+function setPreset(preset) {
+  ['btnAll','btnY1','btnY3','btnY5','btnYTD'].forEach(id => {
+    document.getElementById(id).classList.remove('active');
+  });
+  const now = new Date();
+  const toEl   = document.getElementById('dateTo');
+  const fromEl = document.getElementById('dateFrom');
+  const allDates = RAW_DATA.map(d => d.date).sort();
+  const fmt = d => d.toISOString().slice(0,7);
+  if (preset === 'all') {
+    fromEl.value = allDates[0].slice(0,7);
+    toEl.value   = allDates[allDates.length-1].slice(0,7);
+    document.getElementById('btnAll').classList.add('active');
+  } else if (preset === 'ytd') {
+    fromEl.value = `${now.getFullYear()}-01`;
+    toEl.value   = fmt(now);
+    document.getElementById('btnYTD').classList.add('active');
+  } else {
+    const years = parseInt(preset);
+    const from = new Date(now.getFullYear() - years, now.getMonth(), 1);
+    fromEl.value = fmt(from);
+    toEl.value   = fmt(now);
+    document.getElementById(`btn${preset.toUpperCase()}`).classList.add('active');
+  }
+  applyDateFilter();
+}
+
+function onDateChange() {
+  ['btnAll','btnY1','btnY3','btnY5','btnYTD'].forEach(id => {
+    document.getElementById(id).classList.remove('active');
+  });
+  applyDateFilter();
+}
+
+function applyDateFilter() {
+  const from = document.getElementById('dateFrom').value;
+  const to   = document.getElementById('dateTo').value;
+  filteredData = RAW_DATA.filter(d => {
+    const ym = d.date.slice(0,7);
+    return ym >= from && ym <= to;
+  });
+  renderAll();
+}
+
+function renderAll() { updateStats(); updateChart(); updateHeatmap(); updateTable(); }
+
+function updateStats() {
+  const data = filteredData;
+  document.getElementById('valTotal').textContent = data.length.toLocaleString();
+  document.getElementById('valYears').textContent = new Set(data.map(d=>d.year)).size;
+  const map = monthMap(data);
+  const peak = Object.entries(map).sort((a,b)=>b[1]-a[1])[0];
+  if (peak) {
+    const [yr,mo] = peak[0].split('-');
+    document.getElementById('valPeak').textContent =
+      new Date(yr,mo-1,1).toLocaleDateString('en-US',{month:'short'}) + " '" + yr.slice(2);
+  }
+  const n = Object.keys(map).length;
+  document.getElementById('valAvg').textContent = n ? (data.length/n).toFixed(1) : '—';
+}
+
+function updateChart() {
+  if (!filteredData.length) return;
+  const mode = document.getElementById('viewMode').value;
+  const type = document.getElementById('chartType').value;
+  const { labels, values } = mode === 'monthly' ? getMonthlyData() : getYearlyData();
+  document.getElementById('chartTitleText').textContent =
+    mode === 'monthly' ? 'NoCAs per Month (Notice Date)' : 'NoCAs per Year (Notice Date)';
+  document.getElementById('dataRange').textContent =
+    labels.length ? `${labels[0]} → ${labels[labels.length-1]}` : '';
+  if (mainChart) mainChart.destroy();
+  const ctx = document.getElementById('mainChart').getContext('2d');
+  const grad = ctx.createLinearGradient(0,0,0,340);
+  grad.addColorStop(0,'rgba(0,212,255,0.4)'); grad.addColorStop(1,'rgba(0,212,255,0.02)');
+  mainChart = new Chart(ctx, {
+    type: type === 'bar' ? 'bar' : 'line',
+    data: { labels, datasets: [{
+      label:'NoCAs', data:values,
+      backgroundColor: type==='bar'?'rgba(0,212,255,0.65)':grad,
+      borderColor:'#00d4ff', borderWidth: type==='bar'?0:2,
+      pointBackgroundColor:'#00d4ff',
+      pointRadius: mode==='monthly'?0:4, pointHoverRadius:6,
+      fill: type==='line', tension:0.3
+    }] },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins: {
+        legend:{display:false},
+        tooltip:{ backgroundColor:'#0a0e1a', borderColor:'#00d4ff', borderWidth:1,
+          titleFont:{family:'Space Mono',size:11}, bodyFont:{family:'Space Mono',size:11},
+          titleColor:'#00d4ff', bodyColor:'#e8edf5',
+          callbacks:{label: ctx => ` ${ctx.raw} NoCAs`} }
+      },
+      scales: {
+        x: { grid:{color:'rgba(255,255,255,0.03)'}, ticks:{color:'#5a6a82',font:{family:'Space Mono',size:9},maxRotation:45,maxTicksLimit:28} },
+        y: { grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#5a6a82',font:{family:'Space Mono',size:10}}, beginAtZero:true }
+      }
+    }
+  });
+}
+
+function updateHeatmap() {
+  const data = filteredData; if (!data.length) return;
+  const from = document.getElementById('dateFrom').value;
+  const to   = document.getElementById('dateTo').value;
+  const allMap = {};
+  RAW_DATA.forEach(d => { const k=`${d.year}-${d.month}`; allMap[k]=(allMap[k]||0)+1; });
+  const maxVal = Math.max(...Object.values(allMap));
+  const allYears = [...new Set(RAW_DATA.map(d=>d.year))].sort((a,b)=>a-b);
+  const mn = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  let html = '<div></div>';
+  mn.forEach(m => { html += `<div class="hm-header">${m}</div>`; });
+  allYears.forEach(y => {
+    html += `<div class="hm-year">${y}</div>`;
+    for (let mo=1; mo<=12; mo++) {
+      const v = allMap[`${y}-${mo}`]||0;
+      const ym = `${y}-${String(mo).padStart(2,'0')}`;
+      const inRange = ym >= from && ym <= to;
+      const intensity = maxVal>0?v/maxVal:0;
+      const bg = v===0?'rgba(255,255,255,0.03)':`rgba(0,212,255,${0.08+intensity*0.88})`;
+      const fc = intensity>0.55?'#0a0e1a':'rgba(255,255,255,0.5)';
+      const dimClass = !inRange ? ' dimmed' : '';
+      html += `<div class="hm-cell${dimClass}" style="background:${bg};color:${fc}">${v||''}
+        <div class="hm-tooltip">${mn[mo-1]} ${y}: ${v} NoCAs${!inRange?' (outside range)':''}
+        </div></div>`;
+    }
+  });
+  document.getElementById('heatmapGrid').innerHTML = html;
+  document.getElementById('heatmapNote').textContent =
+    from === document.getElementById('dateFrom').min && to === document.getElementById('dateTo').max
+    ? '' : `— dimmed cells are outside selected range`;
+}
+
+function updateTable() {
+  const data = filteredData; if (!data.length) return;
+  const map = monthMap(data);
+  const sorted = Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,20);
+  const total = data.length;
+  const mn = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('tableCount').textContent = `Top 20 of ${Object.keys(map).length} months`;
+  document.getElementById('tableBody').innerHTML = sorted.map(([k,v],i) => {
+    const [yr,mo] = k.split('-');
+    return `<tr>
+      <td style="color:var(--muted)">${i+1}</td>
+      <td>${mn[parseInt(mo)-1]}</td><td>${yr}</td>
+      <td><span class="badge">${v}</span></td>
+      <td style="color:var(--muted)">${((v/total)*100).toFixed(1)}%</td>
+    </tr>`;
+  }).join('');
+}
+
+function monthMap(data) {
+  const map = {};
+  data.forEach(d => { const k=`${d.year}-${String(d.month).padStart(2,'0')}`; map[k]=(map[k]||0)+1; });
+  return map;
+}
+
+function getMonthlyData() {
+  const map = monthMap(filteredData);
+  const from = document.getElementById('dateFrom').value;
+  const to   = document.getElementById('dateTo').value;
+  const [fy, fm] = from.split('-').map(Number);
+  const [ty, tm] = to.split('-').map(Number);
+  const labels=[], values=[];
+  for (let y=fy; y<=ty; y++) {
+    const moStart = y===fy ? fm : 1;
+    const moEnd   = y===ty ? tm : 12;
+    for (let mo=moStart; mo<=moEnd; mo++) {
+      labels.push(new Date(y,mo-1,1).toLocaleDateString('en-US',{month:'short',year:'2-digit'}));
+      values.push(map[`${y}-${String(mo).padStart(2,'0')}`]||0);
+    }
+  }
+  return {labels, values};
+}
+
+function getYearlyData() {
+  const map = {};
+  filteredData.forEach(d => { map[d.year]=(map[d.year]||0)+1; });
+  const years = Object.keys(map).sort();
+  return {labels:years, values:years.map(y=>map[y])};
+}
+</script>
+</body>
+</html>

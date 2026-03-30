@@ -1,0 +1,1636 @@
+{
+  "description": "DOJ healthcare FCA recoveries \u2014 calendar year 2024",
+  "source": "DOJ_FCA_HealthCare_CY2024.xlsx",
+  "totalRecords": 111,
+  "summary": {
+    "totalRecovered": 2647604481.09,
+    "totalCases": 111,
+    "casesWithAmounts": 111,
+    "avgRecovery": 23852292.62,
+    "largestSettlement": 650000000,
+    "byFraudType": {
+      "Anti-Kickback / Referral": {
+        "recovered": 780249995.22,
+        "cases": 39
+      },
+      "Overbilling / Upcoding / False Billing": {
+        "recovered": 390932119.16,
+        "cases": 32
+      },
+      "Unnecessary / Ineligible Services": {
+        "recovered": 102373741.78,
+        "cases": 13
+      },
+      "False Certification": {
+        "recovered": 46480611.06,
+        "cases": 6
+      },
+      "Stark Law": {
+        "recovered": 14935000,
+        "cases": 2
+      },
+      "Identity Theft / Credential Fraud": {
+        "recovered": 9889180.870000001,
+        "cases": 6
+      },
+      "Cybersecurity / Data": {
+        "recovered": 306722,
+        "cases": 1
+      },
+      "COVID / PPP Fraud": {
+        "recovered": 13783990,
+        "cases": 3
+      },
+      "Drug Pricing / Formulary Fraud": {
+        "recovered": 126000000,
+        "cases": 2
+      },
+      "Clinical Trial Fraud": {
+        "recovered": 19564743,
+        "cases": 1
+      },
+      "Drug Dispensing / Opioids": {
+        "recovered": 1143088378,
+        "cases": 6
+      }
+    },
+    "byDefendantType": {
+      "Clinic / Outpatient Facility": {
+        "recovered": 104487390,
+        "cases": 3
+      },
+      "Pharmacy": {
+        "recovered": 146013530.21,
+        "cases": 8
+      },
+      "Clinical Laboratory / Diagnostic Imaging": {
+        "recovered": 164321088.78,
+        "cases": 18
+      },
+      "Drug Wholesaler / Distributor": {
+        "recovered": 3170000,
+        "cases": 2
+      },
+      "Insurance Company / Health Plan": {
+        "recovered": 98000000,
+        "cases": 1
+      },
+      "Physician / Practice": {
+        "recovered": 55783287.05,
+        "cases": 29
+      },
+      "Consulting / Advisory": {
+        "recovered": 653107884,
+        "cases": 4
+      },
+      "Hospital / Health System": {
+        "recovered": 163619013.06,
+        "cases": 14
+      },
+      "Home Health Agency": {
+        "recovered": 9707840,
+        "cases": 5
+      },
+      "Pharmaceutical Manufacturer": {
+        "recovered": 987650000,
+        "cases": 5
+      },
+      "Behavioral Health / SUD": {
+        "recovered": 29943908.99,
+        "cases": 6
+      },
+      "Medical Device": {
+        "recovered": 32700000,
+        "cases": 4
+      },
+      "DME Supplier": {
+        "recovered": 42302800,
+        "cases": 5
+      },
+      "Hospice": {
+        "recovered": 20828000,
+        "cases": 2
+      },
+      "Nursing Home / SNF": {
+        "recovered": 32979739,
+        "cases": 3
+      },
+      "PBM": {
+        "recovered": 101000000,
+        "cases": 1
+      },
+      "Healthcare Staffing": {
+        "recovered": 1990000,
+        "cases": 1
+      }
+    },
+    "byDistrict": {
+      "Central District of California": {
+        "recovered": 13783990,
+        "cases": 3
+      },
+      "Eastern District of Tennessee": {
+        "recovered": 8488378,
+        "cases": 1
+      },
+      "District of Massachusetts": {
+        "recovered": 740530000,
+        "cases": 10
+      },
+      "Middle District of Georgia": {
+        "recovered": 1500000,
+        "cases": 1
+      },
+      "Main Justice": {
+        "recovered": 8549582,
+        "cases": 2
+      },
+      "Western District of New York": {
+        "recovered": 98000000,
+        "cases": 1
+      },
+      "Eastern District of California": {
+        "recovered": 19204648,
+        "cases": 6
+      },
+      "District of Connecticut": {
+        "recovered": 7155259,
+        "cases": 4
+      },
+      "Northern District of Georgia": {
+        "recovered": 20950000,
+        "cases": 3
+      },
+      "Eastern District of Virginia": {
+        "recovered": 2378731.06,
+        "cases": 1
+      },
+      "Middle District of Florida": {
+        "recovered": 71664743,
+        "cases": 6
+      },
+      "District of Colorado": {
+        "recovered": 84487390,
+        "cases": 3
+      },
+      "Northern District of Texas": {
+        "recovered": 26200000,
+        "cases": 2
+      },
+      "Eastern District of Michigan": {
+        "recovered": 12049370.33,
+        "cases": 4
+      },
+      "Western District of Texas": {
+        "recovered": 7401655.18,
+        "cases": 3
+      },
+      "District of Idaho": {
+        "recovered": 321576.51,
+        "cases": 1
+      },
+      "Northern District of Iowa": {
+        "recovered": 13011315.42,
+        "cases": 3
+      },
+      "Western District of Washington": {
+        "recovered": 2462370,
+        "cases": 3
+      },
+      "Western District of North Carolina": {
+        "recovered": 835000,
+        "cases": 2
+      },
+      "Southern District of California": {
+        "recovered": 3800000,
+        "cases": 1
+      },
+      "Eastern District of Pennsylvania": {
+        "recovered": 479655703.79,
+        "cases": 3
+      },
+      "District of South Carolina": {
+        "recovered": 5738934,
+        "cases": 5
+      },
+      "Eastern District of Texas": {
+        "recovered": 5343630,
+        "cases": 1
+      },
+      "Eastern District of Kentucky": {
+        "recovered": 18108933,
+        "cases": 3
+      },
+      "District of Puerto Rico": {
+        "recovered": 2125640,
+        "cases": 1
+      },
+      "Northern District of Illinois": {
+        "recovered": 64490000,
+        "cases": 4
+      },
+      "District of New Mexico": {
+        "recovered": 106800000,
+        "cases": 1
+      },
+      "District of Delaware": {
+        "recovered": 1080000,
+        "cases": 1
+      },
+      "District of Maryland": {
+        "recovered": 27394751.38,
+        "cases": 3
+      },
+      "District of Montana": {
+        "recovered": 10844201,
+        "cases": 1
+      },
+      "District of Arizona": {
+        "recovered": 13500000,
+        "cases": 1
+      },
+      "Western District of Kentucky": {
+        "recovered": 21611564,
+        "cases": 2
+      },
+      "Southern District of New York": {
+        "recovered": 495054416.48,
+        "cases": 5
+      },
+      "Northern District of Ohio": {
+        "recovered": 120700000,
+        "cases": 4
+      },
+      "District of Minnesota": {
+        "recovered": 13630000,
+        "cases": 2
+      },
+      "Middle District of Tennessee": {
+        "recovered": 19428000,
+        "cases": 1
+      },
+      "Northern District of New York": {
+        "recovered": 21300000,
+        "cases": 1
+      },
+      "Southern District of Ohio": {
+        "recovered": 4496330,
+        "cases": 1
+      },
+      "Northern District of Florida": {
+        "recovered": 550000,
+        "cases": 1
+      },
+      "District of Maine": {
+        "recovered": 629056.76,
+        "cases": 1
+      },
+      "Eastern District of Missouri": {
+        "recovered": 14819660.18,
+        "cases": 2
+      },
+      "Western District of Pennsylvania": {
+        "recovered": 735000,
+        "cases": 1
+      },
+      "District of New Jersey": {
+        "recovered": 46794652,
+        "cases": 5
+      }
+    }
+  },
+  "records": [
+    {
+      "date": "2024-12-26",
+      "title": "Southern California-Based Clinics, Laboratory and Their Owners",
+      "url": "https://www.justice.gov/opa/pr/southern-california-based-clinics-laboratory-and-their-owners-pay-10m-false-claims-arising",
+      "defendant": "Southern California-Based Clinics, Laboratory and Their Owners",
+      "defType": "Clinic / Outpatient Facility",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 10000000,
+      "amountStr": "$10.0M",
+      "location": "Central District of California",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-12-23",
+      "title": "Food City",
+      "url": "https://www.justice.gov/opa/pr/food-city-agrees-pay-over-8m-settle-false-claims-act-allegations-related-opioid-dispensing",
+      "defendant": "Food City",
+      "defType": "Pharmacy",
+      "fraudType": "Drug Dispensing / Opioids",
+      "amount": 8488378,
+      "amountStr": "$8.5M",
+      "location": "Eastern District of Tennessee",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-12-23",
+      "title": "Inform Diagnostics",
+      "url": "https://www.justice.gov/usao-ma/pr/inform-diagnostics-agrees-pay-29-million-resolve-potential-false-claims-act-liability",
+      "defendant": "Inform Diagnostics",
+      "defType": "Clinical Laboratory / Diagnostic Imaging",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 2900000,
+      "amountStr": "$2.9M",
+      "location": "District of Massachusetts",
+      "prefix": "usao-ma"
+    },
+    {
+      "date": "2024-12-23",
+      "title": "BTW Solutions, LLC",
+      "url": "https://www.justice.gov/usao-mdga/pr/drug-wholesaler-agrees-15-million-settlement-anti-kickback-statute-and-false-claims",
+      "defendant": "BTW Solutions, LLC",
+      "defType": "Drug Wholesaler / Distributor",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 1500000,
+      "amountStr": "$1.5M",
+      "location": "Middle District of Georgia",
+      "prefix": "usao-mdga"
+    },
+    {
+      "date": "2024-12-20",
+      "title": "Rapid Health",
+      "url": "https://www.justice.gov/opa/pr/rapid-health-agrees-pay-82m-allegedly-billing-medicare-over-counter-covid-19-tests-were-not",
+      "defendant": "Rapid Health",
+      "defType": "Pharmacy",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 8242860,
+      "amountStr": "$8.2M",
+      "location": "Main Justice",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-12-20",
+      "title": "Independent Health Association",
+      "url": "https://www.justice.gov/opa/pr/medicare-advantage-provider-independent-health-pay-98m-settle-false-claims-act-suit",
+      "defendant": "Independent Health Association",
+      "defType": "Insurance Company / Health Plan",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 98000000,
+      "amountStr": "$98.0M",
+      "location": "Western District of New York",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-12-20",
+      "title": "Sixteen Cardiology Practices and associated physicians",
+      "url": "https://www.justice.gov/opa/pr/sixteen-cardiology-practices-pay-total-177m-resolve-false-claims-act-allegations-concerning",
+      "defendant": "Sixteen Cardiology Practices and associated physicians",
+      "defType": "Physician / Practice",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 17761564,
+      "amountStr": "$17.8M",
+      "location": "Western District of Kentucky",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-12-13",
+      "title": "McKinsey & Company",
+      "url": "https://www.justice.gov/usao-ma/pr/justice-department-announces-resolution-criminal-and-civil-investigations-mckinsey",
+      "defendant": "McKinsey & Company",
+      "defType": "Consulting / Advisory",
+      "fraudType": "Drug Dispensing / Opioids",
+      "amount": 650000000,
+      "amountStr": "$650.0M",
+      "location": "District of Massachusetts",
+      "prefix": "usao-ma"
+    },
+    {
+      "date": "2024-12-13",
+      "title": "ASD Specialty Healthcare (D/B/A Besse Medical)",
+      "url": "https://www.justice.gov/usao-ma/pr/asd-specialty-healthcare-dba-besse-medical-agrees-pay-167-million-allegedly-paying",
+      "defendant": "ASD Specialty Healthcare (D/B/A Besse Medical)",
+      "defType": "Drug Wholesaler / Distributor",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 1670000,
+      "amountStr": "$1.7M",
+      "location": "District of Massachusetts",
+      "prefix": "usao-ma"
+    },
+    {
+      "date": "2024-12-12",
+      "title": "Oroville Hospital",
+      "url": "https://www.justice.gov/opa/pr/california-hospital-pay-1025m-resolve-false-claims-allegations",
+      "defendant": "Oroville Hospital",
+      "defType": "Hospital / Health System",
+      "fraudType": "Unnecessary / Ineligible Services",
+      "amount": 10250000,
+      "amountStr": "$10.2M",
+      "location": "Eastern District of California",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-12-05",
+      "title": "Home Health Care Company and Its Owners",
+      "url": "https://www.justice.gov/usao-ct/pr/home-health-care-company-and-its-owners-pay-more-360k-settle-false-claims-allegations",
+      "defendant": "Home Health Care Company and Its Owners",
+      "defType": "Home Health Agency",
+      "fraudType": "False Certification",
+      "amount": 361520,
+      "amountStr": "$361.5K",
+      "location": "District of Connecticut",
+      "prefix": "usao-ct"
+    },
+    {
+      "date": "2024-12-02",
+      "title": "American Health Imaging, Inc. and Scott Arant",
+      "url": "https://www.justice.gov/usao-ndga/pr/american-health-imaging-inc-and-scott-arant-pay-over-5-million-resolve-allegations",
+      "defendant": "American Health Imaging, Inc. and Scott Arant",
+      "defType": "Clinical Laboratory / Diagnostic Imaging",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 5250000,
+      "amountStr": "$5.2M",
+      "location": "Northern District of Georgia",
+      "prefix": "usao-ndga"
+    },
+    {
+      "date": "2024-11-21",
+      "title": "Fresno Doctors",
+      "url": "https://www.justice.gov/usao-edca/pr/fresno-doctors-agree-pay-24-million-resolve-kickback-allegations",
+      "defendant": "Fresno Doctors",
+      "defType": "Physician / Practice",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 2400000,
+      "amountStr": "$2.4M",
+      "location": "Eastern District of California",
+      "prefix": "usao-edca"
+    },
+    {
+      "date": "2024-11-15",
+      "title": "QOL Medical LLC",
+      "url": "https://www.justice.gov/opa/pr/pharmaceutical-company-qol-medical-and-ceo-agree-pay-47m-allegedly-paying-kickbacks-induce",
+      "defendant": "QOL Medical LLC",
+      "defType": "Pharmaceutical Manufacturer",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 47000000,
+      "amountStr": "$47.0M",
+      "location": "District of Massachusetts",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-11-15",
+      "title": "Inova Health System Foundation, Inova Health Care Services, Inc., and Inova Physician Partners, LLC",
+      "url": "https://www.justice.gov/usao-edva/pr/virginia-hospital-system-agrees-237m-false-claims-settlement",
+      "defendant": "Inova Health System Foundation, Inova Health Care Services, Inc., and Inova Physician Partners, LLC",
+      "defType": "Hospital / Health System",
+      "fraudType": "False Certification",
+      "amount": 2378731.06,
+      "amountStr": "$2.4M",
+      "location": "Eastern District of Virginia",
+      "prefix": "usao-edva"
+    },
+    {
+      "date": "2024-11-12",
+      "title": "Brandon Eye Associates P.A.",
+      "url": "https://www.justice.gov/opa/pr/florida-ophthalmology-practice-agrees-pay-13m-resolve-allegations-fraudulent-claims-0",
+      "defendant": "Brandon Eye Associates P.A.",
+      "defType": "Physician / Practice",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 1300000,
+      "amountStr": "$1.3M",
+      "location": "Middle District of Florida",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-11-12",
+      "title": "UCHealth",
+      "url": "https://www.justice.gov/opa/pr/uchealth-agrees-pay-23m-resolve-allegations-fraudulent-billing-emergency-department-visits",
+      "defendant": "UCHealth",
+      "defType": "Hospital / Health System",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 23000000,
+      "amountStr": "$23.0M",
+      "location": "District of Colorado",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-11-08",
+      "title": "Ethos Laboratories",
+      "url": "https://www.justice.gov/usao-ma/pr/ethos-laboratories-agrees-pay-65-million-resolve-allegations-fraudulent-billing",
+      "defendant": "Ethos Laboratories",
+      "defType": "Clinical Laboratory / Diagnostic Imaging",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 6500000,
+      "amountStr": "$6.5M",
+      "location": "District of Massachusetts",
+      "prefix": "usao-ma"
+    },
+    {
+      "date": "2024-11-04",
+      "title": "Horizon Medical Center of Denton",
+      "url": "https://www.justice.gov/usao-ndtx/pr/north-texas-medical-center-pays-142-million-resolve-potential-false-claims-act",
+      "defendant": "Horizon Medical Center of Denton",
+      "defType": "Hospital / Health System",
+      "fraudType": "Stark Law",
+      "amount": 14200000,
+      "amountStr": "$14.2M",
+      "location": "Northern District of Texas",
+      "prefix": "usao-ndtx"
+    },
+    {
+      "date": "2024-11-04",
+      "title": "GMAJOS, LLC, county doctor, and pharmacist",
+      "url": "https://www.justice.gov/usao-edmi/pr/macomb-county-doctor-and-pharmacist-agree-pay-700948-settle-false-claims-act",
+      "defendant": "GMAJOS, LLC, county doctor, and pharmacist",
+      "defType": "Pharmacy",
+      "fraudType": "Unnecessary / Ineligible Services",
+      "amount": 700948.42,
+      "amountStr": "$700.9K",
+      "location": "Eastern District of Michigan",
+      "prefix": "usao-edmi"
+    },
+    {
+      "date": "2024-11-01",
+      "title": "Optometrist",
+      "url": "https://www.justice.gov/usao-wdtx/pr/optometrist-settles-allegations-his-optometry-practices-submitted-false-claims-using",
+      "defendant": "Optometrist",
+      "defType": "Physician / Practice",
+      "fraudType": "Identity Theft / Credential Fraud",
+      "amount": 1055379.96,
+      "amountStr": "$1.1M",
+      "location": "Western District of Texas",
+      "prefix": "usao-wdtx"
+    },
+    {
+      "date": "2024-10-29",
+      "title": "KA Health Services (KA Health) and its owner",
+      "url": "https://www.justice.gov/usao-id/pr/boise-health-care-company-and-former-therapist-resolve-fraudulent-psychotherapy-billing",
+      "defendant": "KA Health Services (KA Health) and its owner",
+      "defType": "Behavioral Health / SUD",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 321576.51,
+      "amountStr": "$321.6K",
+      "location": "District of Idaho",
+      "prefix": "usao-id"
+    },
+    {
+      "date": "2024-10-29",
+      "title": "Former Sioux City Plastic Surgeon",
+      "url": "https://www.justice.gov/usao-ndia/pr/former-sioux-city-plastic-surgeon-agrees-pay-nearly-200000-settle-allegations-he",
+      "defendant": "Former Sioux City Plastic Surgeon",
+      "defType": "Physician / Practice",
+      "fraudType": "Unnecessary / Ineligible Services",
+      "amount": 198755.42,
+      "amountStr": "$198.8K",
+      "location": "Northern District of Iowa",
+      "prefix": "usao-ndia"
+    },
+    {
+      "date": "2024-10-25",
+      "title": "Washington doctor",
+      "url": "https://www.justice.gov/usao-wdwa/pr/washington-doctor-settles-allegations-he-submitted-false-claims-federal-healthcare",
+      "defendant": "Washington doctor",
+      "defType": "Physician / Practice",
+      "fraudType": "Unnecessary / Ineligible Services",
+      "amount": 65680,
+      "amountStr": "$65.7K",
+      "location": "Western District of Washington",
+      "prefix": "usao-wdwa"
+    },
+    {
+      "date": "2024-10-22",
+      "title": "Veni-Express Inc. and Its Owners",
+      "url": "https://www.justice.gov/opa/pr/california-mobile-phlebotomy-lab-and-its-owners-pay-135000-resolve-allegedly-false-claims",
+      "defendant": "Veni-Express Inc. and Its Owners",
+      "defType": "Clinical Laboratory / Diagnostic Imaging",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 135000,
+      "amountStr": "$135.0K",
+      "location": "Eastern District of California",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-10-15",
+      "title": "ASRC Federal Data Solutions LLC (AFDS)",
+      "url": "https://www.justice.gov/opa/pr/virginia-contractor-settles-false-claims-act-liability-failing-secure-medicare-beneficiary",
+      "defendant": "ASRC Federal Data Solutions LLC (AFDS)",
+      "defType": "Consulting / Advisory",
+      "fraudType": "Cybersecurity / Data",
+      "amount": 306722,
+      "amountStr": "$306.7K",
+      "location": "Main Justice",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-10-11",
+      "title": "Allstar Health Providers Inc. and Owner",
+      "url": "https://www.justice.gov/opa/pr/california-home-health-agency-and-owner-settle-false-claims-act-allegations-relating",
+      "defendant": "Allstar Health Providers Inc. and Owner",
+      "defType": "Home Health Agency",
+      "fraudType": "COVID / PPP Fraud",
+      "amount": 399990,
+      "amountStr": "$400.0K",
+      "location": "Central District of California",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-10-11",
+      "title": "LabXperior Corporation (LabXperior)  And Owner",
+      "url": "https://www.justice.gov/usao-wdnc/pr/urine-drug-testing-laboratory-and-owner-agree-resolve-false-claims-act-allegations",
+      "defendant": "LabXperior Corporation (LabXperior)  And Owner",
+      "defType": "Clinical Laboratory / Diagnostic Imaging",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 235000,
+      "amountStr": "$235.0K",
+      "location": "Western District of North Carolina",
+      "prefix": "usao-wdnc"
+    },
+    {
+      "date": "2024-10-11",
+      "title": "San Diego Physician and The Center for Health & Wellbeing",
+      "url": "https://www.justice.gov/usao-sdca/pr/san-diego-physician-and-medical-practice-pay-38-million-resolve-false-claims-act",
+      "defendant": "San Diego Physician and The Center for Health & Wellbeing",
+      "defType": "Physician / Practice",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 3800000,
+      "amountStr": "$3.8M",
+      "location": "Southern District of California",
+      "prefix": "usao-sdca"
+    },
+    {
+      "date": "2024-10-10",
+      "title": "Teva Pharmaceuticals",
+      "url": "https://www.justice.gov/opa/pr/drug-maker-teva-pharmaceuticals-agrees-pay-450m-false-claims-act-settlement-resolve-kickback",
+      "defendant": "Teva Pharmaceuticals",
+      "defType": "Pharmaceutical Manufacturer",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 450000000,
+      "amountStr": "$450.0M",
+      "location": "Eastern District of Pennsylvania",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-10-09",
+      "title": "North Carolina Physician and Troyer Medical Inc. P.C. (TMI)",
+      "url": "https://www.justice.gov/opa/pr/north-carolina-physician-and-medical-practice-agree-pay-625000-settle-kickback-allegations-0",
+      "defendant": "North Carolina Physician and Troyer Medical Inc. P.C. (TMI)",
+      "defType": "Physician / Practice",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 625000,
+      "amountStr": "$625.0K",
+      "location": "District of South Carolina",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-10-02",
+      "title": "Texas Hospital CEO",
+      "url": "https://www.justice.gov/opa/pr/texas-hospital-ceo-pay-over-53m-settle-kickback-allegations-involving-laboratory-testing",
+      "defendant": "Texas Hospital CEO",
+      "defType": "Hospital / Health System",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 5343630,
+      "amountStr": "$5.3M",
+      "location": "Eastern District of Texas",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-10-02",
+      "title": "Precision Diagnostics",
+      "url": "https://www.justice.gov/opa/pr/precision-toxicology-agrees-pay-27m-resolve-allegations-unnecessary-drug-testing-and-illegal",
+      "defendant": "Precision Diagnostics",
+      "defType": "Clinical Laboratory / Diagnostic Imaging",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 27000000,
+      "amountStr": "$27.0M",
+      "location": "District of Colorado",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-10-01",
+      "title": "First Psychiatric Planners, Inc. d/b/a Bournewood Health Systems and Bournewood Hospital (Bournewood)",
+      "url": "https://www.justice.gov/usao-ma/pr/brookline-hospital-pay-65-million-resolve-false-claims-act-liability-concerning-kickback",
+      "defendant": "First Psychiatric Planners, Inc. d/b/a Bournewood Health Systems and Bournewood Hospital (Bournewood)",
+      "defType": "Behavioral Health / SUD",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 6500000,
+      "amountStr": "$6.5M",
+      "location": "District of Massachusetts",
+      "prefix": "usao-ma"
+    },
+    {
+      "date": "2024-09-27",
+      "title": "Physicians\u2019 Medical Center, LLC (\u201cPMC\u201d), United States Medical Scientific Indiana, LLC (\u201cUS Med Sci Indiana\u201d), and Lab Employees",
+      "url": "https://www.justice.gov/usao-edky/pr/hospital-laboratory-referring-physician-and-lab-employees-pay-more-72-million-resolve",
+      "defendant": "Physicians\u2019 Medical Center, LLC (\u201cPMC\u201d), United States Medical Scientific Indiana, LLC (\u201cUS Med Sci Indiana\u201d), and Lab Employees",
+      "defType": "Hospital / Health System",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 7200000,
+      "amountStr": "$7.2M",
+      "location": "Eastern District of Kentucky",
+      "prefix": "usao-edky"
+    },
+    {
+      "date": "2024-09-27",
+      "title": "Pablo Merced, M.D. and Office Manager",
+      "url": "https://www.justice.gov/usao-edky/pr/physician-and-office-manager-pay-450000-resolve-alleged-violations-controlled",
+      "defendant": "Pablo Merced, M.D. and Office Manager",
+      "defType": "Physician / Practice",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 450000,
+      "amountStr": "$450.0K",
+      "location": "Eastern District of Kentucky",
+      "prefix": "usao-edky"
+    },
+    {
+      "date": "2024-09-26",
+      "title": "Acadia Healthcare Company Inc.",
+      "url": "https://www.justice.gov/opa/pr/acadia-healthcare-company-inc-pay-1985m-settle-allegations-relating-medically-unnecessary",
+      "defendant": "Acadia Healthcare Company Inc.",
+      "defType": "Behavioral Health / SUD",
+      "fraudType": "Unnecessary / Ineligible Services",
+      "amount": 19850000,
+      "amountStr": "$19.9M",
+      "location": "Middle District of Florida",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-09-25",
+      "title": "Local Pharmacies in Cidra and Florida, Puerto Rico",
+      "url": "https://www.justice.gov/usao-pr/pr/2125640-recouped-civil-settlements-violations-false-claims-act-local-pharmacies-cidra",
+      "defendant": "Local Pharmacies in Cidra and Florida, Puerto Rico",
+      "defType": "Pharmacy",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 2125640,
+      "amountStr": "$2.1M",
+      "location": "District of Puerto Rico",
+      "prefix": "usao-pr"
+    },
+    {
+      "date": "2024-09-25",
+      "title": "Ra Medical Systems, Inc. & Physicians",
+      "url": "https://www.justice.gov/usao-edmi/pr/ra-medical-systems-inc-physicians-pay-over-8-million-resolve-false-claims-act",
+      "defendant": "Ra Medical Systems, Inc. & Physicians",
+      "defType": "Medical Device",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 8000000,
+      "amountStr": "$8.0M",
+      "location": "Eastern District of Michigan",
+      "prefix": "usao-edmi"
+    },
+    {
+      "date": "2024-09-18",
+      "title": "Oak Street Health",
+      "url": "https://www.justice.gov/archives/opa/pr/oak-street-health-agrees-pay-60m-resolve-alleged-false-claims-act-liability-paying-kickbacks",
+      "defendant": "Oak Street Health",
+      "defType": "Clinic / Outpatient Facility",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 60000000,
+      "amountStr": "$60.0M",
+      "location": "Northern District of Illinois",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-09-17",
+      "title": "Siouxland Surgery Center LLP and United Surgical Partners International",
+      "url": "https://www.justice.gov/usao-ndia/pr/south-dakota-surgical-hospital-and-united-surgical-partners-international-agree-pay",
+      "defendant": "Siouxland Surgery Center LLP and United Surgical Partners International",
+      "defType": "Hospital / Health System",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 12760000,
+      "amountStr": "$12.8M",
+      "location": "Northern District of Iowa",
+      "prefix": "usao-ndia"
+    },
+    {
+      "date": "2024-09-13",
+      "title": "Walgreens",
+      "url": "https://www.justice.gov/opa/pr/walgreens-agrees-pay-1068m-resolve-allegations-it-billed-government-prescriptions-never",
+      "defendant": "Walgreens",
+      "defType": "Pharmacy",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 106800000,
+      "amountStr": "$106.8M",
+      "location": "District of New Mexico",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-09-11",
+      "title": "Dr. Vishal Patel",
+      "url": "https://www.justice.gov/usao-de/pr/united-states-settles-claims-durable-medical-equipment-fraud-against-wilmington",
+      "defendant": "Dr. Vishal Patel",
+      "defType": "Physician / Practice",
+      "fraudType": "Unnecessary / Ineligible Services",
+      "amount": 1080000,
+      "amountStr": "$1.1M",
+      "location": "District of Delaware",
+      "prefix": "usao-de"
+    },
+    {
+      "date": "2024-09-06",
+      "title": "THD America Inc.",
+      "url": "https://www.justice.gov/opa/pr/medical-device-company-pay-700000-resolve-false-claims-act-allegations-concerning-inflated",
+      "defendant": "THD America Inc.",
+      "defType": "Medical Device",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 700000,
+      "amountStr": "$700.0K",
+      "location": "District of Maryland",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-09-04",
+      "title": "Glenmark Pharmaceuticals Inc. USA (Glenmark)",
+      "url": "https://www.justice.gov/opa/pr/pharmaceutical-company-pays-25m-resolve-alleged-false-claims-act-liability-price-fixing",
+      "defendant": "Glenmark Pharmaceuticals Inc. USA (Glenmark)",
+      "defType": "Pharmaceutical Manufacturer",
+      "fraudType": "Drug Pricing / Formulary Fraud",
+      "amount": 25000000,
+      "amountStr": "$25.0M",
+      "location": "Eastern District of Pennsylvania",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-08-28",
+      "title": "Family Dentistry Of Bridgeport Pc, Family Dentistry Of Hartford Pllc, And Family Dentistry Of Stamford, Pc And Their Owners",
+      "url": "https://www.justice.gov/usao-ct/pr/connecticut-dentists-pay-17-million-settle-false-claims-allegations",
+      "defendant": "Family Dentistry Of Bridgeport Pc, Family Dentistry Of Hartford Pllc, And Family Dentistry Of Stamford, Pc And Their Owners",
+      "defType": "Physician / Practice",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 1700000,
+      "amountStr": "$1.7M",
+      "location": "District of Connecticut",
+      "prefix": "usao-ct"
+    },
+    {
+      "date": "2024-08-27",
+      "title": "St. Peter's Health",
+      "url": "https://www.justice.gov/usao-mt/pr/us-attorney-jesse-laslovich-announces-108-million-civil-settlement-st-peters-health-over",
+      "defendant": "St. Peter's Health",
+      "defType": "Hospital / Health System",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 10844201,
+      "amountStr": "$10.8M",
+      "location": "District of Montana",
+      "prefix": "usao-mt"
+    },
+    {
+      "date": "2024-08-26",
+      "title": "Young Sam Kim",
+      "url": "https://www.justice.gov/usao-edca/pr/us-attorneys-office-obtains-850000-settlement-fresno-acupuncturist-resolve-false",
+      "defendant": "Young Sam Kim",
+      "defType": "Physician / Practice",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 850000,
+      "amountStr": "$850.0K",
+      "location": "Eastern District of California",
+      "prefix": "usao-edca"
+    },
+    {
+      "date": "2024-08-26",
+      "title": "United Seating and Mobility, LLC, d/b/a Numotion (Numotion)",
+      "url": "https://www.justice.gov/usao-az/pr/united-seating-and-mobility-llc-dba-numotion-agrees-pay-13500000-resolve-alleged-false",
+      "defendant": "United Seating and Mobility, LLC, d/b/a Numotion (Numotion)",
+      "defType": "DME Supplier",
+      "fraudType": "False Certification",
+      "amount": 13500000,
+      "amountStr": "$13.5M",
+      "location": "District of Arizona",
+      "prefix": "usao-az"
+    },
+    {
+      "date": "2024-08-20",
+      "title": "Intrepid U.S.A. Inc.",
+      "url": "https://www.justice.gov/opa/pr/nationwide-home-healthcare-and-hospice-provider-pay-385m-resolve-false-claims-act",
+      "defendant": "Intrepid U.S.A. Inc.",
+      "defType": "Home Health Agency",
+      "fraudType": "Unnecessary / Ineligible Services",
+      "amount": 3850000,
+      "amountStr": "$3.9M",
+      "location": "Western District of Kentucky",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-08-19",
+      "title": "Orange Medical Care, P.C. (\u201cOrange Medical\u201d)",
+      "url": "https://www.justice.gov/usao-sdny/pr/us-attorney-announces-600000-false-claims-act-settlement-medical-practice-and-its",
+      "defendant": "Orange Medical Care, P.C. (\u201cOrange Medical\u201d)",
+      "defType": "Physician / Practice",
+      "fraudType": "Identity Theft / Credential Fraud",
+      "amount": 600000,
+      "amountStr": "$600.0K",
+      "location": "Southern District of New York",
+      "prefix": "usao-sdny"
+    },
+    {
+      "date": "2024-08-08",
+      "title": "West Coast Dental Administrative Services LLC and its owners",
+      "url": "https://www.justice.gov/opa/pr/southern-california-dental-offices-and-former-owners-pay-63m-resolve-false-claims-act",
+      "defendant": "West Coast Dental Administrative Services LLC and its owners",
+      "defType": "Physician / Practice",
+      "fraudType": "COVID / PPP Fraud",
+      "amount": 6300000,
+      "amountStr": "$6.3M",
+      "location": "Central District of California",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-08-02",
+      "title": "Dr. Gregory Gerber, MD",
+      "url": "https://www.justice.gov/opa/pr/federal-court-permanently-prohibits-ohio-physician-prescribing-opioids-and-imposes-47m",
+      "defendant": "Dr. Gregory Gerber, MD",
+      "defType": "Physician / Practice",
+      "fraudType": "Drug Dispensing / Opioids",
+      "amount": 4700000,
+      "amountStr": "$4.7M",
+      "location": "Northern District of Ohio",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-07-29",
+      "title": "Burlington County Eye Physicians (BCEP) and its owner",
+      "url": "https://www.justice.gov/usao-ma/pr/eye-practice-and-its-physician-owner-agree-pay-more-460000-resolve-allegations-false",
+      "defendant": "Burlington County Eye Physicians (BCEP) and its owner",
+      "defType": "Physician / Practice",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 460000,
+      "amountStr": "$460.0K",
+      "location": "District of Massachusetts",
+      "prefix": "usao-ma"
+    },
+    {
+      "date": "2024-07-25",
+      "title": "Laboratory Companies and Their Owner",
+      "url": "https://www.justice.gov/opa/pr/united-states-obtains-26m-false-claims-act-judgments-against-laboratory-companies-and-their",
+      "defendant": "Laboratory Companies and Their Owner",
+      "defType": "Clinical Laboratory / Diagnostic Imaging",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 26341951.38,
+      "amountStr": "$26.3M",
+      "location": "District of Maryland",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-07-25",
+      "title": "Crossroads Treatment Center of Petersburg P.C., ARS Treatment Centers of New Jersey P.C., Crossroads Treatment Center of Greensboro P.C. and Starting Point of Virginia P.C.",
+      "url": "https://www.justice.gov/opa/pr/substance-use-disorder-treatment-clinics-pay-more-850000-resolve-allegations-they-knowingly",
+      "defendant": "Crossroads Treatment Center of Petersburg P.C., ARS Treatment Centers of New Jersey P.C., Crossroads Treatment Center of Greensboro P.C. and Starting Point of Virginia P.C.",
+      "defType": "Behavioral Health / SUD",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 863934,
+      "amountStr": "$863.9K",
+      "location": "District of South Carolina",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-07-25",
+      "title": "Precision Lens and its principal",
+      "url": "https://www.justice.gov/usao-mn/pr/precision-lens-agrees-pay-12-million-united-states-kickbacks-doctors-violation-false",
+      "defendant": "Precision Lens and its principal",
+      "defType": "Medical Device",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 12000000,
+      "amountStr": "$12.0M",
+      "location": "District of Minnesota",
+      "prefix": "usao-mn"
+    },
+    {
+      "date": "2024-07-24",
+      "title": "Admera Health LLC (Admera)",
+      "url": "https://www.justice.gov/opa/pr/admera-health-agrees-pay-over-5m-settle-false-claims-act-allegations-kickbacks-third-party",
+      "defendant": "Admera Health LLC (Admera)",
+      "defType": "Clinical Laboratory / Diagnostic Imaging",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 5389648,
+      "amountStr": "$5.4M",
+      "location": "Eastern District of California",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-07-23",
+      "title": "Chiropractor Kevin Michael Brown",
+      "url": "https://www.justice.gov/usao-edca/pr/riverside-county-chiropractor-agrees-pay-18000-resolve-allegations-health-care-fraud",
+      "defendant": "Chiropractor Kevin Michael Brown",
+      "defType": "Physician / Practice",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 180000,
+      "amountStr": "$180.0K",
+      "location": "Eastern District of California",
+      "prefix": "usao-edca"
+    },
+    {
+      "date": "2024-07-18",
+      "title": "DaVita",
+      "url": "https://www.justice.gov/opa/pr/davita-pay-over-34m-resolve-allegations-illegal-kickbacks",
+      "defendant": "DaVita",
+      "defType": "Clinic / Outpatient Facility",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 34487390,
+      "amountStr": "$34.5M",
+      "location": "District of Colorado",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-07-17",
+      "title": "Kindred and Related Entities",
+      "url": "https://www.justice.gov/opa/pr/kindred-and-related-entities-agree-pay-19428m-settle-federal-and-state-false-claims-act",
+      "defendant": "Kindred and Related Entities",
+      "defType": "Hospice",
+      "fraudType": "Unnecessary / Ineligible Services",
+      "amount": 19428000,
+      "amountStr": "$19.4M",
+      "location": "Middle District of Tennessee",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-07-17",
+      "title": "Ma Acupuncture Center PC and Acupuncturist",
+      "url": "https://www.justice.gov/usao-wdtx/pr/acupuncturist-and-acupuncture-clinic-ordered-pay-23-million-resolve-civil-false-claims",
+      "defendant": "Ma Acupuncture Center PC and Acupuncturist",
+      "defType": "Physician / Practice",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 2300000,
+      "amountStr": "$2.3M",
+      "location": "Western District of Texas",
+      "prefix": "usao-wdtx"
+    },
+    {
+      "date": "2024-07-11",
+      "title": "Vista Clinical Diagnostics, LLC; Access Dermpath, Inc.; and Advanced Clinical Laboratories, Inc.",
+      "url": "https://www.justice.gov/usao-mdfl/pr/three-clermont-labs-agree-pay-245-million-settle-false-claims-act-liability",
+      "defendant": "Vista Clinical Diagnostics, LLC; Access Dermpath, Inc.; and Advanced Clinical Laboratories, Inc.",
+      "defType": "Clinical Laboratory / Diagnostic Imaging",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 2450000,
+      "amountStr": "$2.5M",
+      "location": "Middle District of Florida",
+      "prefix": "usao-mdfl"
+    },
+    {
+      "date": "2024-07-11",
+      "title": "Rite Aid Corporation and Affiliates (CSA)",
+      "url": "https://www.justice.gov/usao-ndoh/pr/rite-aid-corporation-and-affiliates-agree-settle-false-claims-act-and-controlled",
+      "defendant": "Rite Aid Corporation and Affiliates (CSA)",
+      "defType": "Pharmacy",
+      "fraudType": "Drug Dispensing / Opioids",
+      "amount": 7500000,
+      "amountStr": "$7.5M",
+      "location": "Northern District of Ohio",
+      "prefix": "usao-ndoh"
+    },
+    {
+      "date": "2024-07-10",
+      "title": "The Grand Health Care System",
+      "url": "https://www.justice.gov/opa/pr/grand-health-care-system-and-12-affiliated-skilled-nursing-facilities-pay-213m-allegedly",
+      "defendant": "The Grand Health Care System",
+      "defType": "Nursing Home / SNF",
+      "fraudType": "Unnecessary / Ineligible Services",
+      "amount": 21300000,
+      "amountStr": "$21.3M",
+      "location": "Northern District of New York",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-07-10",
+      "title": "Rite Aid Corporation and Elixir Insurance Company",
+      "url": "https://www.justice.gov/opa/pr/rite-aid-corporation-and-elixir-insurance-company-agree-pay-101m-resolve-allegations-falsely",
+      "defendant": "Rite Aid Corporation and Elixir Insurance Company",
+      "defType": "PBM",
+      "fraudType": "Drug Pricing / Formulary Fraud",
+      "amount": 101000000,
+      "amountStr": "$101.0M",
+      "location": "Northern District of Ohio",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-07-10",
+      "title": "Rite Aid Corporation and Affiliates (FCA)",
+      "url": "https://www.justice.gov/opa/pr/rite-aid-corporation-and-affiliates-agree-settle-false-claims-act-and-controlled-substance",
+      "defendant": "Rite Aid Corporation and Affiliates (FCA)",
+      "defType": "Pharmacy",
+      "fraudType": "Drug Dispensing / Opioids",
+      "amount": 7500000,
+      "amountStr": "$7.5M",
+      "location": "Northern District of Ohio",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-07-10",
+      "title": "Pacific Toxicology Laboratories",
+      "url": "https://www.justice.gov/usao-ma/pr/pacific-toxicology-laboratories-agrees-pay-1-million-resolve-allegations-fraudulent",
+      "defendant": "Pacific Toxicology Laboratories",
+      "defType": "Clinical Laboratory / Diagnostic Imaging",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 1000000,
+      "amountStr": "$1.0M",
+      "location": "District of Massachusetts",
+      "prefix": "usao-ma"
+    },
+    {
+      "date": "2024-07-01",
+      "title": "Guardian Health Care Inc., Gem City Home Care LLC and Care Connection of Cincinnati LLC",
+      "url": "https://www.justice.gov/opa/pr/home-health-providers-pay-45m-resolve-alleged-false-claims-act-liability-providing-kickbacks",
+      "defendant": "Guardian Health Care Inc., Gem City Home Care LLC and Care Connection of Cincinnati LLC",
+      "defType": "Home Health Agency",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 4496330,
+      "amountStr": "$4.5M",
+      "location": "Southern District of Ohio",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-06-28",
+      "title": "Tareen Dermatology, P.A., Dr. Mohiba Tareen, and Basir Tareen, CEO",
+      "url": "https://www.justice.gov/usao-mn/pr/tareen-dermatology-agrees-pay-more-16-million-resolve-alleged-false-claims-act",
+      "defendant": "Tareen Dermatology, P.A., Dr. Mohiba Tareen, and Basir Tareen, CEO",
+      "defType": "Physician / Practice",
+      "fraudType": "Identity Theft / Credential Fraud",
+      "amount": 1630000,
+      "amountStr": "$1.6M",
+      "location": "District of Minnesota",
+      "prefix": "usao-mn"
+    },
+    {
+      "date": "2024-06-26",
+      "title": "VNS Health and Related Entities",
+      "url": "https://www.justice.gov/usao-sdny/pr/us-attorney-announces-settlement-civil-fraud-lawsuit-against-vns-health-and-related",
+      "defendant": "VNS Health and Related Entities",
+      "defType": "Behavioral Health / SUD",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 954416.48,
+      "amountStr": "$954.4K",
+      "location": "Southern District of New York",
+      "prefix": "usao-sdny"
+    },
+    {
+      "date": "2024-06-25",
+      "title": "Former Panama City Doctor",
+      "url": "https://www.justice.gov/usao-ndfl/pr/former-panama-city-doctor-agrees-550000-consent-judgment-resolve-fca-and-csa-lawsuit",
+      "defendant": "Former Panama City Doctor",
+      "defType": "Physician / Practice",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 550000,
+      "amountStr": "$550.0K",
+      "location": "Northern District of Florida",
+      "prefix": "usao-ndfl"
+    },
+    {
+      "date": "2024-06-21",
+      "title": "Provider",
+      "url": "https://www.justice.gov/usao-me/pr/provider-agrees-pay-over-629000-settle-allegations-false-claims-act-violations",
+      "defendant": "Provider",
+      "defType": "Physician / Practice",
+      "fraudType": "Unnecessary / Ineligible Services",
+      "amount": 629056.76,
+      "amountStr": "$629.1K",
+      "location": "District of Maine",
+      "prefix": "usao-me"
+    },
+    {
+      "date": "2024-06-20",
+      "title": "Tapestry Hospice and owners and managers",
+      "url": "https://www.justice.gov/usao-ndga/pr/tapestry-hospice-settles-healthcare-kickback-claims-14-million",
+      "defendant": "Tapestry Hospice and owners and managers",
+      "defType": "Hospice",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 1400000,
+      "amountStr": "$1.4M",
+      "location": "Northern District of Georgia",
+      "prefix": "usao-ndga"
+    },
+    {
+      "date": "2024-06-20",
+      "title": "Avertest, LLC",
+      "url": "https://www.justice.gov/usao-edmi/pr/averhealth-pay-over-13-million-resolve-false-claims-act-allegations-related-drug-tests",
+      "defendant": "Avertest, LLC",
+      "defType": "Clinical Laboratory / Diagnostic Imaging",
+      "fraudType": "False Certification",
+      "amount": 1344621,
+      "amountStr": "$1.3M",
+      "location": "Eastern District of Michigan",
+      "prefix": "usao-edmi"
+    },
+    {
+      "date": "2024-06-18",
+      "title": "Karefirst Management and Its Former Owners",
+      "url": "https://www.justice.gov/usao-ndil/pr/chicago-health-care-company-and-its-former-owners-pay-nearly-2-million-settle-false",
+      "defendant": "Karefirst Management and Its Former Owners",
+      "defType": "Healthcare Staffing",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 1990000,
+      "amountStr": "$2.0M",
+      "location": "Northern District of Illinois",
+      "prefix": "usao-ndil"
+    },
+    {
+      "date": "2024-06-13",
+      "title": "Evergreen Treatment Services",
+      "url": "https://www.justice.gov/usao-wdwa/pr/doj-and-evergreen-treatment-services-settle-allegations-regarding-double-billing",
+      "defendant": "Evergreen Treatment Services",
+      "defType": "Behavioral Health / SUD",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 1453982,
+      "amountStr": "$1.5M",
+      "location": "Western District of Washington",
+      "prefix": "usao-wdwa"
+    },
+    {
+      "date": "2024-06-13",
+      "title": "Supportive Care Holdings, LLC, related healthcare companies,  and CEO",
+      "url": "https://www.justice.gov/usao-ct/pr/behavioral-health-companies-ceo-pay-nearly-46-million-settle-allegations-related",
+      "defendant": "Supportive Care Holdings, LLC, related healthcare companies,  and CEO",
+      "defType": "Nursing Home / SNF",
+      "fraudType": "False Certification",
+      "amount": 4595739,
+      "amountStr": "$4.6M",
+      "location": "District of Connecticut",
+      "prefix": "usao-ct"
+    },
+    {
+      "date": "2024-06-11",
+      "title": "Progressive Pain Management and its owner",
+      "url": "https://www.justice.gov/usao-edmo/pr/united-states-reaches-12-million-civil-settlement-festus-pain-management-doctor-over",
+      "defendant": "Progressive Pain Management and its owner",
+      "defType": "Physician / Practice",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 1200000,
+      "amountStr": "$1.2M",
+      "location": "Eastern District of Missouri",
+      "prefix": "usao-edmo"
+    },
+    {
+      "date": "2024-05-31",
+      "title": "Massachusetts Surgeon",
+      "url": "https://www.justice.gov/usao-ma/pr/massachusetts-surgeon-pay-200000-resolve-allegations-soliciting-and-receiving-illegal",
+      "defendant": "Massachusetts Surgeon",
+      "defType": "Physician / Practice",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 200000,
+      "amountStr": "$200.0K",
+      "location": "District of Massachusetts",
+      "prefix": "usao-ma"
+    },
+    {
+      "date": "2024-05-29",
+      "title": "Spinal device manufacturer Innovasis Inc. and Two Top Executives",
+      "url": "https://www.justice.gov/opa/pr/medical-device-manufacturer-innovasis-inc-and-two-top-executives-agree-pay-12m-settle",
+      "defendant": "Spinal device manufacturer Innovasis Inc. and Two Top Executives",
+      "defType": "Medical Device",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 12000000,
+      "amountStr": "$12.0M",
+      "location": "Northern District of Texas",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-05-28",
+      "title": "Penn Highlands Healthcare",
+      "url": "https://www.justice.gov/usao-wdpa/pr/penn-highlands-healthcare-pay-735000-settle-false-claims-act-allegations",
+      "defendant": "Penn Highlands Healthcare",
+      "defType": "Hospital / Health System",
+      "fraudType": "Stark Law",
+      "amount": 735000,
+      "amountStr": "$735.0K",
+      "location": "Western District of Pennsylvania",
+      "prefix": "usao-wdpa"
+    },
+    {
+      "date": "2024-05-24",
+      "title": "Florida Businessman Daniel Hurt",
+      "url": "https://www.justice.gov/opa/pr/florida-businessman-daniel-hurt-pay-over-27-million-medicare-fraud-connection-cancer-genomic",
+      "defendant": "Florida Businessman Daniel Hurt",
+      "defType": "Clinical Laboratory / Diagnostic Imaging",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 27000000,
+      "amountStr": "$27.0M",
+      "location": "Middle District of Florida",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-05-16",
+      "title": "Cape Cod Hospital",
+      "url": "https://www.justice.gov/opa/pr/cape-cod-hospital-pay-243-million-resolve-false-claims-act-allegations-concerning-its",
+      "defendant": "Cape Cod Hospital",
+      "defType": "Hospital / Health System",
+      "fraudType": "False Certification",
+      "amount": 24300000,
+      "amountStr": "$24.3M",
+      "location": "District of Massachusetts",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-05-14",
+      "title": "Comfort Care Medical Equipment, Inc. And Its Owners",
+      "url": "https://www.justice.gov/usao-md/pr/comfort-care-medical-equpment-inc-and-its-owner-agree-pay-352800-settle-false-claims-act",
+      "defendant": "Comfort Care Medical Equipment, Inc. And Its Owners",
+      "defType": "DME Supplier",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 352800,
+      "amountStr": "$352.8K",
+      "location": "District of Maryland",
+      "prefix": "usao-md"
+    },
+    {
+      "date": "2024-05-08",
+      "title": "James Aronovitz, D.O., and Michigan Ear Care PLLC",
+      "url": "https://www.justice.gov/usao-edmi/pr/local-physician-and-practice-agree-pay-over-2-million-settle-false-claims-act",
+      "defendant": "James Aronovitz, D.O., and Michigan Ear Care PLLC",
+      "defType": "Physician / Practice",
+      "fraudType": "Identity Theft / Credential Fraud",
+      "amount": 2003800.91,
+      "amountStr": "$2.0M",
+      "location": "Eastern District of Michigan",
+      "prefix": "usao-edmi"
+    },
+    {
+      "date": "2024-05-07",
+      "title": "CHI Franciscan Health and St. Joseph Medical Center and surgeon",
+      "url": "https://www.justice.gov/usao-wdwa/pr/doj-resolves-allegations-tacoma-spine-surgeon-billed-unnecessary-surgeries",
+      "defendant": "CHI Franciscan Health and St. Joseph Medical Center and surgeon",
+      "defType": "Hospital / Health System",
+      "fraudType": "Unnecessary / Ineligible Services",
+      "amount": 942708,
+      "amountStr": "$942.7K",
+      "location": "Western District of Washington",
+      "prefix": "usao-wdwa"
+    },
+    {
+      "date": "2024-05-06",
+      "title": "Baptist Health System Inc",
+      "url": "https://www.justice.gov/opa/pr/florida-hospital-system-agrees-pay-15-million-resolve-liability-relating-self-disclosure",
+      "defendant": "Baptist Health System Inc",
+      "defType": "Hospital / Health System",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 1500000,
+      "amountStr": "$1.5M",
+      "location": "Middle District of Florida",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-05-06",
+      "title": "C&S Family Dental New Britain, Llc, And C&S Family Dental Waterbury, Llc and their owners",
+      "url": "https://www.justice.gov/usao-ct/pr/connecticut-dentists-pay-498k-settle-false-claims-allegations",
+      "defendant": "C&S Family Dental New Britain, Llc, And C&S Family Dental Waterbury, Llc and their owners",
+      "defType": "Physician / Practice",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 498000,
+      "amountStr": "$498.0K",
+      "location": "District of Connecticut",
+      "prefix": "usao-ct"
+    },
+    {
+      "date": "2024-05-03",
+      "title": "Apollo Health Inc. and Its Owner",
+      "url": "https://www.justice.gov/usao-ndil/pr/chicago-health-care-company-and-its-owner-pay-1-million-settle-false-claims-act",
+      "defendant": "Apollo Health Inc. and Its Owner",
+      "defType": "Physician / Practice",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 1000000,
+      "amountStr": "$1.0M",
+      "location": "Northern District of Illinois",
+      "prefix": "usao-ndil"
+    },
+    {
+      "date": "2024-04-29",
+      "title": "Laboratory Marketer and North Carolina Physicians",
+      "url": "https://www.justice.gov/opa/pr/laboratory-marketer-and-north-carolina-physicians-agree-pay-over-13m-settle-kickback",
+      "defendant": "Laboratory Marketer and North Carolina Physicians",
+      "defType": "Consulting / Advisory",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 1300000,
+      "amountStr": "$1.3M",
+      "location": "District of South Carolina",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-04-26",
+      "title": "ReNew Health Group LLC, ReNew Health Consulting Services LLC, and Executives",
+      "url": "https://www.justice.gov/usao-cdca/pr/san-gabriel-valley-based-nursing-home-chain-and-executives-pay-over-7-million-settle",
+      "defendant": "ReNew Health Group LLC, ReNew Health Consulting Services LLC, and Executives",
+      "defType": "Nursing Home / SNF",
+      "fraudType": "COVID / PPP Fraud",
+      "amount": 7084000,
+      "amountStr": "$7.1M",
+      "location": "Central District of California",
+      "prefix": "usao-cdca"
+    },
+    {
+      "date": "2024-04-25",
+      "title": "Iowa Nurse Practitioner",
+      "url": "https://www.justice.gov/usao-ndia/pr/iowa-nurse-practitioner-agrees-pay-over-50000-resolve-suit-alleging-fraudulent-durable",
+      "defendant": "Iowa Nurse Practitioner",
+      "defType": "Physician / Practice",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 52560,
+      "amountStr": "$52.6K",
+      "location": "Northern District of Iowa",
+      "prefix": "usao-ndia"
+    },
+    {
+      "date": "2024-04-02",
+      "title": "Oncology San Antonio, PA and its affiliated physicians and CorePath Laboratories, PA",
+      "url": "https://www.justice.gov/usao-wdtx/pr/oncology-practice-physicians-and-reference-laboratory-pay-over-4-million-settle-false",
+      "defendant": "Oncology San Antonio, PA and its affiliated physicians and CorePath Laboratories, PA",
+      "defType": "Clinical Laboratory / Diagnostic Imaging",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 4046275.22,
+      "amountStr": "$4.0M",
+      "location": "Western District of Texas",
+      "prefix": "usao-wdtx"
+    },
+    {
+      "date": "2024-04-01",
+      "title": "Marketers and Physicians in Five States",
+      "url": "https://www.justice.gov/opa/pr/marketers-and-physicians-five-states-agree-pay-over-15-million-settle-laboratory-kickback",
+      "defendant": "Marketers and Physicians in Five States",
+      "defType": "Consulting / Advisory",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 1501162,
+      "amountStr": "$1.5M",
+      "location": "District of New Jersey",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-03-28",
+      "title": "The Radiology Group LLC and Its CEO",
+      "url": "https://www.justice.gov/usao-sdny/pr/us-attorney-announces-31-million-false-claims-act-settlement-radiology-company-and-its",
+      "defendant": "The Radiology Group LLC and Its CEO",
+      "defType": "Clinical Laboratory / Diagnostic Imaging",
+      "fraudType": "Identity Theft / Credential Fraud",
+      "amount": 3100000,
+      "amountStr": "$3.1M",
+      "location": "Southern District of New York",
+      "prefix": "usao-sdny"
+    },
+    {
+      "date": "2024-03-27",
+      "title": "Gamma Healthcare and Three of Its Owners",
+      "url": "https://www.justice.gov/opa/pr/gamma-healthcare-and-three-its-owners-agree-pay-136-million-allegedly-billing-medicare-lab",
+      "defendant": "Gamma Healthcare and Three of Its Owners",
+      "defType": "Clinical Laboratory / Diagnostic Imaging",
+      "fraudType": "Unnecessary / Ineligible Services",
+      "amount": 13619660.18,
+      "amountStr": "$13.6M",
+      "location": "Eastern District of Missouri",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-03-12",
+      "title": "Family First Home Health Care, Inc. And Owner",
+      "url": "https://www.justice.gov/usao-wdnc/pr/north-carolina-home-health-care-agency-and-owner-agree-pay-600000-resolve-false-claims",
+      "defendant": "Family First Home Health Care, Inc. And Owner",
+      "defType": "Home Health Agency",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 600000,
+      "amountStr": "$600.0K",
+      "location": "Western District of North Carolina",
+      "prefix": "usao-wdnc"
+    },
+    {
+      "date": "2024-02-29",
+      "title": "Endo International and its affiliates",
+      "url": "https://www.justice.gov/usao-sdny/pr/united-states-reaches-settlement-law-enforcement-tax-and-healthcare-cost-claims-endo",
+      "defendant": "Endo International and its affiliates",
+      "defType": "Pharmaceutical Manufacturer",
+      "fraudType": "Drug Dispensing / Opioids",
+      "amount": 464900000,
+      "amountStr": "$464.9M",
+      "location": "Southern District of New York",
+      "prefix": "usao-sdny"
+    },
+    {
+      "date": "2024-02-28",
+      "title": "Brynwood Myofascial Therapy Llc and its owners",
+      "url": "https://www.justice.gov/usao-ndil/pr/rockford-skilled-therapy-provider-pay-15-million-settle-federal-health-care-fraud-suit",
+      "defendant": "Brynwood Myofascial Therapy Llc and its owners",
+      "defType": "Physician / Practice",
+      "fraudType": "Identity Theft / Credential Fraud",
+      "amount": 1500000,
+      "amountStr": "$1.5M",
+      "location": "Northern District of Illinois",
+      "prefix": "usao-ndil"
+    },
+    {
+      "date": "2024-02-28",
+      "title": "Capstone Diagnostics and its owner",
+      "url": "https://www.justice.gov/usao-ndga/pr/georgia-laboratory-owner-pleads-guilty-felony-charge-and-agrees-pay-143-million",
+      "defendant": "Capstone Diagnostics and its owner",
+      "defType": "Clinical Laboratory / Diagnostic Imaging",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 14300000,
+      "amountStr": "$14.3M",
+      "location": "Northern District of Georgia",
+      "prefix": "usao-ndga"
+    },
+    {
+      "date": "2024-02-22",
+      "title": "Doctor",
+      "url": "https://www.justice.gov/usao-nj/pr/doctor-pay-nearly-700000-resolve-false-claims-act-allegations",
+      "defendant": "Doctor",
+      "defType": "Physician / Practice",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 693490,
+      "amountStr": "$693.5K",
+      "location": "District of New Jersey",
+      "prefix": "usao-nj"
+    },
+    {
+      "date": "2024-02-16",
+      "title": "LabTox, LLC, its owner and compiance officer",
+      "url": "https://www.justice.gov/usao-edky/pr/lexington-lab-agrees-104-million-civil-judgments-resolve-false-claims-act-allegations",
+      "defendant": "LabTox, LLC, its owner and compiance officer",
+      "defType": "Clinical Laboratory / Diagnostic Imaging",
+      "fraudType": "Unnecessary / Ineligible Services",
+      "amount": 10458933,
+      "amountStr": "$10.5M",
+      "location": "Eastern District of Kentucky",
+      "prefix": "usao-edky"
+    },
+    {
+      "date": "2024-02-15",
+      "title": "Sentynl Therapeutics Inc.",
+      "url": "https://www.justice.gov/usao-nj/pr/california-pharmaceutical-company-pay-750000-resolve-false-claims-act-liability",
+      "defendant": "Sentynl Therapeutics Inc.",
+      "defType": "Pharmaceutical Manufacturer",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 750000,
+      "amountStr": "$750.0K",
+      "location": "District of New Jersey",
+      "prefix": "usao-nj"
+    },
+    {
+      "date": "2024-02-15",
+      "title": "Lincare Inc.",
+      "url": "https://www.justice.gov/usao-sdny/pr/us-attorney-announces-255-million-settlement-durable-medical-equipment-supplier",
+      "defendant": "Lincare Inc.",
+      "defType": "DME Supplier",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 25500000,
+      "amountStr": "$25.5M",
+      "location": "Southern District of New York",
+      "prefix": "usao-sdny"
+    },
+    {
+      "date": "2024-01-26",
+      "title": "Hill-Rom Holdings, Inc., Hill-Rom Company, Inc., Hill-Rom Services, Inc., and Advanced Respiratory Inc.",
+      "url": "https://www.justice.gov/usao-sc/pr/durable-medical-equipment-companies-pay-millions-false-claims-settlement",
+      "defendant": "Hill-Rom Holdings, Inc., Hill-Rom Company, Inc., Hill-Rom Services, Inc., and Advanced Respiratory Inc.",
+      "defType": "DME Supplier",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 2100000,
+      "amountStr": "$2.1M",
+      "location": "District of South Carolina",
+      "prefix": "usao-sc"
+    },
+    {
+      "date": "2024-01-23",
+      "title": "Pennmark Pharmacy Inc. and current and former owners",
+      "url": "https://www.justice.gov/usao-edpa/pr/current-and-former-owners-center-city-philadelphia-pharmacy-agree-pay-over-46-million",
+      "defendant": "Pennmark Pharmacy Inc. and current and former owners",
+      "defType": "Pharmacy",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 4655703.79,
+      "amountStr": "$4.7M",
+      "location": "Eastern District of Pennsylvania",
+      "prefix": "usao-edpa"
+    },
+    {
+      "date": "2024-01-18",
+      "title": "New York Man (DME Scheme)",
+      "url": "https://www.justice.gov/usao-sc/pr/new-york-man-sentenced-federal-prison-and-pays-850000-civil-fines-and-restitution",
+      "defendant": "New York Man (DME Scheme)",
+      "defType": "DME Supplier",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 850000,
+      "amountStr": "$850.0K",
+      "location": "District of South Carolina",
+      "prefix": "usao-sc"
+    },
+    {
+      "date": "2024-01-16",
+      "title": "Silver Lake Hospital (Silver Lake) and its investors",
+      "url": "https://www.justice.gov/opa/pr/new-jersey-hospital-and-investors-pay-united-states-306-million-alleged-false-claims-related",
+      "defendant": "Silver Lake Hospital (Silver Lake) and its investors",
+      "defType": "Hospital / Health System",
+      "fraudType": "Overbilling / Upcoding / False Billing",
+      "amount": 30600000,
+      "amountStr": "$30.6M",
+      "location": "District of New Jersey",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-01-10",
+      "title": "RDx Bioscience Inc. (RDx) and Its Owner and CEO",
+      "url": "https://www.justice.gov/opa/pr/new-jersey-laboratory-and-its-owner-and-ceo-agree-pay-over-13-million-settle-allegations",
+      "defendant": "RDx Bioscience Inc. (RDx) and Its Owner and CEO",
+      "defType": "Clinical Laboratory / Diagnostic Imaging",
+      "fraudType": "Anti-Kickback / Referral",
+      "amount": 13250000,
+      "amountStr": "$13.2M",
+      "location": "District of New Jersey",
+      "prefix": "opa"
+    },
+    {
+      "date": "2024-01-04",
+      "title": "H. Lee Moffitt Cancer Center & Research Institute Hospital Inc.",
+      "url": "https://www.justice.gov/opa/pr/florida-research-hospital-agrees-pay-more-195-million-resolve-liability-relating-self",
+      "defendant": "H. Lee Moffitt Cancer Center & Research Institute Hospital Inc.",
+      "defType": "Hospital / Health System",
+      "fraudType": "Clinical Trial Fraud",
+      "amount": 19564743,
+      "amountStr": "$19.6M",
+      "location": "Middle District of Florida",
+      "prefix": "opa"
+    }
+  ]
+}

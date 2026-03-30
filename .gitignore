@@ -1,0 +1,11 @@
+# Excel source workbooks — not part of the web app
+*.xlsx
+*.xlsm
+
+# Python cache
+__pycache__/
+*.pyc
+
+# OS files
+.DS_Store
+Thumbs.db

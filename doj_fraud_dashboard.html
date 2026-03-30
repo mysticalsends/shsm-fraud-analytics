@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOJ False Claims Act — Fraud Recovery Dashboard</title>
+<link rel="stylesheet" href="css/shared.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  /* ── Amber accent for DOJ FCA ── */
+  :root {
+    --accent: #f59e0b;
+    --hhs:    #f59e0b;
+    --dod:    #3b82f6;
+    --other:  #8b5cf6;
+    --total:  #00d4ff;
+  }
+
+  /* Active button uses amber tint */
+  .btn.active { background: rgba(245, 158, 11, 0.08); }
+
+  /* Stat card color variants */
+  .stat-card.hhs::after   { background: var(--hhs); }
+  .stat-card.dod::after   { background: var(--dod); }
+  .stat-card.other::after { background: var(--other); }
+  .stat-card.total::after { background: var(--total); }
+
+  .stat-value { font-size: 30px; }
+  .stat-value.hhs   { color: var(--hhs); }
+  .stat-value.dod   { color: var(--dod); }
+  .stat-value.other { color: var(--other); }
+  .stat-value.total { color: var(--total); }
+
+  /* Chart panels */
+  .chart-wrapper.short { height: 260px; }
+
+  /* Chart series toggle */
+  .chart-toggle { display: flex; gap: 6px; }
+  .toggle-btn {
+    font-family: 'Space Mono', monospace; font-size: 9px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 4px 10px; border: 1px solid var(--border);
+    background: transparent; color: var(--muted);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .toggle-btn.on { border-color: var(--accent); color: var(--accent); background: rgba(245,158,11,0.08); }
+
+  /* Data table overrides (right-aligned numbers) */
+  .data-table { min-width: 700px; }
+  .data-table th          { text-align: right; }
+  .data-table th:first-child { text-align: center; }
+  .data-table td          { text-align: right; }
+  .data-table td:first-child { text-align: center; color: var(--accent); font-weight: 700; }
+  .pct { font-size: 9px; color: var(--muted); }
+
+  /* Mini bar cells */
+  .bar-cell { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+  .mini-bar { height: 6px; border-radius: 2px; min-width: 4px; max-width: 80px; }
+
+  /* Highlight current-year row */
+  .row-2025 td { background: rgba(245, 158, 11, 0.06) !important; }
+
+  /* Chart description text */
+  .chart-desc {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 4px 0 12px;
+    padding: 6px 10px;
+    border-left: 2px solid rgba(245, 158, 11, 0.3);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-link" href="index.html">&#8592; Back to Dashboard Hub</a>
+
+  <header>
+    <div class="tag">DOJ / False Claims Act</div>
+    <h1>Federal Fraud <em>Recovery</em> Dashboard</h1>
+    <p class="subtitle">False Claims Act settlements &amp; judgments by agency &nbsp;·&nbsp; FY 1987–2025 &nbsp;·&nbsp;
+      Source: <a href="https://www.justice.gov/civil/false-claims-act" target="_blank">U.S. Department of Justice</a></p>
+  </header>
+
+  <div class="legend-row">
+    <span class="chip"><span class="chip-dot" style="background:var(--hhs)"></span>Health Care / HHS</span>
+    <span class="chip"><span class="chip-dot" style="background:var(--dod)"></span>Defense / DOD</span>
+    <span class="chip"><span class="chip-dot" style="background:var(--other)"></span>Other Agencies</span>
+    <span class="chip"><span class="chip-dot" style="background:var(--total)"></span>Total (all agencies)</span>
+  </div>
+
+  <!-- Year range controls -->
+  <div class="controls-row">
+    <span class="date-label">From FY</span>
+    <input type="number" id="yearFrom" min="1987" max="2025" value="2007" onchange="renderAll()">
+    <span class="date-label">To FY</span>
+    <input type="number" id="yearTo" min="1987" max="2025" value="2025" onchange="renderAll()">
+    <button class="btn" id="btnAll"  onclick="setRange(1987,2025)">All Years</button>
+    <button class="btn" id="btn10"   onclick="setRange(2016,2025)">Last 10 Yrs</button>
+    <button class="btn" id="btn5"    onclick="setRange(2021,2025)">Last 5 Yrs</button>
+    <button class="btn" id="btnAgency" onclick="setRange(2007,2025)">Agency Data Era</button>
+  </div>
+
+  <div class="note">
+    <strong>Data note:</strong> Total FCA recoveries (all years) are from DOJ's official Fraud Statistics Overview document.
+    Agency-specific breakdowns (HHS/DOD/Other) are available for FY 2007–2025 from DOJ annual press releases and reports.
+    HHS figures reflect health care and life sciences fraud matters. DOD figures reflect defense procurement fraud.
+    "Other" includes all remaining federal agencies (SBA, housing, customs, cybersecurity, etc.).
+  </div>
+
+  <!-- KPI cards — latest year (FY2025) -->
+  <div class="stats" id="statsRow"></div>
+
+  <!-- MAIN CHART: Stacked bar or grouped bar by agency -->
+  <div class="chart-panel">
+    <div class="chart-title">
+      <span>FCA Recoveries by Agency ($ Billions)</span>
+      <div class="chart-toggle">
+        <button class="toggle-btn on" id="btnStacked" onclick="setChartMode('stacked')">Stacked</button>
+        <button class="toggle-btn" id="btnGrouped" onclick="setChartMode('grouped')">Grouped</button>
+        <button class="toggle-btn" id="btnPct"     onclick="setChartMode('pct')">% Share</button>
+      </div>
+    </div>
+    <p class="chart-desc">Annual FCA recovery totals broken down by agency sector. Health &amp; Human Services (HHS) covers Medicare, Medicaid, and life-sciences fraud; DOD covers defense procurement; Other includes SBA, housing, customs, and cybersecurity matters. Toggle between Stacked, Grouped, and % Share views. Agency-level data is available for FY 2007–2025 only.</p>
+    <div class="chart-subtitle" id="mainChartSub">Stacked bars show total and composition per year</div>
+    <div class="chart-wrapper"><canvas id="mainChart"></canvas></div>
+  </div>
+
+  <!-- Two-column: line trend + donut current year -->
+  <div class="two-col">
+    <div class="chart-panel">
+      <div class="chart-title">Trend: HHS vs DOD vs Total</div>
+      <p class="chart-desc">Lines trace the dollar trajectory of Health &amp; Human Services, Department of Defense, and combined total recoveries over the selected period, highlighting years of peak enforcement activity.</p>
+      <div class="chart-wrapper short"><canvas id="trendChart"></canvas></div>
+    </div>
+    <div class="chart-panel">
+      <div class="chart-title">
+        <span>FY <span id="donutYear">2025</span> Breakdown</span>
+        <select id="donutYearSelect" onchange="updateDonut()" style="width:90px;padding:4px 8px;font-size:10px;"></select>
+      </div>
+      <p class="chart-desc">Proportional breakdown of FCA recoveries for a selected fiscal year, showing how total enforcement dollars were distributed across the three agency sectors.</p>
+      <div class="chart-wrapper short"><canvas id="donutChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Whistleblower qui tam chart -->
+  <div class="chart-panel">
+    <div class="chart-title">
+      <span>Qui Tam Activity — New Lawsuits Filed & Relator Awards</span>
+      <span style="font-size:9px;color:var(--accent)">Whistleblower / Relator Program</span>
+    </div>
+    <p class="chart-desc">Tracks two dimensions of the whistleblower program: the annual volume of new qui tam suits filed by relators (bars, left axis) and the total dollar amount paid back to those relators as their statutory share of recovered funds (line, right axis). Relator awards typically range from 15–30% of the recovery.</p>
+    <div class="chart-subtitle">Qui tam suits drive the majority of recent FCA recoveries; awards paid to whistleblowers</div>
+    <div class="chart-wrapper"><canvas id="quitamChart"></canvas></div>
+  </div>
+
+  <!-- Qui Tam vs Non-Qui Tam Recoveries -->
+  <div class="chart-panel">
+    <div class="chart-title">
+      <span>Qui Tam vs. Government-Initiated Recoveries ($ Billions)</span>
+      <span style="font-size:9px;color:var(--accent)">Whistleblower Impact</span>
+    </div>
+    <p class="chart-desc">Compares the dollar value of FCA recoveries from whistleblower-initiated qui tam suits against recoveries from government-initiated (non-qui tam) investigations. Qui tam suits have increasingly dominated total recoveries since the 1986 FCA amendments, reflecting the critical role of insider whistleblowers in uncovering fraud that federal investigators would otherwise not detect.</p>
+    <div class="chart-wrapper"><canvas id="qtRecoveryChart"></canvas></div>
+  </div>
+
+  <!-- Data table -->
+  <div class="table-panel">
+    <div class="table-header">
+      <span>Annual FCA Recovery Detail</span>
+      <span style="color:var(--accent);font-size:9px" id="tableRange"></span>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>FY</th>
+          <th>Total Recovered</th>
+          <th>HHS / Health Care</th>
+          <th>HHS %</th>
+          <th>DOD / Defense</th>
+          <th>DOD %</th>
+          <th>Other Agencies</th>
+          <th>Qui Tam Suits</th>
+          <th>Relator Awards</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <footer>
+    <span>Source: <a href="https://www.justice.gov/civil/false-claims-act" target="_blank">DOJ Civil Division — False Claims Act</a> &nbsp;·&nbsp; Overall totals per DOJ Fraud Statistics Overview (FY1987–2025) &nbsp;·&nbsp; Agency breakdown from DOJ annual press releases</span>
+    <span>Dashboard generated February 2026</span>
+  </footer>
+
+</div><!-- /container -->
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────────────
+// Totals (in dollars) from DOJ Fraud Statistics Overview spreadsheet
+// Agency breakdown from DOJ annual press releases (FY2007-2025)
+let FCA_DATA = [];  // loaded from data/doj_fca.json
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let chartMode = 'stacked';  // 'stacked' | 'grouped' | 'pct'
+let mainChartInst = null, trendChartInst = null, donutChartInst = null, qtChartInst = null, qtRecoveryChartInst = null;
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+const $  = id => document.getElementById(id);
+const fmt = (n, decimals=1) => n == null ? '—' : (n/1e9).toFixed(decimals) + 'B';
+const fmtM = n => n == null ? '—' : '$' + (n/1e6).toFixed(0) + 'M';
+const fmtB = n => n == null ? '—' : '$' + (n/1e9).toFixed(2) + 'B';
+const pct  = (part, total) => (part == null || total == null || total === 0) ? '—' : ((part/total)*100).toFixed(1) + '%';
+const fmtK = n => n >= 1000 ? (n/1000).toFixed(1) + 'k' : String(n);
+
+function getRange() {
+  const from = parseInt($('yearFrom').value) || 1987;
+  const to   = parseInt($('yearTo').value)   || 2025;
+  return FCA_DATA.filter(d => d.y >= from && d.y <= to);
+}
+
+function getAgencyRange() {
+  const from = parseInt($('yearFrom').value) || 1987;
+  const to   = parseInt($('yearTo').value)   || 2025;
+  return FCA_DATA.filter(d => d.y >= from && d.y <= to && d.hhs !== null);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const res = await fetch('data/doj_fca.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    FCA_DATA = json.records;
+  } catch(e) {
+    console.error('Could not load doj_fca.json:', e);
+  }
+  // Populate donut year selector
+  const sel = $('donutYearSelect');
+  [...FCA_DATA].reverse().forEach(d => {
+    if (d.hhs !== null) {
+      const opt = document.createElement('option');
+      opt.value = d.y;
+      opt.textContent = 'FY ' + d.y;
+      if (d.y === 2025) opt.selected = true;
+      sel.appendChild(opt);
+    }
+  });
+  setRange(2007, 2025);
+});
+
+function setRange(from, to) {
+  $('yearFrom').value = from;
+  $('yearTo').value   = to;
+  ['btnAll','btn10','btn5','btnAgency'].forEach(id => $(id).classList.remove('active'));
+  if (from===1987 && to===2025) $('btnAll').classList.add('active');
+  else if (from===2016 && to===2025) $('btn10').classList.add('active');
+  else if (from===2021 && to===2025) $('btn5').classList.add('active');
+  else if (from===2007 && to===2025) $('btnAgency').classList.add('active');
+  renderAll();
+}
+
+function setChartMode(mode) {
+  chartMode = mode;
+  ['btnStacked','btnGrouped','btnPct'].forEach(id => $(id).classList.remove('on'));
+  $('btn' + mode.charAt(0).toUpperCase() + mode.slice(1)).classList.add('on');
+  const subs = {
+    stacked: 'Stacked bars show total and composition per year',
+    grouped: 'Grouped bars compare HHS, DOD and Other side by side',
+    pct:     "100% stacked \u2014 shows each agency's share of total recoveries"
+  };
+  $('mainChartSub').textContent = subs[mode];
+  updateMainChart();
+}
+
+function renderAll() {
+  updateStats();
+  updateMainChart();
+  updateTrendChart();
+  updateDonut();
+  updateQtChart();
+  updateQtRecoveryChart();
+  updateTable();
+}
+
+// ── STATS CARDS ───────────────────────────────────────────────────────────────
+function updateStats() {
+  const latest = FCA_DATA.find(d => d.y === 2025);
+  const prev   = FCA_DATA.find(d => d.y === 2024);
+  $('statsRow').innerHTML = `
+    <div class="stat-card total">
+      <div class="stat-label">FY 2025 Total Recovered</div>
+      <div class="stat-value total">${fmt(latest.t)}</div>
+      <div class="stat-sub">All-time record &nbsp;·&nbsp; +${pct(latest.t-prev.t, prev.t)} vs FY24</div>
+    </div>
+    <div class="stat-card hhs">
+      <div class="stat-label">FY 2025 Health Care / HHS</div>
+      <div class="stat-value hhs">${fmt(latest.hhs)}</div>
+      <div class="stat-sub">${pct(latest.hhs, latest.t)} of total &nbsp;·&nbsp; Medicare, Medicaid &amp; TRICARE</div>
+    </div>
+    <div class="stat-card dod">
+      <div class="stat-label">FY 2025 Defense / DOD</div>
+      <div class="stat-value dod">${fmt(latest.dod)}</div>
+      <div class="stat-sub">${pct(latest.dod, latest.t)} of total &nbsp;·&nbsp; Procurement fraud</div>
+    </div>
+    <div class="stat-card other">
+      <div class="stat-label">FY 2025 Other Agencies</div>
+      <div class="stat-value other">${fmt(latest.other)}</div>
+      <div class="stat-sub">${pct(latest.other, latest.t)} of total &nbsp;·&nbsp; SBA, customs, cyber, etc.</div>
+    </div>
+    <div class="stat-card" style="--accent:#22c55e">
+      <div class="stat-label">Record Qui Tam Filings</div>
+      <div class="stat-value" style="color:#22c55e">${latest.qt.toLocaleString()}</div>
+      <div class="stat-sub">New whistleblower suits in FY 2025</div>
+    </div>
+    <div class="stat-card" style="--accent:#e879f9">
+      <div class="stat-label">Lifetime FCA Recoveries</div>
+      <div class="stat-value" style="color:#e879f9;font-size:22px">$85B+</div>
+      <div class="stat-sub">Since 1986 FCA amendments</div>
+    </div>
+  `;
+}
+
+// ── MAIN CHART ─────────────────────────────────────────────────────────────────
+function updateMainChart() {
+  const data = getAgencyRange();
+  const labels = data.map(d => 'FY' + d.y);
+
+  let datasets;
+  const opts = { responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ display:true, position:'top', labels:{ color:'#5a6a82', font:{family:'Space Mono',size:10}, boxWidth:10, padding:16 } },
+      tooltip:{ backgroundColor:'#0a0e1a', borderColor:'#1e2d45', borderWidth:1,
+        titleFont:{family:'Space Mono',size:11}, bodyFont:{family:'Space Mono',size:11},
+        titleColor:'#e8edf5', bodyColor:'#e8edf5',
+        callbacks:{ label: ctx => {
+          const v = ctx.raw;
+          if (chartMode === 'pct') return ` ${ctx.dataset.label}: ${v.toFixed(1)}%`;
+          return ` ${ctx.dataset.label}: $${(v/1e9).toFixed(2)}B`;
+        }}
+      }
+    },
+    scales:{
+      x:{ stacked: chartMode!=='grouped', grid:{color:'rgba(255,255,255,0.03)'}, ticks:{color:'#5a6a82',font:{family:'Space Mono',size:9},maxRotation:45} },
+      y:{ stacked: chartMode!=='grouped', grid:{color:'rgba(255,255,255,0.05)'}, beginAtZero:true,
+        ticks:{ color:'#5a6a82', font:{family:'Space Mono',size:10},
+          callback: v => chartMode==='pct' ? v+'%' : '$'+(v/1e9).toFixed(1)+'B' } }
+    }
+  };
+
+  if (chartMode === 'pct') {
+    datasets = [
+      { label:'HHS / Health Care', data: data.map(d => d.t>0?(d.hhs/d.t*100):0), backgroundColor:'rgba(245,158,11,0.85)', borderWidth:0 },
+      { label:'DOD / Defense',     data: data.map(d => d.t>0?(d.dod/d.t*100):0), backgroundColor:'rgba(59,130,246,0.85)', borderWidth:0 },
+      { label:'Other Agencies',    data: data.map(d => d.t>0?(d.other/d.t*100):0), backgroundColor:'rgba(139,92,246,0.85)', borderWidth:0 },
+    ];
+  } else {
+    datasets = [
+      { label:'HHS / Health Care', data: data.map(d => d.hhs),   backgroundColor:'rgba(245,158,11,0.85)', borderWidth:0 },
+      { label:'DOD / Defense',     data: data.map(d => d.dod),   backgroundColor:'rgba(59,130,246,0.85)', borderWidth:0 },
+      { label:'Other Agencies',    data: data.map(d => d.other), backgroundColor:'rgba(139,92,246,0.75)', borderWidth:0 },
+    ];
+  }
+
+  if (mainChartInst) mainChartInst.destroy();
+  mainChartInst = new Chart($('mainChart').getContext('2d'), {
+    type: 'bar', data:{ labels, datasets }, options: opts
+  });
+}
+
+// ── TREND CHART ───────────────────────────────────────────────────────────────
+function updateTrendChart() {
+  const data = getAgencyRange();
+  const labels = data.map(d => 'FY' + d.y);
+  if (trendChartInst) trendChartInst.destroy();
+  trendChartInst = new Chart($('trendChart').getContext('2d'), {
+    type:'line',
+    data:{ labels, datasets:[
+      { label:'Total', data:data.map(d=>d.t), borderColor:'#00d4ff', backgroundColor:'rgba(0,212,255,0.05)', borderWidth:2, pointRadius:2, pointHoverRadius:5, fill:true, tension:0.3 },
+      { label:'HHS',   data:data.map(d=>d.hhs), borderColor:'#f59e0b', backgroundColor:'rgba(245,158,11,0.08)', borderWidth:2, pointRadius:2, pointHoverRadius:5, fill:true, tension:0.3 },
+      { label:'DOD',   data:data.map(d=>d.dod), borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,0.08)', borderWidth:2, pointRadius:2, pointHoverRadius:5, fill:true, tension:0.3 },
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ display:true, position:'top', labels:{ color:'#5a6a82', font:{family:'Space Mono',size:9}, boxWidth:8, padding:12 }},
+        tooltip:{ backgroundColor:'#0a0e1a', borderColor:'#1e2d45', borderWidth:1,
+          titleFont:{family:'Space Mono',size:10}, bodyFont:{family:'Space Mono',size:10},
+          callbacks:{ label: ctx => ` ${ctx.dataset.label}: $${(ctx.raw/1e9).toFixed(2)}B` } }
+      },
+      scales:{
+        x:{ grid:{color:'rgba(255,255,255,0.03)'}, ticks:{color:'#5a6a82',font:{family:'Space Mono',size:8},maxRotation:45,maxTicksLimit:12} },
+        y:{ grid:{color:'rgba(255,255,255,0.05)'}, beginAtZero:true, ticks:{ color:'#5a6a82', font:{family:'Space Mono',size:9}, callback: v=>'$'+(v/1e9).toFixed(1)+'B' } }
+      }
+    }
+  });
+}
+
+// ── DONUT CHART ───────────────────────────────────────────────────────────────
+function updateDonut() {
+  const yr  = parseInt($('donutYearSelect').value);
+  const row = FCA_DATA.find(d => d.y === yr);
+  if (!row || row.hhs === null) return;
+  $('donutYear').textContent = yr;
+
+  if (donutChartInst) donutChartInst.destroy();
+  donutChartInst = new Chart($('donutChart').getContext('2d'), {
+    type: 'doughnut',
+    data:{
+      labels:['HHS / Health Care','DOD / Defense','Other Agencies'],
+      datasets:[{ data:[row.hhs, row.dod, row.other],
+        backgroundColor:['rgba(245,158,11,0.85)','rgba(59,130,246,0.85)','rgba(139,92,246,0.8)'],
+        borderColor:'#0a0e1a', borderWidth:3 }]
+    },
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'65%',
+      plugins:{ legend:{ display:true, position:'bottom', labels:{ color:'#5a6a82', font:{family:'Space Mono',size:9}, boxWidth:10, padding:10 }},
+        tooltip:{ backgroundColor:'#0a0e1a', borderColor:'#1e2d45', borderWidth:1,
+          callbacks:{ label: ctx => {
+            const v = ctx.raw; const t = ctx.dataset.data.reduce((a,b)=>a+b,0);
+            return ` $${(v/1e9).toFixed(2)}B  (${(v/t*100).toFixed(1)}%)`;
+          }}
+        }
+      }
+    }
+  });
+}
+
+// ── QUI TAM CHART ─────────────────────────────────────────────────────────────
+function updateQtChart() {
+  const data = getRange();
+  const labels = data.map(d => 'FY' + d.y);
+  if (qtChartInst) qtChartInst.destroy();
+  qtChartInst = new Chart($('quitamChart').getContext('2d'), {
+    type:'bar',
+    data:{ labels, datasets:[
+      { label:'Qui Tam Suits Filed', data:data.map(d=>d.qt), backgroundColor:'rgba(34,197,94,0.7)', borderWidth:0, yAxisID:'yQt', type:'bar' },
+      { label:'Relator Awards ($)', data:data.map(d=>d.ra), borderColor:'#e879f9', backgroundColor:'rgba(232,121,249,0.08)', borderWidth:2, pointRadius:2, fill:true, tension:0.3, yAxisID:'yRa', type:'line' },
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ display:true, position:'top', labels:{ color:'#5a6a82', font:{family:'Space Mono',size:10}, boxWidth:10, padding:14 }},
+        tooltip:{ backgroundColor:'#0a0e1a', borderColor:'#1e2d45', borderWidth:1,
+          callbacks:{ label: ctx => {
+            if (ctx.dataset.yAxisID === 'yQt') return ` Suits filed: ${ctx.raw.toLocaleString()}`;
+            return ` Relator awards: $${(ctx.raw/1e6).toFixed(0)}M`;
+          }}
+        }
+      },
+      scales:{
+        x:{ grid:{color:'rgba(255,255,255,0.03)'}, ticks:{color:'#5a6a82',font:{family:'Space Mono',size:9},maxRotation:45,maxTicksLimit:20} },
+        yQt:{ position:'left',  grid:{color:'rgba(255,255,255,0.05)'}, beginAtZero:true, ticks:{ color:'#22c55e', font:{family:'Space Mono',size:9} }, title:{display:true,text:'Suits',color:'#22c55e',font:{family:'Space Mono',size:9}} },
+        yRa:{ position:'right', grid:{drawOnChartArea:false}, beginAtZero:true, ticks:{ color:'#e879f9', font:{family:'Space Mono',size:9}, callback: v=>'$'+(v/1e6).toFixed(0)+'M' }, title:{display:true,text:'Awards',color:'#e879f9',font:{family:'Space Mono',size:9}} },
+      }
+    }
+  });
+}
+
+// ── QUI TAM VS NON-QUI TAM RECOVERY CHART ────────────────────────────────────
+function updateQtRecoveryChart() {
+  const data = getRange();
+  const labels = data.map(d => 'FY' + d.y);
+  if (qtRecoveryChartInst) qtRecoveryChartInst.destroy();
+  qtRecoveryChartInst = new Chart($('qtRecoveryChart').getContext('2d'), {
+    type: 'bar',
+    data: { labels, datasets: [
+      { label: 'Qui Tam (Whistleblower)', data: data.map(d => d.qtR), backgroundColor: 'rgba(34,197,94,0.80)', borderWidth: 0, stack: 'rec' },
+      { label: 'Government-Initiated',   data: data.map(d => d.nqR), backgroundColor: 'rgba(245,158,11,0.70)', borderWidth: 0, stack: 'rec' },
+    ]},
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { color: '#5a6a82', font: { family: 'Space Mono', size: 10 }, boxWidth: 10, padding: 16 } },
+        tooltip: {
+          backgroundColor: '#0a0e1a', borderColor: '#1e2d45', borderWidth: 1,
+          titleFont: { family: 'Space Mono', size: 11 }, bodyFont: { family: 'Space Mono', size: 11 },
+          titleColor: '#e8edf5', bodyColor: '#e8edf5',
+          callbacks: {
+            label: ctx => {
+              const v = ctx.raw;
+              const total = ctx.chart.data.datasets.reduce((s, ds) => s + (ds.data[ctx.dataIndex] || 0), 0);
+              return ` ${ctx.dataset.label}: $${(v/1e9).toFixed(2)}B (${total>0?(v/total*100).toFixed(1):0}%)`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: { stacked: true, grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#5a6a82', font: { family: 'Space Mono', size: 9 }, maxRotation: 45, maxTicksLimit: 20 } },
+        y: { stacked: true, grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true,
+          ticks: { color: '#5a6a82', font: { family: 'Space Mono', size: 10 }, callback: v => '$' + (v/1e9).toFixed(1) + 'B' }
+        }
+      }
+    }
+  });
+}
+
+// ── TABLE ─────────────────────────────────────────────────────────────────────
+function updateTable() {
+  const data = [...getRange()].reverse();   // most recent first
+  $('tableRange').textContent = `FY${data[data.length-1].y}–FY${data[0].y}`;
+  const maxT = Math.max(...data.map(d=>d.t));
+
+  $('tableBody').innerHTML = data.map(row => {
+    const is25 = row.y === 2025;
+    const hasAgency = row.hhs !== null;
+    const hhsPct  = hasAgency ? (row.hhs/row.t*100).toFixed(1)  : null;
+    const dodPct  = hasAgency ? (row.dod/row.t*100).toFixed(1)  : null;
+    const barW    = (row.t / maxT * 72).toFixed(0);
+
+    return `<tr class="${is25 ? 'row-2025' : ''}">
+      <td>${row.y}</td>
+      <td>
+        <div class="bar-cell">
+          <span>${fmtB(row.t)}</span>
+          <div class="mini-bar" style="width:${barW}px;background:var(--total)"></div>
+        </div>
+      </td>
+      <td>${hasAgency ? fmtB(row.hhs) : '<span class="pct">n/a</span>'}</td>
+      <td>${hhsPct ? `<span class="pct">${hhsPct}%</span>` : '<span class="pct">—</span>'}</td>
+      <td>${hasAgency ? fmtB(row.dod) : '<span class="pct">n/a</span>'}</td>
+      <td>${dodPct ? `<span class="pct">${dodPct}%</span>` : '<span class="pct">—</span>'}</td>
+      <td>${hasAgency ? fmtB(row.other) : '<span class="pct">n/a</span>'}</td>
+      <td>${row.qt.toLocaleString()}</td>
+      <td>$${(row.ra/1e6).toFixed(0)}M</td>
+    </tr>`;
+  }).join('');
+}
+</script>
+</body>
+</html>

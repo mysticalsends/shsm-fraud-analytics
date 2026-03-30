@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOJ Health Care Fraud Enforcement Actions — 2024</title>
+<link rel="stylesheet" href="css/shared.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --accent: #f59e0b;
+    --amber:  #f59e0b;
+    --indigo: #6366f1;
+    --cyan:   #00d4ff;
+  }
+
+  .main { padding: 28px 40px 40px; }
+
+  /* Methodology box */
+  .methodology-box {
+    border: 1px solid rgba(245,158,11,0.4);
+    background: rgba(245,158,11,0.04);
+    border-left: 4px solid var(--amber);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin-bottom: 28px;
+  }
+  .methodology-box .meth-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  .methodology-box p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.75;
+    margin: 0;
+  }
+
+  /* KPI row */
+  .kpi-row { display: flex; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
+  .kpi {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 18px 22px; flex: 1; min-width: 160px;
+    position: relative; overflow: hidden;
+  }
+  .kpi::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px; background: var(--amber);
+  }
+  .kpi .kpi-label { font-size: 10px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .kpi .kpi-value { font-size: 26px; color: var(--amber); font-family: 'Playfair Display', serif; margin-top: 6px; }
+  .kpi .kpi-sub   { font-size: 10px; color: var(--muted); margin-top: 4px; }
+
+  /* Chart cards */
+  .chart-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 24px; margin-bottom: 22px;
+  }
+  .chart-card h3 {
+    font-size: 11px; color: var(--muted); letter-spacing: 0.08em;
+    text-transform: uppercase; margin: 0 0 8px 0;
+  }
+  .chart-desc {
+    font-size: 11px; color: var(--muted); line-height: 1.65;
+    margin: 0 0 16px 0; padding: 8px 12px;
+    border-left: 3px solid rgba(245,158,11,0.35);
+    background: rgba(245,158,11,0.02);
+    border-radius: 0 4px 4px 0;
+  }
+  .chart-wrap { position: relative; }
+
+  /* Summary section */
+  .summary-section {
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 4px solid var(--cyan);
+    border-radius: 6px; padding: 24px 28px; margin-bottom: 28px;
+  }
+  .summary-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; color: var(--text);
+    margin: 0 0 16px 0;
+  }
+  .summary-section p {
+    font-size: 12px; color: var(--muted);
+    line-height: 1.8; margin: 0 0 12px 0;
+  }
+  .summary-section p:last-child { margin-bottom: 0; }
+  .summary-section strong { color: var(--text); }
+
+  /* Table */
+  .table-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px 24px; overflow-x: auto;
+  }
+  .table-card h3 {
+    font-size: 11px; color: var(--muted); letter-spacing: 0.08em;
+    text-transform: uppercase; margin: 0 0 16px 0;
+  }
+  .controls {
+    display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end;
+    margin-bottom: 16px;
+  }
+  .controls label {
+    font-size: 10px; color: var(--muted);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    display: block; margin-bottom: 4px;
+  }
+  select, input[type="text"] {
+    background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+    font-family: 'Space Mono', monospace; font-size: 11px; padding: 6px 10px;
+    border-radius: 4px; outline: none;
+  }
+  select:focus, input:focus { border-color: var(--accent); }
+  .btn-reset {
+    background: none; border: 1px solid var(--border); color: var(--muted);
+    font-family: 'Space Mono', monospace; font-size: 10px; padding: 6px 12px;
+    border-radius: 4px; cursor: pointer;
+  }
+  .btn-reset:hover { border-color: var(--accent); color: var(--accent); }
+
+  .stats-line { font-size: 10px; color: var(--muted); margin-bottom: 10px; }
+  .stats-line span { color: var(--accent); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 700px; }
+  th {
+    text-align: left; color: var(--muted); font-size: 10px; letter-spacing: 0.06em;
+    padding: 8px 10px; border-bottom: 1px solid var(--border);
+    white-space: nowrap; cursor: pointer; user-select: none;
+  }
+  th:hover { color: var(--accent); }
+  th.sorted-asc::after  { content: ' ▲'; color: var(--accent); }
+  th.sorted-desc::after { content: ' ▼'; color: var(--accent); }
+  td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:hover td { background: var(--surface2); }
+  tr:last-child td { border-bottom: none; }
+  td.amount   { color: var(--accent); white-space: nowrap; text-align: right; font-weight: 700; }
+  td.date-col { color: var(--muted); white-space: nowrap; font-size: 10px; }
+  td.def-col  { max-width: 220px; }
+  td.def-col a { color: var(--text); text-decoration: none; }
+  td.def-col a:hover { color: var(--accent); }
+  td.dist-col { font-size: 10px; color: var(--muted); max-width: 180px; }
+
+  .badge {
+    display: inline-block; font-size: 9px; padding: 2px 7px; border-radius: 3px;
+    white-space: nowrap; font-weight: 700; letter-spacing: 0.04em;
+  }
+  /* fraud type badges */
+  .ft-0{background:#6366f133;color:#818cf8}.ft-1{background:#f9731633;color:#fb923c}
+  .ft-2{background:#ef444433;color:#f87171}.ft-3{background:#22c55e33;color:#4ade80}
+  .ft-4{background:#f59e0b33;color:#fbbf24}.ft-5{background:#ec489933;color:#f472b6}
+  .ft-6{background:#00d4ff33;color:#00d4ff}.ft-7{background:#a78bfa33;color:#c4b5fd}
+  .ft-8{background:#94a3b833;color:#cbd5e1}.ft-9{background:#14b8a633;color:#2dd4bf}
+  .ft-10{background:#84cc1633;color:#a3e635}
+  /* defendant type badges */
+  .dt-0{background:#6366f133;color:#818cf8}.dt-1{background:#f9731633;color:#fb923c}
+  .dt-2{background:#ef444433;color:#f87171}.dt-3{background:#22c55e33;color:#4ade80}
+  .dt-4{background:#f59e0b33;color:#fbbf24}.dt-5{background:#ec489933;color:#f472b6}
+  .dt-6{background:#00d4ff33;color:#00d4ff}.dt-7{background:#a78bfa33;color:#c4b5fd}
+  .dt-8{background:#14b8a633;color:#2dd4bf}.dt-9{background:#84cc1633;color:#a3e635}
+  .dt-10{background:#d946ef33;color:#e879f9}.dt-11{background:#0ea5e933;color:#38bdf8}
+  .dt-12{background:#f4303433;color:#fc8181}.dt-13{background:#78716c33;color:#a8a29e}
+  .dt-14{background:#64748b33;color:#94a3b8}.dt-15{background:#44444433;color:#aaaaaa}
+  .dt-16{background:#1e3a5f33;color:#60a5fa}
+
+  /* Pager */
+  .pager { display: flex; gap: 8px; margin-top: 14px; align-items: center; justify-content: flex-end; }
+  .pager button {
+    background: var(--surface2); border: 1px solid var(--border); color: var(--muted);
+    font-family: 'Space Mono', monospace; font-size: 10px; padding: 4px 10px;
+    border-radius: 4px; cursor: pointer;
+  }
+  .pager button:hover, .pager button.active { border-color: var(--accent); color: var(--accent); }
+  .pager span { font-size: 10px; color: var(--muted); }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 16px 40px;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 0;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<a class="back-link" href="index.html">&#8592; Back to Dashboard Hub</a>
+
+<header>
+  <div class="tag">DOJ / False Claims Act</div>
+  <h1>DOJ Health Care Fraud Enforcement Actions — <em>2024</em></h1>
+  <p class="subtitle">A Data Analysis of False Claims Act Recoveries</p>
+</header>
+
+<div class="main">
+
+  <!-- Methodology Note -->
+  <div class="methodology-box">
+    <div class="meth-title">Methodology Note</div>
+    <p>This report is based on DOJ press releases identified as healthcare fraud recoveries in calendar year 2024. We may have missed some cases. Each press release was classified into a single fraud type and a single defendant type. Where multiple types applied — for example, a case involving both a physician and a hospital, or both overbilling and medical necessity — we selected the most prominent. For cases involving multiple U.S. Attorney districts, we chose the first district named in the press release and prioritized individual districts over Main Justice. We believe this provides a detailed look at a single year of DOJ enforcement actions against healthcare companies.</p>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="kpi-label">Total Recovered</div>
+      <div class="kpi-value">$2.65B</div>
+      <div class="kpi-sub">Calendar year 2024</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Total Cases</div>
+      <div class="kpi-value">111</div>
+      <div class="kpi-sub">Unique DOJ press releases</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Average Recovery</div>
+      <div class="kpi-value">$23.9M</div>
+      <div class="kpi-sub">Per case with announced amount</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Largest Settlement</div>
+      <div class="kpi-value">$650.0M</div>
+      <div class="kpi-sub">McKinsey &amp; Company</div>
+    </div>
+  </div>
+
+  <!-- Graph 1 -->
+  <div class="chart-card">
+    <h3>Graph 1 — Recoveries by Fraud Type</h3>
+    <p class="chart-desc">This chart shows total dollar recoveries grouped by fraud type. Drug Dispensing / Opioids dominates due to several large pharmaceutical settlements.</p>
+    <div class="chart-wrap" style="height:370px"><canvas id="chart1"></canvas></div>
+  </div>
+
+  <!-- Graph 2 -->
+  <div class="chart-card">
+    <h3>Graph 2 — Case Count by Fraud Type</h3>
+    <p class="chart-desc">This chart shows the number of cases by fraud type, independent of settlement size. Anti-Kickback / Referral is the most frequently prosecuted fraud type.</p>
+    <div class="chart-wrap" style="height:370px"><canvas id="chart2"></canvas></div>
+  </div>
+
+  <!-- Graph 3 -->
+  <div class="chart-card">
+    <h3>Graph 3 — Recoveries by Defendant Type</h3>
+    <p class="chart-desc">This chart shows total dollar recoveries by defendant type. Pharmaceutical Manufacturers account for the largest share of total recoveries.</p>
+    <div class="chart-wrap" style="height:560px"><canvas id="chart3"></canvas></div>
+  </div>
+
+  <!-- Graph 4 -->
+  <div class="chart-card">
+    <h3>Graph 4 — Case Count by Defendant Type</h3>
+    <p class="chart-desc">This chart shows the number of cases by defendant type. Physician / Practice and Clinical Laboratory / Diagnostic Imaging are the most frequently named defendant categories.</p>
+    <div class="chart-wrap" style="height:560px"><canvas id="chart4"></canvas></div>
+  </div>
+
+  <!-- Graph 5 -->
+  <div class="chart-card">
+    <h3>Graph 5 — Top 15 Districts by Total Recoveries</h3>
+    <p class="chart-desc">This chart shows the top 15 U.S. Attorney districts by total dollar recoveries. The District of Massachusetts and the Southern District of New York led all districts in 2024 recovery amounts.</p>
+    <div class="chart-wrap" style="height:490px"><canvas id="chart5"></canvas></div>
+  </div>
+
+  <!-- Graph 6 -->
+  <div class="chart-card">
+    <h3>Graph 6 — Top 15 Districts by Case Count</h3>
+    <p class="chart-desc">This chart shows the districts with the highest number of healthcare fraud cases in 2024. The District of Massachusetts led with 10 cases.</p>
+    <div class="chart-wrap" style="height:490px"><canvas id="chart6"></canvas></div>
+  </div>
+
+  <!-- Graph 7 -->
+  <div class="chart-card">
+    <h3>Graph 7 — Top 20 Largest Individual Settlements</h3>
+    <p class="chart-desc">This chart displays the 20 largest individual settlements in 2024, illustrating how a small number of large cases drive a significant share of total recoveries.</p>
+    <div class="chart-wrap" style="height:660px"><canvas id="chart7"></canvas></div>
+  </div>
+
+  <!-- Graph 8 -->
+  <div class="chart-card">
+    <h3>Graph 8 — Cases by Month</h3>
+    <p class="chart-desc">This chart shows the distribution of cases by month, reflecting the pace of DOJ enforcement activity throughout the year.</p>
+    <div class="chart-wrap" style="height:280px"><canvas id="chart8"></canvas></div>
+  </div>
+
+  <!-- Summary of Findings -->
+  <div class="summary-section">
+    <h2>Summary of Findings</h2>
+    <p>In calendar year 2024, the Department of Justice announced <strong>111 healthcare fraud settlements and judgments</strong> totaling <strong>$2.65 billion</strong> in recoveries under the False Claims Act. These cases spanned a wide range of fraud types, defendant categories, and federal districts, reflecting the breadth of the government's health care enforcement program.</p>
+    <p><strong>Drug Dispensing / Opioids was the top fraud type by dollars recovered</strong>, generating $1.14 billion across just 6 cases — driven largely by the McKinsey ($650M), Endo International ($464.9M), and Teva Pharmaceuticals ($450M) settlements. By case count, however, <strong>Anti-Kickback / Referral dominated with 39 cases</strong>, underscoring the government's sustained focus on improper financial relationships between referral sources and healthcare providers.</p>
+    <p><strong>Pharmaceutical Manufacturers accounted for the largest share of total recoveries by defendant type</strong> at $987.7M across 5 cases, followed by Consulting / Advisory firms at $653.1M (4 cases). By case count, <strong>Physician / Practice defendants were named most frequently (29 cases)</strong>, followed by Clinical Laboratory / Diagnostic Imaging entities (18 cases) and Hospitals / Health Systems (14 cases).</p>
+    <p><strong>Three districts accounted for nearly 65% of total dollar recoveries</strong>: the District of Massachusetts ($740.5M, 10 cases), the Southern District of New York ($495.1M, 5 cases), and the Eastern District of Pennsylvania ($479.7M, 3 cases). Despite this geographic concentration of large-dollar cases, enforcement was geographically broad — <strong>44 different U.S. Attorney districts</strong> were represented in the 2024 data.</p>
+    <p><strong>A small number of large settlements drive a disproportionate share of total recoveries.</strong> The top 5 settlements alone — McKinsey ($650M), Endo International ($464.9M), Teva Pharmaceuticals ($450M), Walgreens ($106.8M), and Rite Aid / Elixir ($101M) — account for over <strong>$1.77 billion</strong>, or approximately 67% of all 2024 recoveries.</p>
+    <p>Taken together, the 2024 data reflects a Department of Justice that pursues healthcare fraud across a <strong>diverse mix of fraud theories and defendant types</strong> — from large pharmaceutical kickback schemes to small-dollar physician billing irregularities — while achieving the most dollar impact through a handful of blockbuster settlements each year.</p>
+  </div>
+
+  <!-- Table -->
+  <div class="table-card">
+    <h3>All Cases — 2024</h3>
+    <div class="controls">
+      <div>
+        <label>Search</label>
+        <input type="text" id="searchInput" placeholder="defendant, fraud type..." style="width:200px" oninput="filterTable()">
+      </div>
+      <div>
+        <label>Fraud Type</label>
+        <select id="filterFraud" onchange="filterTable()"><option value="">All</option></select>
+      </div>
+      <div>
+        <label>Defendant Type</label>
+        <select id="filterDef" onchange="filterTable()"><option value="">All</option></select>
+      </div>
+      <div>
+        <label>District</label>
+        <select id="filterDist" onchange="filterTable()"><option value="">All</option></select>
+      </div>
+      <div>
+        <button class="btn-reset" onclick="resetFilters()">Reset</button>
+      </div>
+    </div>
+    <div class="stats-line" id="tableStats"></div>
+    <table id="caseTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable('date')" id="th-date">Date</th>
+          <th onclick="sortTable('defendant')">Defendant</th>
+          <th onclick="sortTable('fraudType')">Fraud Type</th>
+          <th onclick="sortTable('defType')">Defendant Type</th>
+          <th onclick="sortTable('location')">District</th>
+          <th onclick="sortTable('amount')" id="th-amount">Amount</th>
+          <th style="width:40px;text-align:center;">Link</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+    <div class="pager" id="pager"></div>
+  </div>
+
+</div><!-- /main -->
+
+<footer>
+  Source: U.S. Department of Justice press releases, calendar year 2024. Analysis by Shaun Rosenthal.
+</footer>
+
+</div><!-- /container -->
+
+<script>
+// ── COLOR PALETTES ────────────────────────────────────────────────────────────
+const FRAUD_COLORS = [
+  '#6366f1','#f97316','#ef4444','#22c55e','#f59e0b',
+  '#ec4899','#00d4ff','#a78bfa','#94a3b8','#14b8a6','#84cc16'
+];
+const DEF_COLORS = [
+  '#6366f1','#f97316','#ef4444','#22c55e','#f59e0b',
+  '#ec4899','#00d4ff','#a78bfa','#14b8a6','#84cc16',
+  '#d946ef','#0ea5e9','#f43034','#78716c','#64748b','#888','#3b82f6'
+];
+
+// ── SUMMARY DATA (hardcoded from doj_hc_cy2024.json) ─────────────────────────
+const BY_FRAUD = {
+  'Drug Dispensing / Opioids':              { recovered: 1143088378,    cases: 6  },
+  'Anti-Kickback / Referral':               { recovered: 780249995.22,  cases: 39 },
+  'Overbilling / Upcoding / False Billing': { recovered: 390932119.16,  cases: 32 },
+  'Drug Pricing / Formulary Fraud':         { recovered: 126000000,     cases: 2  },
+  'Unnecessary / Ineligible Services':      { recovered: 102373741.78,  cases: 13 },
+  'False Certification':                    { recovered: 46480611.06,   cases: 6  },
+  'Clinical Trial Fraud':                   { recovered: 19564743,      cases: 1  },
+  'Stark Law':                              { recovered: 14935000,      cases: 2  },
+  'COVID / PPP Fraud':                      { recovered: 13783990,      cases: 3  },
+  'Identity Theft / Credential Fraud':      { recovered: 9889180.87,    cases: 6  },
+  'Cybersecurity / Data':                   { recovered: 306722,        cases: 1  }
+};
+
+const BY_DEF = {
+  'Pharmaceutical Manufacturer':              { recovered: 987650000,    cases: 5  },
+  'Consulting / Advisory':                   { recovered: 653107884,    cases: 4  },
+  'Clinical Laboratory / Diagnostic Imaging':{ recovered: 164321088.78, cases: 18 },
+  'Hospital / Health System':                { recovered: 163619013.06, cases: 14 },
+  'Pharmacy':                                { recovered: 146013530.21, cases: 8  },
+  'Clinic / Outpatient Facility':            { recovered: 104487390,    cases: 3  },
+  'PBM':                                     { recovered: 101000000,    cases: 1  },
+  'Insurance Company / Health Plan':         { recovered: 98000000,     cases: 1  },
+  'Physician / Practice':                    { recovered: 55783287.05,  cases: 29 },
+  'DME Supplier':                            { recovered: 42302800,     cases: 5  },
+  'Nursing Home / SNF':                      { recovered: 32979739,     cases: 3  },
+  'Medical Device':                          { recovered: 32700000,     cases: 4  },
+  'Behavioral Health / SUD':                 { recovered: 29943908.99,  cases: 6  },
+  'Hospice':                                 { recovered: 20828000,     cases: 2  },
+  'Home Health Agency':                      { recovered: 9707840,      cases: 5  },
+  'Drug Wholesaler / Distributor':           { recovered: 3170000,      cases: 2  },
+  'Healthcare Staffing':                     { recovered: 1990000,      cases: 1  }
+};
+
+const BY_DIST = {
+  'District of Massachusetts':         { recovered: 740530000,    cases: 10 },
+  'Southern District of New York':     { recovered: 495054416.48, cases: 5  },
+  'Eastern District of Pennsylvania':  { recovered: 479655703.79, cases: 3  },
+  'Northern District of Ohio':         { recovered: 120700000,    cases: 4  },
+  'District of New Mexico':            { recovered: 106800000,    cases: 1  },
+  'Western District of New York':      { recovered: 98000000,     cases: 1  },
+  'District of Colorado':              { recovered: 84487390,     cases: 3  },
+  'Middle District of Florida':        { recovered: 71664743,     cases: 6  },
+  'Northern District of Illinois':     { recovered: 64490000,     cases: 4  },
+  'District of New Jersey':            { recovered: 46794652,     cases: 5  },
+  'District of Maryland':              { recovered: 27394751.38,  cases: 3  },
+  'Northern District of Texas':        { recovered: 26200000,     cases: 2  },
+  'Western District of Kentucky':      { recovered: 21611564,     cases: 2  },
+  'Northern District of New York':     { recovered: 21300000,     cases: 1  },
+  'Northern District of Georgia':      { recovered: 20950000,     cases: 3  },
+  'Middle District of Tennessee':      { recovered: 19428000,     cases: 1  },
+  'Eastern District of California':    { recovered: 19204648,     cases: 6  },
+  'Eastern District of Kentucky':      { recovered: 18108933,     cases: 3  },
+  'District of Arizona':               { recovered: 13500000,     cases: 1  },
+  'District of Minnesota':             { recovered: 13630000,     cases: 2  },
+  'Northern District of Iowa':         { recovered: 13011315.42,  cases: 3  },
+  'Eastern District of Michigan':      { recovered: 12049370.33,  cases: 4  },
+  'District of Montana':               { recovered: 10844201,     cases: 1  },
+  'Central District of California':    { recovered: 13783990,     cases: 3  },
+  'Northern District of Florida':      { recovered: 550000,       cases: 1  },
+  'Eastern District of Missouri':      { recovered: 14819660.18,  cases: 2  },
+  'District of New Jersey':            { recovered: 46794652,     cases: 5  },
+  'Southern District of Ohio':         { recovered: 4496330,      cases: 1  },
+  'District of South Carolina':        { recovered: 5738934,      cases: 5  },
+  'Eastern District of Tennessee':     { recovered: 8488378,      cases: 1  },
+  'Eastern District of Texas':         { recovered: 5343630,      cases: 1  },
+  'Eastern District of Virginia':      { recovered: 2378731.06,   cases: 1  },
+  'Western District of North Carolina':{ recovered: 835000,       cases: 2  },
+  'Western District of Pennsylvania':  { recovered: 735000,       cases: 1  },
+  'Western District of Texas':         { recovered: 7401655.18,   cases: 3  },
+  'Western District of Washington':    { recovered: 2462370,      cases: 3  },
+  'District of Connecticut':           { recovered: 7155259,      cases: 4  },
+  'District of Delaware':              { recovered: 1080000,      cases: 1  },
+  'District of Idaho':                 { recovered: 321576.51,    cases: 1  },
+  'District of Maine':                 { recovered: 629056.76,    cases: 1  },
+  'District of Puerto Rico':           { recovered: 2125640,      cases: 1  },
+  'Main Justice':                      { recovered: 8549582,      cases: 2  },
+  'Middle District of Georgia':        { recovered: 1500000,      cases: 1  },
+  'Southern District of California':   { recovered: 3800000,      cases: 1  }
+};
+
+// ── RECORDS (hardcoded from doj_hc_cy2024.json) ───────────────────────────────
+const RECORDS = [
+  {date:"2024-12-26",defendant:"Southern California-Based Clinics, Laboratory and Their Owners",defType:"Clinic / Outpatient Facility",fraudType:"Anti-Kickback / Referral",amount:10000000,location:"Central District of California",url:"https://www.justice.gov/opa/pr/southern-california-based-clinics-laboratory-and-their-owners-pay-10m-false-claims-arising"},
+  {date:"2024-12-23",defendant:"Food City",defType:"Pharmacy",fraudType:"Drug Dispensing / Opioids",amount:8488378,location:"Eastern District of Tennessee",url:"https://www.justice.gov/opa/pr/food-city-agrees-pay-over-8m-settle-false-claims-act-allegations-related-opioid-dispensing"},
+  {date:"2024-12-23",defendant:"Inform Diagnostics",defType:"Clinical Laboratory / Diagnostic Imaging",fraudType:"Anti-Kickback / Referral",amount:2900000,location:"District of Massachusetts",url:"https://www.justice.gov/usao-ma/pr/inform-diagnostics-agrees-pay-29-million-resolve-potential-false-claims-act-liability"},
+  {date:"2024-12-23",defendant:"BTW Solutions, LLC",defType:"Drug Wholesaler / Distributor",fraudType:"Anti-Kickback / Referral",amount:1500000,location:"Middle District of Georgia",url:"https://www.justice.gov/usao-mdga/pr/drug-wholesaler-agrees-15-million-settlement-anti-kickback-statute-and-false-claims"},
+  {date:"2024-12-20",defendant:"Rapid Health",defType:"Pharmacy",fraudType:"Overbilling / Upcoding / False Billing",amount:8242860,location:"Main Justice",url:"https://www.justice.gov/opa/pr/rapid-health-agrees-pay-82m-allegedly-billing-medicare-over-counter-covid-19-tests-were-not"},
+  {date:"2024-12-20",defendant:"Independent Health Association",defType:"Insurance Company / Health Plan",fraudType:"Overbilling / Upcoding / False Billing",amount:98000000,location:"Western District of New York",url:"https://www.justice.gov/opa/pr/medicare-advantage-provider-independent-health-pay-98m-settle-false-claims-act-suit"},
+  {date:"2024-12-20",defendant:"Sixteen Cardiology Practices and associated physicians",defType:"Physician / Practice",fraudType:"Overbilling / Upcoding / False Billing",amount:17761564,location:"Western District of Kentucky",url:"https://www.justice.gov/opa/pr/sixteen-cardiology-practices-pay-total-177m-resolve-false-claims-act-allegations-concerning"},
+  {date:"2024-12-13",defendant:"McKinsey & Company",defType:"Consulting / Advisory",fraudType:"Drug Dispensing / Opioids",amount:650000000,location:"District of Massachusetts",url:"https://www.justice.gov/usao-ma/pr/justice-department-announces-resolution-criminal-and-civil-investigations-mckinsey"},
+  {date:"2024-12-13",defendant:"ASD Specialty Healthcare (D/B/A Besse Medical)",defType:"Drug Wholesaler / Distributor",fraudType:"Anti-Kickback / Referral",amount:1670000,location:"District of Massachusetts",url:"https://www.justice.gov/usao-ma/pr/asd-specialty-healthcare-dba-besse-medical-agrees-pay-167-million-allegedly-paying"},
+  {date:"2024-12-12",defendant:"Oroville Hospital",defType:"Hospital / Health System",fraudType:"Unnecessary / Ineligible Services",amount:10250000,location:"Eastern District of California",url:"https://www.justice.gov/opa/pr/california-hospital-pay-1025m-resolve-false-claims-allegations"},
+  {date:"2024-12-05",defendant:"Home Health Care Company and Its Owners",defType:"Home Health Agency",fraudType:"False Certification",amount:361520,location:"District of Connecticut",url:"https://www.justice.gov/usao-ct/pr/home-health-care-company-and-its-owners-pay-more-360k-settle-false-claims-allegations"},
+  {date:"2024-12-02",defendant:"American Health Imaging, Inc. and Scott Arant",defType:"Clinical Laboratory / Diagnostic Imaging",fraudType:"Anti-Kickback / Referral",amount:5250000,location:"Northern District of Georgia",url:"https://www.justice.gov/usao-ndga/pr/american-health-imaging-inc-and-scott-arant-pay-over-5-million-resolve-allegations"},
+  {date:"2024-11-21",defendant:"Fresno Doctors",defType:"Physician / Practice",fraudType:"Anti-Kickback / Referral",amount:2400000,location:"Eastern District of California",url:"https://www.justice.gov/usao-edca/pr/fresno-doctors-agree-pay-24-million-resolve-kickback-allegations"},
+  {date:"2024-11-15",defendant:"QOL Medical LLC",defType:"Pharmaceutical Manufacturer",fraudType:"Anti-Kickback / Referral",amount:47000000,location:"District of Massachusetts",url:"https://www.justice.gov/opa/pr/pharmaceutical-company-qol-medical-and-ceo-agree-pay-47m-allegedly-paying-kickbacks-induce"},
+  {date:"2024-11-15",defendant:"Inova Health System Foundation et al.",defType:"Hospital / Health System",fraudType:"False Certification",amount:2378731,location:"Eastern District of Virginia",url:"https://www.justice.gov/usao-edva/pr/virginia-hospital-system-agrees-237m-false-claims-settlement"},
+  {date:"2024-11-12",defendant:"Brandon Eye Associates P.A.",defType:"Physician / Practice",fraudType:"Anti-Kickback / Referral",amount:1300000,location:"Middle District of Florida",url:"https://www.justice.gov/opa/pr/florida-ophthalmology-practice-agrees-pay-13m-resolve-allegations-fraudulent-claims-0"},
+  {date:"2024-11-12",defendant:"UCHealth",defType:"Hospital / Health System",fraudType:"Overbilling / Upcoding / False Billing",amount:23000000,location:"District of Colorado",url:"https://www.justice.gov/opa/pr/uchealth-agrees-pay-23m-resolve-allegations-fraudulent-billing-emergency-department-visits"},
+  {date:"2024-11-08",defendant:"Ethos Laboratories",defType:"Clinical Laboratory / Diagnostic Imaging",fraudType:"Overbilling / Upcoding / False Billing",amount:6500000,location:"District of Massachusetts",url:"https://www.justice.gov/usao-ma/pr/ethos-laboratories-agrees-pay-65-million-resolve-allegations-fraudulent-billing"},
+  {date:"2024-11-04",defendant:"Horizon Medical Center of Denton",defType:"Hospital / Health System",fraudType:"Stark Law",amount:14200000,location:"Northern District of Texas",url:"https://www.justice.gov/usao-ndtx/pr/north-texas-medical-center-pays-142-million-resolve-potential-false-claims-act"},
+  {date:"2024-11-04",defendant:"GMAJOS, LLC, county doctor, and pharmacist",defType:"Pharmacy",fraudType:"Unnecessary / Ineligible Services",amount:700948,location:"Eastern District of Michigan",url:"https://www.justice.gov/usao-edmi/pr/macomb-county-doctor-and-pharmacist-agree-pay-700948-settle-false-claims-act"},
+  {date:"2024-11-01",defendant:"Optometrist",defType:"Physician / Practice",fraudType:"Identity Theft / Credential Fraud",amount:1055380,location:"Western District of Texas",url:"https://www.justice.gov/usao-wdtx/pr/optometrist-settles-allegations-his-optometry-practices-submitted-false-claims-using"},
+  {date:"2024-10-29",defendant:"KA Health Services (KA Health) and its owner",defType:"Behavioral Health / SUD",fraudType:"Overbilling / Upcoding / False Billing",amount:321577,location:"District of Idaho",url:"https://www.justice.gov/usao-id/pr/boise-health-care-company-and-former-therapist-resolve-fraudulent-psychotherapy-billing"},
+  {date:"2024-10-29",defendant:"Former Sioux City Plastic Surgeon",defType:"Physician / Practice",fraudType:"Unnecessary / Ineligible Services",amount:198755,location:"Northern District of Iowa",url:"https://www.justice.gov/usao-ndia/pr/former-sioux-city-plastic-surgeon-agrees-pay-nearly-200000-settle-allegations-he"},
+  {date:"2024-10-25",defendant:"Washington doctor",defType:"Physician / Practice",fraudType:"Unnecessary / Ineligible Services",amount:65680,location:"Western District of Washington",url:"https://www.justice.gov/usao-wdwa/pr/washington-doctor-settles-allegations-he-submitted-false-claims-federal-healthcare"},
+  {date:"2024-10-22",defendant:"Veni-Express Inc. and Its Owners",defType:"Clinical Laboratory / Diagnostic Imaging",fraudType:"Anti-Kickback / Referral",amount:135000,location:"Eastern District of California",url:"https://www.justice.gov/opa/pr/california-mobile-phlebotomy-lab-and-its-owners-pay-135000-resolve-allegedly-false-claims"},
+  {date:"2024-10-15",defendant:"ASRC Federal Data Solutions LLC",defType:"Consulting / Advisory",fraudType:"Cybersecurity / Data",amount:306722,location:"Main Justice",url:"https://www.justice.gov/opa/pr/virginia-contractor-settles-false-claims-act-liability-failing-secure-medicare-beneficiary"},
+  {date:"2024-10-11",defendant:"Allstar Health Providers Inc. and Owner",defType:"Home Health Agency",fraudType:"COVID / PPP Fraud",amount:399990,location:"Central District of California",url:"https://www.justice.gov/opa/pr/california-home-health-agency-and-owner-settle-false-claims-act-allegations-relating"},
+  {date:"2024-10-11",defendant:"LabXperior Corporation And Owner",defType:"Clinical Laboratory / Diagnostic Imaging",fraudType:"Anti-Kickback / Referral",amount:235000,location:"Western District of North Carolina",url:"https://www.justice.gov/usao-wdnc/pr/urine-drug-testing-laboratory-and-owner-agree-resolve-false-claims-act-allegations"},
+  {date:"2024-10-11",defendant:"San Diego Physician and The Center for Health & Wellbeing",defType:"Physician / Practice",fraudType:"Overbilling / Upcoding / False Billing",amount:3800000,location:"Southern District of California",url:"https://www.justice.gov/usao-sdca/pr/san-diego-physician-and-medical-practice-pay-38-million-resolve-false-claims-act"},
+  {date:"2024-10-10",defendant:"Teva Pharmaceuticals",defType:"Pharmaceutical Manufacturer",fraudType:"Anti-Kickback / Referral",amount:450000000,location:"Eastern District of Pennsylvania",url:"https://www.justice.gov/opa/pr/drug-maker-teva-pharmaceuticals-agrees-pay-450m-false-claims-act-settlement-resolve-kickback"},
+  {date:"2024-10-09",defendant:"North Carolina Physician and Troyer Medical Inc. P.C.",defType:"Physician / Practice",fraudType:"Anti-Kickback / Referral",amount:625000,location:"District of South Carolina",url:"https://www.justice.gov/opa/pr/north-carolina-physician-and-medical-practice-agree-pay-625000-settle-kickback-allegations-0"},
+  {date:"2024-10-02",defendant:"Texas Hospital CEO",defType:"Hospital / Health System",fraudType:"Anti-Kickback / Referral",amount:5343630,location:"Eastern District of Texas",url:"https://www.justice.gov/opa/pr/texas-hospital-ceo-pay-over-53m-settle-kickback-allegations-involving-laboratory-testing"},
+  {date:"2024-10-02",defendant:"Precision Diagnostics",defType:"Clinical Laboratory / Diagnostic Imaging",fraudType:"Anti-Kickback / Referral",amount:27000000,location:"District of Colorado",url:"https://www.justice.gov/opa/pr/precision-toxicology-agrees-pay-27m-resolve-allegations-unnecessary-drug-testing-and-illegal"},
+  {date:"2024-10-01",defendant:"First Psychiatric Planners / Bournewood Health Systems",defType:"Behavioral Health / SUD",fraudType:"Anti-Kickback / Referral",amount:6500000,location:"District of Massachusetts",url:"https://www.justice.gov/usao-ma/pr/brookline-hospital-pay-65-million-resolve-false-claims-act-liability-concerning-kickback"},
+  {date:"2024-09-27",defendant:"Physicians' Medical Center, LLC and Lab Employees",defType:"Hospital / Health System",fraudType:"Overbilling / Upcoding / False Billing",amount:7200000,location:"Eastern District of Kentucky",url:"https://www.justice.gov/usao-edky/pr/hospital-laboratory-referring-physician-and-lab-employees-pay-more-72-million-resolve"},
+  {date:"2024-09-27",defendant:"Pablo Merced, M.D. and Office Manager",defType:"Physician / Practice",fraudType:"Anti-Kickback / Referral",amount:450000,location:"Eastern District of Kentucky",url:"https://www.justice.gov/usao-edky/pr/physician-and-office-manager-pay-450000-resolve-alleged-violations-controlled"},
+  {date:"2024-09-26",defendant:"Acadia Healthcare Company Inc.",defType:"Behavioral Health / SUD",fraudType:"Unnecessary / Ineligible Services",amount:19850000,location:"Middle District of Florida",url:"https://www.justice.gov/opa/pr/acadia-healthcare-company-inc-pay-1985m-settle-allegations-relating-medically-unnecessary"},
+  {date:"2024-09-25",defendant:"Local Pharmacies in Cidra and Florida, Puerto Rico",defType:"Pharmacy",fraudType:"Overbilling / Upcoding / False Billing",amount:2125640,location:"District of Puerto Rico",url:"https://www.justice.gov/usao-pr/pr/2125640-recouped-civil-settlements-violations-false-claims-act-local-pharmacies-cidra"},
+  {date:"2024-09-25",defendant:"Ra Medical Systems, Inc. & Physicians",defType:"Medical Device",fraudType:"Anti-Kickback / Referral",amount:8000000,location:"Eastern District of Michigan",url:"https://www.justice.gov/usao-edmi/pr/ra-medical-systems-inc-physicians-pay-over-8-million-resolve-false-claims-act"},
+  {date:"2024-09-18",defendant:"Oak Street Health",defType:"Clinic / Outpatient Facility",fraudType:"Anti-Kickback / Referral",amount:60000000,location:"Northern District of Illinois",url:"https://www.justice.gov/archives/opa/pr/oak-street-health-agrees-pay-60m-resolve-alleged-false-claims-act-liability-paying-kickbacks"},
+  {date:"2024-09-17",defendant:"Siouxland Surgery Center LLP and United Surgical Partners International",defType:"Hospital / Health System",fraudType:"Anti-Kickback / Referral",amount:12760000,location:"Northern District of Iowa",url:"https://www.justice.gov/usao-ndia/pr/south-dakota-surgical-hospital-and-united-surgical-partners-international-agree-pay"},
+  {date:"2024-09-13",defendant:"Walgreens",defType:"Pharmacy",fraudType:"Overbilling / Upcoding / False Billing",amount:106800000,location:"District of New Mexico",url:"https://www.justice.gov/opa/pr/walgreens-agrees-pay-1068m-resolve-allegations-it-billed-government-prescriptions-never"},
+  {date:"2024-09-11",defendant:"Dr. Vishal Patel",defType:"Physician / Practice",fraudType:"Unnecessary / Ineligible Services",amount:1080000,location:"District of Delaware",url:"https://www.justice.gov/usao-de/pr/united-states-settles-claims-durable-medical-equipment-fraud-against-wilmington"},
+  {date:"2024-09-06",defendant:"THD America Inc.",defType:"Medical Device",fraudType:"Overbilling / Upcoding / False Billing",amount:700000,location:"District of Maryland",url:"https://www.justice.gov/opa/pr/medical-device-company-pay-700000-resolve-false-claims-act-allegations-concerning-inflated"},
+  {date:"2024-09-04",defendant:"Glenmark Pharmaceuticals Inc. USA",defType:"Pharmaceutical Manufacturer",fraudType:"Drug Pricing / Formulary Fraud",amount:25000000,location:"Eastern District of Pennsylvania",url:"https://www.justice.gov/opa/pr/pharmaceutical-company-pays-25m-resolve-alleged-false-claims-act-liability-price-fixing"},
+  {date:"2024-08-28",defendant:"Family Dentistry Of Bridgeport Pc et al. and Their Owners",defType:"Physician / Practice",fraudType:"Anti-Kickback / Referral",amount:1700000,location:"District of Connecticut",url:"https://www.justice.gov/usao-ct/pr/connecticut-dentists-pay-17-million-settle-false-claims-allegations"},
+  {date:"2024-08-27",defendant:"St. Peter's Health",defType:"Hospital / Health System",fraudType:"Overbilling / Upcoding / False Billing",amount:10844201,location:"District of Montana",url:"https://www.justice.gov/usao-mt/pr/us-attorney-jesse-laslovich-announces-108-million-civil-settlement-st-peters-health-over"},
+  {date:"2024-08-26",defendant:"Young Sam Kim",defType:"Physician / Practice",fraudType:"Overbilling / Upcoding / False Billing",amount:850000,location:"Eastern District of California",url:"https://www.justice.gov/usao-edca/pr/us-attorneys-office-obtains-850000-settlement-fresno-acupuncturist-resolve-false"},
+  {date:"2024-08-26",defendant:"United Seating and Mobility, LLC d/b/a Numotion",defType:"DME Supplier",fraudType:"False Certification",amount:13500000,location:"District of Arizona",url:"https://www.justice.gov/usao-az/pr/united-seating-and-mobility-llc-dba-numotion-agrees-pay-13500000-resolve-alleged-false"},
+  {date:"2024-08-20",defendant:"Intrepid U.S.A. Inc.",defType:"Home Health Agency",fraudType:"Unnecessary / Ineligible Services",amount:3850000,location:"Western District of Kentucky",url:"https://www.justice.gov/opa/pr/nationwide-home-healthcare-and-hospice-provider-pay-385m-resolve-false-claims-act"},
+  {date:"2024-08-19",defendant:"Orange Medical Care, P.C.",defType:"Physician / Practice",fraudType:"Identity Theft / Credential Fraud",amount:600000,location:"Southern District of New York",url:"https://www.justice.gov/usao-sdny/pr/us-attorney-announces-600000-false-claims-act-settlement-medical-practice-and-its"},
+  {date:"2024-08-08",defendant:"West Coast Dental Administrative Services LLC and its owners",defType:"Physician / Practice",fraudType:"COVID / PPP Fraud",amount:6300000,location:"Central District of California",url:"https://www.justice.gov/opa/pr/southern-california-dental-offices-and-former-owners-pay-63m-resolve-false-claims-act"},
+  {date:"2024-08-02",defendant:"Dr. Gregory Gerber, MD",defType:"Physician / Practice",fraudType:"Drug Dispensing / Opioids",amount:4700000,location:"Northern District of Ohio",url:"https://www.justice.gov/opa/pr/federal-court-permanently-prohibits-ohio-physician-prescribing-opioids-and-imposes-47m"},
+  {date:"2024-07-29",defendant:"Burlington County Eye Physicians (BCEP) and its owner",defType:"Physician / Practice",fraudType:"Anti-Kickback / Referral",amount:460000,location:"District of Massachusetts",url:"https://www.justice.gov/usao-ma/pr/eye-practice-and-its-physician-owner-agree-pay-more-460000-resolve-allegations-false"},
+  {date:"2024-07-25",defendant:"Laboratory Companies and Their Owner",defType:"Clinical Laboratory / Diagnostic Imaging",fraudType:"Overbilling / Upcoding / False Billing",amount:26341951,location:"District of Maryland",url:"https://www.justice.gov/opa/pr/united-states-obtains-26m-false-claims-act-judgments-against-laboratory-companies-and-their"},
+  {date:"2024-07-25",defendant:"Crossroads Treatment Center et al.",defType:"Behavioral Health / SUD",fraudType:"Overbilling / Upcoding / False Billing",amount:863934,location:"District of South Carolina",url:"https://www.justice.gov/opa/pr/substance-use-disorder-treatment-clinics-pay-more-850000-resolve-allegations-they-knowingly"},
+  {date:"2024-07-25",defendant:"Precision Lens and its principal",defType:"Medical Device",fraudType:"Anti-Kickback / Referral",amount:12000000,location:"District of Minnesota",url:"https://www.justice.gov/usao-mn/pr/precision-lens-agrees-pay-12-million-united-states-kickbacks-doctors-violation-false"},
+  {date:"2024-07-24",defendant:"Admera Health LLC",defType:"Clinical Laboratory / Diagnostic Imaging",fraudType:"Anti-Kickback / Referral",amount:5389648,location:"Eastern District of California",url:"https://www.justice.gov/opa/pr/admera-health-agrees-pay-over-5m-settle-false-claims-act-allegations-kickbacks-third-party"},
+  {date:"2024-07-23",defendant:"Chiropractor Kevin Michael Brown",defType:"Physician / Practice",fraudType:"Overbilling / Upcoding / False Billing",amount:180000,location:"Eastern District of California",url:"https://www.justice.gov/usao-edca/pr/riverside-county-chiropractor-agrees-pay-18000-resolve-allegations-health-care-fraud"},
+  {date:"2024-07-18",defendant:"DaVita",defType:"Clinic / Outpatient Facility",fraudType:"Anti-Kickback / Referral",amount:34487390,location:"District of Colorado",url:"https://www.justice.gov/opa/pr/davita-pay-over-34m-resolve-allegations-illegal-kickbacks"},
+  {date:"2024-07-17",defendant:"Kindred and Related Entities",defType:"Hospice",fraudType:"Unnecessary / Ineligible Services",amount:19428000,location:"Middle District of Tennessee",url:"https://www.justice.gov/opa/pr/kindred-and-related-entities-agree-pay-19428m-settle-federal-and-state-false-claims-act"},
+  {date:"2024-07-17",defendant:"Ma Acupuncture Center PC and Acupuncturist",defType:"Physician / Practice",fraudType:"Overbilling / Upcoding / False Billing",amount:2300000,location:"Western District of Texas",url:"https://www.justice.gov/usao-wdtx/pr/acupuncturist-and-acupuncture-clinic-ordered-pay-23-million-resolve-civil-false-claims"},
+  {date:"2024-07-11",defendant:"Vista Clinical Diagnostics, LLC; Access Dermpath; Advanced Clinical Laboratories",defType:"Clinical Laboratory / Diagnostic Imaging",fraudType:"Overbilling / Upcoding / False Billing",amount:2450000,location:"Middle District of Florida",url:"https://www.justice.gov/usao-mdfl/pr/three-clermont-labs-agree-pay-245-million-settle-false-claims-act-liability"},
+  {date:"2024-07-10",defendant:"Rite Aid Corporation and Affiliates (CSA)",defType:"Pharmacy",fraudType:"Drug Dispensing / Opioids",amount:7500000,location:"Northern District of Ohio",url:"https://www.justice.gov/usao-ndoh/pr/rite-aid-corporation-and-affiliates-agree-settle-false-claims-act-and-controlled"},
+  {date:"2024-07-10",defendant:"Rite Aid Corporation and Elixir Insurance Company",defType:"PBM",fraudType:"Drug Pricing / Formulary Fraud",amount:101000000,location:"Northern District of Ohio",url:"https://www.justice.gov/opa/pr/rite-aid-corporation-and-elixir-insurance-company-agree-pay-101m-resolve-allegations-falsely"},
+  {date:"2024-07-10",defendant:"Rite Aid Corporation and Affiliates (FCA)",defType:"Pharmacy",fraudType:"Drug Dispensing / Opioids",amount:7500000,location:"Northern District of Ohio",url:"https://www.justice.gov/opa/pr/rite-aid-corporation-and-affiliates-agree-settle-false-claims-act-and-controlled-substance"},
+  {date:"2024-07-10",defendant:"Pacific Toxicology Laboratories",defType:"Clinical Laboratory / Diagnostic Imaging",fraudType:"Overbilling / Upcoding / False Billing",amount:1000000,location:"District of Massachusetts",url:"https://www.justice.gov/usao-ma/pr/pacific-toxicology-laboratories-agrees-pay-1-million-resolve-allegations-fraudulent"},
+  {date:"2024-07-01",defendant:"Guardian Health Care Inc., Gem City Home Care LLC and Care Connection of Cincinnati",defType:"Home Health Agency",fraudType:"Anti-Kickback / Referral",amount:4496330,location:"Southern District of Ohio",url:"https://www.justice.gov/opa/pr/home-health-providers-pay-45m-resolve-alleged-false-claims-act-liability-providing-kickbacks"},
+  {date:"2024-06-28",defendant:"Tareen Dermatology, P.A., Dr. Mohiba Tareen, and Basir Tareen",defType:"Physician / Practice",fraudType:"Identity Theft / Credential Fraud",amount:1630000,location:"District of Minnesota",url:"https://www.justice.gov/usao-mn/pr/tareen-dermatology-agrees-pay-more-16-million-resolve-alleged-false-claims-act"},
+  {date:"2024-06-26",defendant:"VNS Health and Related Entities",defType:"Behavioral Health / SUD",fraudType:"Overbilling / Upcoding / False Billing",amount:954416,location:"Southern District of New York",url:"https://www.justice.gov/usao-sdny/pr/us-attorney-announces-settlement-civil-fraud-lawsuit-against-vns-health-and-related"},
+  {date:"2024-06-25",defendant:"Former Panama City Doctor",defType:"Physician / Practice",fraudType:"Overbilling / Upcoding / False Billing",amount:550000,location:"Northern District of Florida",url:"https://www.justice.gov/usao-ndfl/pr/former-panama-city-doctor-agrees-550000-consent-judgment-resolve-fca-and-csa-lawsuit"},
+  {date:"2024-06-21",defendant:"Provider",defType:"Physician / Practice",fraudType:"Unnecessary / Ineligible Services",amount:629057,location:"District of Maine",url:"https://www.justice.gov/usao-me/pr/provider-agrees-pay-over-629000-settle-allegations-false-claims-act-violations"},
+  {date:"2024-06-20",defendant:"Avertest, LLC",defType:"Clinical Laboratory / Diagnostic Imaging",fraudType:"False Certification",amount:1344621,location:"Eastern District of Michigan",url:"https://www.justice.gov/usao-edmi/pr/averhealth-pay-over-13-million-resolve-false-claims-act-allegations-related-drug-tests"},
+  {date:"2024-06-20",defendant:"Tapestry Hospice and owners and managers",defType:"Hospice",fraudType:"Anti-Kickback / Referral",amount:1400000,location:"Northern District of Georgia",url:"https://www.justice.gov/usao-ndga/pr/tapestry-hospice-settles-healthcare-kickback-claims-14-million"},
+  {date:"2024-06-18",defendant:"Karefirst Management and Its Former Owners",defType:"Healthcare Staffing",fraudType:"Overbilling / Upcoding / False Billing",amount:1990000,location:"Northern District of Illinois",url:"https://www.justice.gov/usao-ndil/pr/chicago-health-care-company-and-its-former-owners-pay-nearly-2-million-settle-false"},
+  {date:"2024-06-13",defendant:"Evergreen Treatment Services",defType:"Behavioral Health / SUD",fraudType:"Overbilling / Upcoding / False Billing",amount:1453982,location:"Western District of Washington",url:"https://www.justice.gov/usao-wdwa/pr/doj-and-evergreen-treatment-services-settle-allegations-regarding-double-billing"},
+  {date:"2024-06-13",defendant:"Supportive Care Holdings, LLC and CEO",defType:"Nursing Home / SNF",fraudType:"False Certification",amount:4595739,location:"District of Connecticut",url:"https://www.justice.gov/usao-ct/pr/behavioral-health-companies-ceo-pay-nearly-46-million-settle-allegations-related"},
+  {date:"2024-06-11",defendant:"Progressive Pain Management and its owner",defType:"Physician / Practice",fraudType:"Overbilling / Upcoding / False Billing",amount:1200000,location:"Eastern District of Missouri",url:"https://www.justice.gov/usao-edmo/pr/united-states-reaches-12-million-civil-settlement-festus-pain-management-doctor-over"},
+  {date:"2024-05-31",defendant:"Massachusetts Surgeon",defType:"Physician / Practice",fraudType:"Anti-Kickback / Referral",amount:200000,location:"District of Massachusetts",url:"https://www.justice.gov/usao-ma/pr/massachusetts-surgeon-pay-200000-resolve-allegations-soliciting-and-receiving-illegal"},
+  {date:"2024-05-29",defendant:"Spinal device manufacturer Innovasis Inc. and Two Top Executives",defType:"Medical Device",fraudType:"Anti-Kickback / Referral",amount:12000000,location:"Northern District of Texas",url:"https://www.justice.gov/opa/pr/medical-device-manufacturer-innovasis-inc-and-two-top-executives-agree-pay-12m-settle"},
+  {date:"2024-05-28",defendant:"Penn Highlands Healthcare",defType:"Hospital / Health System",fraudType:"Stark Law",amount:735000,location:"Western District of Pennsylvania",url:"https://www.justice.gov/usao-wdpa/pr/penn-highlands-healthcare-pay-735000-settle-false-claims-act-allegations"},
+  {date:"2024-05-24",defendant:"Florida Businessman Daniel Hurt",defType:"Clinical Laboratory / Diagnostic Imaging",fraudType:"Anti-Kickback / Referral",amount:27000000,location:"Middle District of Florida",url:"https://www.justice.gov/opa/pr/florida-businessman-daniel-hurt-pay-over-27-million-medicare-fraud-connection-cancer-genomic"},
+  {date:"2024-05-16",defendant:"Cape Cod Hospital",defType:"Hospital / Health System",fraudType:"False Certification",amount:24300000,location:"District of Massachusetts",url:"https://www.justice.gov/opa/pr/cape-cod-hospital-pay-243-million-resolve-false-claims-act-allegations-concerning-its"},
+  {date:"2024-05-14",defendant:"Comfort Care Medical Equipment, Inc. And Its Owners",defType:"DME Supplier",fraudType:"Overbilling / Upcoding / False Billing",amount:352800,location:"District of Maryland",url:"https://www.justice.gov/usao-md/pr/comfort-care-medical-equpment-inc-and-its-owner-agree-pay-352800-settle-false-claims-act"},
+  {date:"2024-05-08",defendant:"James Aronovitz, D.O., and Michigan Ear Care PLLC",defType:"Physician / Practice",fraudType:"Identity Theft / Credential Fraud",amount:2003801,location:"Eastern District of Michigan",url:"https://www.justice.gov/usao-edmi/pr/local-physician-and-practice-agree-pay-over-2-million-settle-false-claims-act"},
+  {date:"2024-05-07",defendant:"CHI Franciscan Health and St. Joseph Medical Center and surgeon",defType:"Hospital / Health System",fraudType:"Unnecessary / Ineligible Services",amount:942708,location:"Western District of Washington",url:"https://www.justice.gov/usao-wdwa/pr/doj-resolves-allegations-tacoma-spine-surgeon-billed-unnecessary-surgeries"},
+  {date:"2024-05-06",defendant:"Baptist Health System Inc",defType:"Hospital / Health System",fraudType:"Anti-Kickback / Referral",amount:1500000,location:"Middle District of Florida",url:"https://www.justice.gov/opa/pr/florida-hospital-system-agrees-pay-15-million-resolve-liability-relating-self-disclosure"},
+  {date:"2024-05-06",defendant:"C&S Family Dental and their owners",defType:"Physician / Practice",fraudType:"Anti-Kickback / Referral",amount:498000,location:"District of Connecticut",url:"https://www.justice.gov/usao-ct/pr/connecticut-dentists-pay-498k-settle-false-claims-allegations"},
+  {date:"2024-05-03",defendant:"Apollo Health Inc. and Its Owner",defType:"Physician / Practice",fraudType:"Overbilling / Upcoding / False Billing",amount:1000000,location:"Northern District of Illinois",url:"https://www.justice.gov/usao-ndil/pr/chicago-health-care-company-and-its-owner-pay-1-million-settle-false-claims-act"},
+  {date:"2024-04-29",defendant:"Laboratory Marketer and North Carolina Physicians",defType:"Consulting / Advisory",fraudType:"Anti-Kickback / Referral",amount:1300000,location:"District of South Carolina",url:"https://www.justice.gov/opa/pr/laboratory-marketer-and-north-carolina-physicians-agree-pay-over-13m-settle-kickback"},
+  {date:"2024-04-26",defendant:"ReNew Health Group LLC and Executives",defType:"Nursing Home / SNF",fraudType:"COVID / PPP Fraud",amount:7084000,location:"Central District of California",url:"https://www.justice.gov/usao-cdca/pr/san-gabriel-valley-based-nursing-home-chain-and-executives-pay-over-7-million-settle"},
+  {date:"2024-04-25",defendant:"Iowa Nurse Practitioner",defType:"Physician / Practice",fraudType:"Anti-Kickback / Referral",amount:52560,location:"Northern District of Iowa",url:"https://www.justice.gov/usao-ndia/pr/iowa-nurse-practitioner-agrees-pay-over-50000-resolve-suit-alleging-fraudulent-durable"},
+  {date:"2024-04-02",defendant:"Oncology San Antonio, PA and affiliated physicians and CorePath Laboratories",defType:"Clinical Laboratory / Diagnostic Imaging",fraudType:"Anti-Kickback / Referral",amount:4046275,location:"Western District of Texas",url:"https://www.justice.gov/usao-wdtx/pr/oncology-practice-physicians-and-reference-laboratory-pay-over-4-million-settle-false"},
+  {date:"2024-04-01",defendant:"Marketers and Physicians in Five States",defType:"Consulting / Advisory",fraudType:"Anti-Kickback / Referral",amount:1501162,location:"District of New Jersey",url:"https://www.justice.gov/opa/pr/marketers-and-physicians-five-states-agree-pay-over-15-million-settle-laboratory-kickback"},
+  {date:"2024-03-28",defendant:"The Radiology Group LLC and Its CEO",defType:"Clinical Laboratory / Diagnostic Imaging",fraudType:"Identity Theft / Credential Fraud",amount:3100000,location:"Southern District of New York",url:"https://www.justice.gov/usao-sdny/pr/us-attorney-announces-31-million-false-claims-act-settlement-radiology-company-and-its"},
+  {date:"2024-03-27",defendant:"Gamma Healthcare and Three of Its Owners",defType:"Clinical Laboratory / Diagnostic Imaging",fraudType:"Unnecessary / Ineligible Services",amount:13619660,location:"Eastern District of Missouri",url:"https://www.justice.gov/opa/pr/gamma-healthcare-and-three-its-owners-agree-pay-136-million-allegedly-billing-medicare-lab"},
+  {date:"2024-03-12",defendant:"Family First Home Health Care, Inc. And Owner",defType:"Home Health Agency",fraudType:"Overbilling / Upcoding / False Billing",amount:600000,location:"Western District of North Carolina",url:"https://www.justice.gov/usao-wdnc/pr/north-carolina-home-health-care-agency-and-owner-agree-pay-600000-resolve-false-claims"},
+  {date:"2024-02-29",defendant:"Endo International and its affiliates",defType:"Pharmaceutical Manufacturer",fraudType:"Drug Dispensing / Opioids",amount:464900000,location:"Southern District of New York",url:"https://www.justice.gov/usao-sdny/pr/united-states-reaches-settlement-law-enforcement-tax-and-healthcare-cost-claims-endo"},
+  {date:"2024-02-28",defendant:"Brynwood Myofascial Therapy Llc and its owners",defType:"Physician / Practice",fraudType:"Identity Theft / Credential Fraud",amount:1500000,location:"Northern District of Illinois",url:"https://www.justice.gov/usao-ndil/pr/rockford-skilled-therapy-provider-pay-15-million-settle-federal-health-care-fraud-suit"},
+  {date:"2024-02-28",defendant:"Capstone Diagnostics and its owner",defType:"Clinical Laboratory / Diagnostic Imaging",fraudType:"Anti-Kickback / Referral",amount:14300000,location:"Northern District of Georgia",url:"https://www.justice.gov/usao-ndga/pr/georgia-laboratory-owner-pleads-guilty-felony-charge-and-agrees-pay-143-million"},
+  {date:"2024-02-22",defendant:"Doctor",defType:"Physician / Practice",fraudType:"Overbilling / Upcoding / False Billing",amount:693490,location:"District of New Jersey",url:"https://www.justice.gov/usao-nj/pr/doctor-pay-nearly-700000-resolve-false-claims-act-allegations"},
+  {date:"2024-02-16",defendant:"LabTox, LLC, its owner and compliance officer",defType:"Clinical Laboratory / Diagnostic Imaging",fraudType:"Unnecessary / Ineligible Services",amount:10458933,location:"Eastern District of Kentucky",url:"https://www.justice.gov/usao-edky/pr/lexington-lab-agrees-104-million-civil-judgments-resolve-false-claims-act-allegations"},
+  {date:"2024-02-15",defendant:"Sentynl Therapeutics Inc.",defType:"Pharmaceutical Manufacturer",fraudType:"Anti-Kickback / Referral",amount:750000,location:"District of New Jersey",url:"https://www.justice.gov/usao-nj/pr/california-pharmaceutical-company-pay-750000-resolve-false-claims-act-liability"},
+  {date:"2024-02-15",defendant:"Lincare Inc.",defType:"DME Supplier",fraudType:"Overbilling / Upcoding / False Billing",amount:25500000,location:"Southern District of New York",url:"https://www.justice.gov/usao-sdny/pr/us-attorney-announces-255-million-settlement-durable-medical-equipment-supplier"},
+  {date:"2024-01-26",defendant:"Hill-Rom Holdings, Inc. et al.",defType:"DME Supplier",fraudType:"Overbilling / Upcoding / False Billing",amount:2100000,location:"District of South Carolina",url:"https://www.justice.gov/usao-sc/pr/durable-medical-equipment-companies-pay-millions-false-claims-settlement"},
+  {date:"2024-01-23",defendant:"Pennmark Pharmacy Inc. and current and former owners",defType:"Pharmacy",fraudType:"Overbilling / Upcoding / False Billing",amount:4655704,location:"Eastern District of Pennsylvania",url:"https://www.justice.gov/usao-edpa/pr/current-and-former-owners-center-city-philadelphia-pharmacy-agree-pay-over-46-million"},
+  {date:"2024-01-18",defendant:"New York Man (DME Scheme)",defType:"DME Supplier",fraudType:"Anti-Kickback / Referral",amount:850000,location:"District of South Carolina",url:"https://www.justice.gov/usao-sc/pr/new-york-man-sentenced-federal-prison-and-pays-850000-civil-fines-and-restitution"},
+  {date:"2024-01-16",defendant:"Silver Lake Hospital and its investors",defType:"Hospital / Health System",fraudType:"Overbilling / Upcoding / False Billing",amount:30600000,location:"District of New Jersey",url:"https://www.justice.gov/opa/pr/new-jersey-hospital-and-investors-pay-united-states-306-million-alleged-false-claims-related"},
+  {date:"2024-01-10",defendant:"RDx Bioscience Inc. and Its Owner and CEO",defType:"Clinical Laboratory / Diagnostic Imaging",fraudType:"Anti-Kickback / Referral",amount:13250000,location:"District of New Jersey",url:"https://www.justice.gov/opa/pr/new-jersey-laboratory-and-its-owner-and-ceo-agree-pay-over-13-million-settle-allegations"},
+  {date:"2024-01-04",defendant:"H. Lee Moffitt Cancer Center & Research Institute Hospital Inc.",defType:"Hospital / Health System",fraudType:"Clinical Trial Fraud",amount:19564743,location:"Middle District of Florida",url:"https://www.justice.gov/opa/pr/florida-research-hospital-agrees-pay-more-195-million-resolve-liability-relating-self"}
+];
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function fmtAmt(n) {
+  if (!n) return '—';
+  if (n >= 1e9) return '$' + (n/1e9).toFixed(2) + 'B';
+  if (n >= 1e6) return '$' + (n/1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return '$' + (n/1e3).toFixed(0) + 'K';
+  return '$' + n.toLocaleString();
+}
+
+const CHART_OPTS = {
+  responsive: true, maintainAspectRatio: false,
+  animation: { duration: 300 },
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      backgroundColor: '#0a0e1a', borderColor: '#1e2d45', borderWidth: 1,
+      titleFont: { family: 'Space Mono', size: 11 },
+      bodyFont:  { family: 'Space Mono', size: 11 },
+      titleColor: '#e8edf5', bodyColor: '#e8edf5'
+    }
+  },
+  scales: {
+    x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#5a6a82', font: { family: 'Space Mono', size: 9 } } },
+    y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#5a6a82', font: { family: 'Space Mono', size: 9 } } }
+  }
+};
+
+function hbar(canvasId, labels, values, colors, xFmt) {
+  return new Chart(document.getElementById(canvasId), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{ data: values, backgroundColor: colors, borderWidth: 0 }]
+    },
+    options: {
+      ...CHART_OPTS,
+      indexAxis: 'y',
+      plugins: {
+        ...CHART_OPTS.plugins,
+        tooltip: {
+          ...CHART_OPTS.plugins.tooltip,
+          callbacks: { label: ctx => '  ' + xFmt(ctx.raw) }
+        }
+      },
+      scales: {
+        x: { ...CHART_OPTS.scales.x, beginAtZero: true, ticks: { ...CHART_OPTS.scales.x.ticks, callback: xFmt } },
+        y: { ...CHART_OPTS.scales.y, ticks: { ...CHART_OPTS.scales.y.ticks, font: { family: 'Space Mono', size: 10 } } }
+      }
+    }
+  });
+}
+
+// ── BUILD CHARTS ──────────────────────────────────────────────────────────────
+function buildCharts() {
+  // Chart 1 — Fraud type by $ (sorted desc)
+  const ft = Object.entries(BY_FRAUD).sort((a,b) => b[1].recovered - a[1].recovered);
+  hbar('chart1', ft.map(e=>e[0]), ft.map(e=>e[1].recovered),
+    ft.map((_,i) => FRAUD_COLORS[i % FRAUD_COLORS.length] + 'cc'),
+    v => '$' + (v/1e6).toFixed(1) + 'M');
+
+  // Chart 2 — Fraud type by case count (sorted desc)
+  const ft2 = Object.entries(BY_FRAUD).sort((a,b) => b[1].cases - a[1].cases);
+  hbar('chart2', ft2.map(e=>e[0]), ft2.map(e=>e[1].cases),
+    ft2.map((_,i) => FRAUD_COLORS[i % FRAUD_COLORS.length] + 'cc'),
+    v => v + ' cases');
+
+  // Chart 3 — Defendant type by $ (sorted desc)
+  const dt = Object.entries(BY_DEF).sort((a,b) => b[1].recovered - a[1].recovered);
+  hbar('chart3', dt.map(e=>e[0]), dt.map(e=>e[1].recovered),
+    dt.map((_,i) => DEF_COLORS[i % DEF_COLORS.length] + 'cc'),
+    v => '$' + (v/1e6).toFixed(1) + 'M');
+
+  // Chart 4 — Defendant type by case count (sorted desc)
+  const dt2 = Object.entries(BY_DEF).sort((a,b) => b[1].cases - a[1].cases);
+  hbar('chart4', dt2.map(e=>e[0]), dt2.map(e=>e[1].cases),
+    dt2.map((_,i) => DEF_COLORS[i % DEF_COLORS.length] + 'cc'),
+    v => v + ' cases');
+
+  // Chart 5 — Top 15 districts by $ (sorted desc)
+  const dist5 = Object.entries(BY_DIST)
+    .sort((a,b) => b[1].recovered - a[1].recovered).slice(0,15);
+  hbar('chart5', dist5.map(e=>e[0]), dist5.map(e=>e[1].recovered),
+    dist5.map(() => '#00d4ffcc'), v => '$' + (v/1e6).toFixed(1) + 'M');
+
+  // Chart 6 — Top 15 districts by case count (sorted desc)
+  const dist6 = Object.entries(BY_DIST)
+    .sort((a,b) => b[1].cases - a[1].cases).slice(0,15);
+  hbar('chart6', dist6.map(e=>e[0]), dist6.map(e=>e[1].cases),
+    dist6.map(() => '#00d4ffcc'), v => v + ' cases');
+
+  // Chart 7 — Top 20 largest individual settlements
+  const top20 = [...RECORDS].sort((a,b) => b.amount - a.amount).slice(0,20);
+  hbar('chart7', top20.map(r => r.defendant.slice(0,45)), top20.map(r => r.amount),
+    top20.map(() => '#f59e0bcc'), v => '$' + (v/1e6).toFixed(1) + 'M');
+
+  // Chart 8 — Cases by month
+  const MONTH_LABELS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const monthlyCounts = Array(12).fill(0);
+  RECORDS.forEach(r => {
+    if (r.date) { const m = parseInt(r.date.slice(5,7),10) - 1; if (m>=0&&m<12) monthlyCounts[m]++; }
+  });
+  new Chart(document.getElementById('chart8'), {
+    type: 'bar',
+    data: {
+      labels: MONTH_LABELS,
+      datasets: [{
+        label: 'Cases',
+        data: monthlyCounts,
+        backgroundColor: '#6366f1cc',
+        borderColor: '#6366f1',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      ...CHART_OPTS,
+      plugins: {
+        ...CHART_OPTS.plugins,
+        tooltip: {
+          ...CHART_OPTS.plugins.tooltip,
+          callbacks: { label: ctx => '  ' + ctx.raw + ' cases' }
+        }
+      },
+      scales: {
+        x: { ...CHART_OPTS.scales.x },
+        y: { ...CHART_OPTS.scales.y, beginAtZero: true, ticks: { ...CHART_OPTS.scales.y.ticks, stepSize: 2 } }
+      }
+    }
+  });
+}
+
+// ── TABLE ─────────────────────────────────────────────────────────────────────
+const FRAUD_TYPES = [...new Set(RECORDS.map(r=>r.fraudType))].sort();
+const DEF_TYPES   = [...new Set(RECORDS.map(r=>r.defType))].sort();
+const DISTRICTS   = [...new Set(RECORDS.map(r=>r.location))].sort();
+
+const fraudIdx = Object.fromEntries(FRAUD_TYPES.map((f,i)=>[f,i]));
+const defIdx   = Object.fromEntries(DEF_TYPES.map((d,i)=>[d,i]));
+
+let sortKey = 'amount', sortDir = -1;
+let filtered = [...RECORDS];
+const PAGE_SIZE = 25;
+let currentPage = 1;
+
+function populateSel(id, vals) {
+  const sel = document.getElementById(id);
+  vals.forEach(v => { const o=document.createElement('option'); o.value=v; o.textContent=v; sel.appendChild(o); });
+}
+
+function filterTable() {
+  const q   = document.getElementById('searchInput').value.toLowerCase();
+  const ft  = document.getElementById('filterFraud').value;
+  const dt  = document.getElementById('filterDef').value;
+  const dis = document.getElementById('filterDist').value;
+
+  filtered = RECORDS.filter(r => {
+    if (ft  && r.fraudType !== ft)  return false;
+    if (dt  && r.defType   !== dt)  return false;
+    if (dis && r.location  !== dis) return false;
+    if (q) {
+      const hay = (r.defendant + r.fraudType + r.defType + r.location).toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  filtered.sort((a,b) => {
+    let va = a[sortKey] ?? '', vb = b[sortKey] ?? '';
+    if (sortKey === 'amount') { va = va||0; vb = vb||0; }
+    if (va < vb) return -sortDir;
+    if (va > vb) return  sortDir;
+    return 0;
+  });
+  currentPage = 1;
+  renderTable();
+}
+
+function sortTable(key) {
+  if (sortKey === key) sortDir *= -1;
+  else { sortKey = key; sortDir = key === 'amount' ? -1 : 1; }
+  filterTable();
+}
+
+function resetFilters() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('filterFraud').value = '';
+  document.getElementById('filterDef').value   = '';
+  document.getElementById('filterDist').value  = '';
+  filterTable();
+}
+
+function renderTable() {
+  const start = (currentPage-1)*PAGE_SIZE;
+  const page  = filtered.slice(start, start+PAGE_SIZE);
+
+  document.getElementById('tableBody').innerHTML = page.map(r => {
+    const fi = fraudIdx[r.fraudType] % FRAUD_COLORS.length;
+    const di = defIdx[r.defType]     % DEF_COLORS.length;
+    const def = r.defendant || '';
+    return `<tr>
+      <td class="date-col">${r.date}</td>
+      <td class="def-col"><a href="${r.url||'#'}" target="_blank">${def.slice(0,55)}${def.length>55?'…':''}</a></td>
+      <td><span class="badge ft-${fi}">${r.fraudType}</span></td>
+      <td><span class="badge dt-${di}">${r.defType}</span></td>
+      <td class="dist-col">${r.location||'—'}</td>
+      <td class="amount">${fmtAmt(r.amount)}</td>
+      <td style="text-align:center">${r.url?`<a href="${r.url}" target="_blank" style="color:var(--accent);text-decoration:none;font-size:13px">↗</a>`:''}</td>
+    </tr>`;
+  }).join('');
+
+  const visAmt = filtered.filter(r=>r.amount).reduce((s,r)=>s+r.amount,0);
+  document.getElementById('tableStats').innerHTML =
+    `Showing <span>${filtered.length}</span> of <span>${RECORDS.length}</span> cases &nbsp;·&nbsp; Filtered total: <span>${fmtAmt(visAmt)}</span>`;
+
+  const pages = Math.ceil(filtered.length/PAGE_SIZE);
+  const pager = document.getElementById('pager');
+  pager.innerHTML = '';
+  if (pages > 1) {
+    const add = (label, pg, active) => {
+      const b = document.createElement('button');
+      b.textContent = label;
+      if (active) b.classList.add('active');
+      b.onclick = () => { currentPage = pg; renderTable(); };
+      pager.appendChild(b);
+    };
+    if (currentPage > 1) add('← Prev', currentPage-1, false);
+    const s = Math.max(1, currentPage-2), e = Math.min(pages, s+4);
+    for (let p=s; p<=e; p++) add(p, p, p===currentPage);
+    if (currentPage < pages) add('Next →', currentPage+1, false);
+    const sp = document.createElement('span');
+    sp.textContent = `Page ${currentPage} of ${pages}`;
+    pager.appendChild(sp);
+  }
+
+  document.querySelectorAll('th').forEach(th => th.classList.remove('sorted-asc','sorted-desc'));
+  const thEl = document.getElementById('th-' + sortKey);
+  if (thEl) thEl.classList.add(sortDir > 0 ? 'sorted-asc' : 'sorted-desc');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+populateSel('filterFraud', FRAUD_TYPES);
+populateSel('filterDef',   DEF_TYPES);
+populateSel('filterDist',  DISTRICTS);
+buildCharts();
+filterTable();
+</script>
+</body>
+</html>

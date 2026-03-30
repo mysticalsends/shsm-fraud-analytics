@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Whistleblower & Fraud Analytics Hub</title>
+<link rel="stylesheet" href="css/shared.css">
+<style>
+  /* ── Index-page overrides & additional tokens ── */
+  :root {
+    --cyan:   #00d4ff;
+    --amber:  #f59e0b;
+    --green:  #22c55e;
+    --indigo: #818cf8;
+  }
+
+  /* Hub layout: centered column with flex */
+  body { display: flex; flex-direction: column; }
+  .container { max-width: 960px; padding: 60px 24px 80px; flex: 1; }
+
+  footer {
+    position: relative; z-index: 1;
+    padding: 20px 24px; margin-top: 0;
+  }
+
+  /* ── Hero ── */
+  .eyebrow {
+    font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 12px;
+  }
+  .hero-sub {
+    color: var(--muted); font-size: 12px; letter-spacing: 0.05em;
+    line-height: 2; max-width: 580px; margin-bottom: 56px;
+  }
+
+  /* ── Dashboard cards ── */
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 48px; }
+  @media (max-width: 620px) { .cards { grid-template-columns: 1fr; } }
+
+  .card {
+    display: block; text-decoration: none;
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 32px 28px; position: relative; overflow: hidden;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  }
+  .card.sec::before   { background: var(--cyan); }
+  .card.doj::before   { background: var(--amber); }
+  .card.macro::before { background: var(--indigo); }
+
+  .card:hover                    { border-color: #2a3d58; background: var(--surface2); }
+  .card.sec:hover                { border-color: var(--cyan); }
+  .card.doj:hover                { border-color: var(--amber); }
+  .card.macro:hover              { border-color: var(--indigo); }
+
+  .card-tag {
+    font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 14px;
+  }
+  .card.sec  .card-tag  { color: var(--cyan); }
+  .card.doj  .card-tag  { color: var(--amber); }
+  .card.macro .card-tag { color: var(--indigo); }
+
+  .card-title {
+    font-family: 'Playfair Display', serif; font-size: 26px;
+    font-weight: 400; line-height: 1.15; margin-bottom: 12px;
+  }
+  .card.sec  .card-title em  { color: var(--cyan); }
+  .card.doj  .card-title em  { color: var(--amber); }
+  .card.macro .card-title em { color: var(--indigo); }
+
+  .card-desc { font-size: 10px; color: var(--muted); line-height: 1.9; margin-bottom: 24px; }
+
+  .card-stats { display: flex; gap: 20px; flex-wrap: wrap; }
+  .cs-value {
+    font-family: 'Playfair Display', serif; font-size: 22px; line-height: 1; margin-bottom: 2px;
+  }
+  .card.sec  .cs-value  { color: var(--cyan); }
+  .card.doj  .cs-value  { color: var(--amber); }
+  .card.macro .cs-value { color: var(--indigo); }
+  .cs-label { font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+  .card-arrow {
+    position: absolute; bottom: 24px; right: 24px; font-size: 18px;
+    color: var(--border); transition: color 0.2s, transform 0.2s;
+  }
+  .card:hover .card-arrow { color: var(--muted); transform: translateX(4px); }
+
+  /* ── Blog banner ── */
+  .blog-banner {
+    display: flex; flex-direction: column; gap: 6px;
+    text-decoration: none;
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 4px solid var(--green);
+    padding: 24px 28px; margin-bottom: 36px;
+    position: relative; overflow: hidden;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .blog-banner:hover { background: var(--surface2); border-color: var(--green); }
+  .blog-banner-label {
+    font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--green); margin-bottom: 2px;
+  }
+  .blog-banner-title {
+    font-family: 'Playfair Display', serif; font-size: 22px;
+    font-weight: 400; color: var(--text); line-height: 1.2;
+  }
+  .blog-banner-desc {
+    font-size: 10px; color: var(--muted); line-height: 1.85;
+    max-width: 680px; margin-top: 4px;
+  }
+  .blog-banner-cta {
+    font-size: 10px; color: var(--green); margin-top: 8px;
+    letter-spacing: 0.05em;
+  }
+  @media (max-width: 620px) {
+    .blog-banner { padding: 20px 18px; }
+    .blog-banner-title { font-size: 19px; }
+  }
+
+  /* ── Launch instructions panel ── */
+  .launch-panel {
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid var(--green); padding: 24px 28px; margin-bottom: 48px;
+  }
+  .launch-title {
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--green); margin-bottom: 14px;
+  }
+  .launch-steps { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 560px) { .launch-steps { grid-template-columns: 1fr; } }
+  .step { display: flex; gap: 12px; align-items: flex-start; }
+  .step-num {
+    flex-shrink: 0; width: 22px; height: 22px; border: 1px solid var(--border);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 9px; color: var(--green); margin-top: 2px;
+  }
+  .step-text { font-size: 10px; color: var(--muted); line-height: 1.7; }
+  .step-text code {
+    background: var(--surface2); border: 1px solid var(--border);
+    padding: 1px 5px; font-size: 9px; color: var(--cyan);
+  }
+  .step-text strong { color: var(--text); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <p class="eyebrow">Sanford Heisler Sharp McKnight &nbsp;·&nbsp; Analytics Hub</p>
+  <h1>Whistleblower &amp;<br><em>Fraud Analytics</em></h1>
+  <p class="hero-sub">
+    Data dashboards covering SEC whistleblower enforcement activity and DOJ False Claims Act fraud recoveries.
+    Use these tools to understand patterns, agency comparisons, and historical trends.
+  </p>
+
+  <a class="blog-banner" href="blog_dashboard_overview.html">
+    <div class="blog-banner-label">Read the write-up &nbsp;·&nbsp; March 2026</div>
+    <div class="blog-banner-title">Building the SHSM Fraud Analytics Dashboards — Methodology &amp; Findings</div>
+    <p class="blog-banner-desc">How we collected and structured the data, how each dashboard was built, and what the numbers reveal about SEC whistleblower enforcement, DOJ health care fraud recoveries, and the political economy of federal oversight.</p>
+    <div class="blog-banner-cta">Read the full write-up &nbsp;&#8594;</div>
+  </a>
+
+  <div class="cards">
+
+    <!-- DOJ FCA Card -->
+    <a class="card doj" href="doj_fraud_dashboard.html">
+      <div class="card-tag">DOJ / False Claims Act</div>
+      <div class="card-title">Federal Fraud <em>Recoveries</em></div>
+      <p class="card-desc">
+        Annual FCA settlements and judgments broken down by agency: Health Care / HHS,
+        Defense / DOD, and Other. Compare agency shares across 39 fiscal years (1987–2025)
+        with stacked charts, trend lines, and relator award data.
+      </p>
+      <div class="card-stats">
+        <div class="card-stat">
+          <div class="cs-value">$6.9B</div>
+          <div class="cs-label">FY 2025 Total</div>
+        </div>
+        <div class="card-stat">
+          <div class="cs-value">$85B+</div>
+          <div class="cs-label">Since 1986</div>
+        </div>
+        <div class="card-stat">
+          <div class="cs-value">83%</div>
+          <div class="cs-label">HHS Share (2025)</div>
+        </div>
+      </div>
+      <div class="card-arrow">&#8594;</div>
+    </a>
+
+
+    <!-- DOJ HC CY2024 Card -->
+    <a class="card doj" href="DOJ_Health_Care_Fraud_Recoveries_2024.html">
+      <div class="card-tag">DOJ / Health Care Fraud</div>
+      <div class="card-title">FCA Health Care <em>Recoveries</em></div>
+      <p class="card-desc">
+        Individual DOJ settlements and judgments for health care fraud in calendar year 2024.
+        Browse 122 cases by fraud type, defendant type, program, and location with sortable tables and charts.
+      </p>
+      <div class="card-stats">
+        <div class="card-stat">
+          <div class="cs-value">122</div>
+          <div class="cs-label">Cases (CY 2024)</div>
+        </div>
+        <div class="card-stat">
+          <div class="cs-value">$650M</div>
+          <div class="cs-label">Largest Settlement</div>
+        </div>
+        <div class="card-stat">
+          <div class="cs-value">McKinsey</div>
+          <div class="cs-label">Top Defendant</div>
+        </div>
+      </div>
+      <div class="card-arrow">&#8594;</div>
+    </a>
+
+    <!-- SEC Macro Card -->
+    <a class="card macro" href="sec_macro_dashboard.html">
+      <div class="card-tag">SEC / Economy &amp; Politics</div>
+      <div class="card-title">SEC Whistleblower <em>Program</em></div>
+      <p class="card-desc">
+        NOCAs and whistleblower award/denial orders compared against S&amp;P 500 performance,
+        SEC leadership, and presidential administration. Includes the tips pipeline
+        showing how tip volume predicts future enforcement activity.
+      </p>
+      <div class="card-stats">
+        <div class="card-stat">
+          <div class="cs-value">325</div>
+          <div class="cs-label">Award Orders</div>
+        </div>
+        <div class="card-stat">
+          <div class="cs-value">671</div>
+          <div class="cs-label">Denial Orders</div>
+        </div>
+        <div class="card-stat">
+          <div class="cs-value">32.6%</div>
+          <div class="cs-label">Award Rate</div>
+        </div>
+      </div>
+      <div class="card-arrow">&#8594;</div>
+    </a>
+
+  </div>
+
+
+</div><!-- /container -->
+
+<footer>
+  <span>Sanford Heisler Sharp McKnight &nbsp;·&nbsp; Internal Analytics</span>
+  <span>Sources: <a href="https://www.sec.gov/enforcement-litigation/whistleblower-program/whistleblower-program-notices-covered-action" target="_blank">SEC.gov</a> &nbsp;·&nbsp; <a href="https://www.justice.gov/civil/false-claims-act" target="_blank">DOJ Civil Division</a></span>
+</footer>
+</body>
+</html>
