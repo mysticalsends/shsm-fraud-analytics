@@ -28,7 +28,7 @@
   --warm:       #c8874a;
 
   /* Text */
-  --text:       #f3f7fd;   /* cool white */
+  --text:       #F9F6EE;   /* warm white */
   --muted:      #8aaac6;   /* blue-tinted secondary labels, readable */
 
   /* Chart grid */
@@ -72,8 +72,8 @@ body::before {
 /* ── Navigation ─────────────────────────────────────────────────────────── */
 .back-link {
   display: inline-block;
-  font-size: 10px;
-  letter-spacing: 0.15em;
+  font-size: 12px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
   text-decoration: none;
@@ -88,8 +88,8 @@ body::before {
 /* ── Tag chips ──────────────────────────────────────────────────────────── */
 .tag {
   display: inline-block;
-  font-size: 10px;
-  letter-spacing: 0.2em;
+  font-size: 12px;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--accent);
   border: 1px solid var(--accent);
@@ -134,9 +134,9 @@ h2 {
 }
 
 .date-label {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--muted);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
@@ -167,8 +167,8 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 /* ── Buttons ────────────────────────────────────────────────────────────── */
 .btn {
   font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-size: 12px;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   padding: 8px 14px;
   border: 1px solid var(--border);
@@ -210,8 +210,8 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 }
 
 .stat-label {
-  font-size: 9px;
-  letter-spacing: 0.15em;
+  font-size: 12px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
   margin-bottom: 8px;
@@ -225,7 +225,7 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   color: var(--accent);
 }
 
-.stat-sub { font-size: 9px; color: var(--muted); }
+.stat-sub { font-size: 12px; color: var(--muted); }
 
 /* ── Chart panels ───────────────────────────────────────────────────────── */
 .chart-panel {
@@ -237,10 +237,11 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 }
 
 .chart-title {
-  font-size: 10px;
-  letter-spacing: 0.15em;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--text);
   margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
@@ -269,7 +270,7 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   border-left: 4px solid var(--accent);
   border-radius: 6px;
   padding: 14px 18px;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--muted);
   line-height: 1.8;
   margin-bottom: 20px;
@@ -282,8 +283,8 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 9px;
-  letter-spacing: 0.08em;
+  font-size: 12px;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--muted);
 }
@@ -298,8 +299,8 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   overflow-x: auto;
 }
 .table-header {
-  font-size: 10px;
-  letter-spacing: 0.15em;
+  font-size: 12px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
   padding: 16px 24px;
@@ -310,13 +311,13 @@ input[type="month"]::-webkit-calendar-picker-indicator {
   flex-wrap: wrap;
   gap: 8px;
 }
-.data-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
 .data-table th {
   text-align: left;
   padding: 10px 16px;
   color: var(--muted);
-  font-size: 9px;
-  letter-spacing: 0.1em;
+  font-size: 12px;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   font-weight: 400;
   border-bottom: 1px solid var(--border);
@@ -335,7 +336,7 @@ footer {
   margin-top: 48px;
   padding-top: 24px;
   border-top: 1px solid var(--border);
-  font-size: 9px;
+  font-size: 12px;
   color: var(--muted);
   display: flex;
   justify-content: space-between;

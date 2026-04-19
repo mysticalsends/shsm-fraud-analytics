@@ -25,7 +25,7 @@
 
   /* ── Hero ── */
   .eyebrow {
-    font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+    font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
     color: var(--muted); margin-bottom: 12px;
   }
   .hero-sub {
@@ -57,7 +57,7 @@
   .card.macro:hover              { border-color: var(--indigo); }
 
   .card-tag {
-    font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 14px;
+    font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 14px;
   }
   .card.sec  .card-tag  { color: var(--cyan); }
   .card.doj  .card-tag  { color: var(--amber); }
@@ -71,7 +71,7 @@
   .card.doj  .card-title em  { color: var(--amber); }
   .card.macro .card-title em { color: var(--indigo); }
 
-  .card-desc { font-size: 10px; color: var(--muted); line-height: 1.9; margin-bottom: 24px; }
+  .card-desc { font-size: 12px; color: var(--muted); line-height: 1.9; margin-bottom: 24px; }
 
   .card-stats { display: flex; gap: 20px; flex-wrap: wrap; }
   .cs-value {
@@ -80,7 +80,7 @@
   .card.sec  .cs-value  { color: var(--cyan); }
   .card.doj  .cs-value  { color: var(--amber); }
   .card.macro .cs-value { color: var(--indigo); }
-  .cs-label { font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .cs-label { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
 
   .card-arrow {
     position: absolute; bottom: 24px; right: 24px; font-size: 18px;
@@ -101,7 +101,7 @@
   }
   .blog-banner:hover { background: var(--surface2); border-color: var(--green); }
   .blog-banner-label {
-    font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+    font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;
     color: var(--green); margin-bottom: 2px;
   }
   .blog-banner-title {
@@ -109,12 +109,12 @@
     font-weight: 400; color: var(--text); line-height: 1.2;
   }
   .blog-banner-desc {
-    font-size: 10px; color: var(--muted); line-height: 1.85;
+    font-size: 12px; color: var(--muted); line-height: 1.85;
     max-width: 680px; margin-top: 4px;
   }
   .blog-banner-cta {
-    font-size: 10px; color: var(--green); margin-top: 8px;
-    letter-spacing: 0.05em;
+    font-size: 12px; color: var(--green); margin-top: 8px;
+    letter-spacing: 0.04em;
   }
   @media (max-width: 620px) {
     .blog-banner { padding: 20px 18px; }
@@ -129,7 +129,7 @@
     padding: 24px 28px; margin-bottom: 48px;
   }
   .launch-title {
-    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
     color: var(--green); margin-bottom: 14px;
   }
   .launch-steps { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -138,12 +138,12 @@
   .step-num {
     flex-shrink: 0; width: 22px; height: 22px; border: 1px solid var(--border);
     border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    font-size: 9px; color: var(--green); margin-top: 2px;
+    font-size: 12px; color: var(--green); margin-top: 2px;
   }
-  .step-text { font-size: 10px; color: var(--muted); line-height: 1.7; }
+  .step-text { font-size: 12px; color: var(--muted); line-height: 1.7; }
   .step-text code {
     background: var(--surface2); border: 1px solid var(--border);
-    padding: 1px 5px; font-size: 9px; color: var(--cyan);
+    padding: 1px 5px; font-size: 12px; color: var(--cyan);
   }
   .step-text strong { color: var(--text); }
 </style>
@@ -172,27 +172,26 @@
       <div class="card-tag">DOJ / False Claims Act</div>
       <div class="card-title">Federal Fraud <em>Recoveries</em></div>
       <p class="card-desc">
-        Annual FCA settlements and judgments broken down by agency: Health Care / HHS,
-        Defense / DOD, and Other. Compare agency shares across 39 fiscal years (1987–2025)
+        Annual FCA settlements and judgments broken down by agency: Health Care, Defense,
+        and Other Agencies. Compare shares across fiscal years (1987–present)
         with stacked charts, trend lines, and relator award data.
       </p>
       <div class="card-stats">
         <div class="card-stat">
-          <div class="cs-value">$6.9B</div>
-          <div class="cs-label">FY 2025 Total</div>
+          <div class="cs-value" id="stat-fca-latest">—</div>
+          <div class="cs-label" id="stat-fca-latest-label">Latest FY Total</div>
         </div>
         <div class="card-stat">
-          <div class="cs-value">$85B+</div>
-          <div class="cs-label">Since 1986</div>
+          <div class="cs-value" id="stat-fca-total">—</div>
+          <div class="cs-label">All-Time Total</div>
         </div>
         <div class="card-stat">
-          <div class="cs-value">83%</div>
-          <div class="cs-label">HHS Share (2025)</div>
+          <div class="cs-value" id="stat-fca-hhs">—</div>
+          <div class="cs-label" id="stat-fca-hhs-label">HHS Share</div>
         </div>
       </div>
       <div class="card-arrow">&#8594;</div>
     </a>
-
 
     <!-- DOJ HC CY2024 Card -->
     <a class="card doj" href="DOJ_Health_Care_Fraud_Recoveries_2024.html">
@@ -200,20 +199,20 @@
       <div class="card-title">FCA Health Care <em>Recoveries</em></div>
       <p class="card-desc">
         Individual DOJ settlements and judgments for health care fraud in calendar year 2024.
-        Browse 122 cases by fraud type, defendant type, program, and location with sortable tables and charts.
+        Browse cases by fraud type, defendant type, program, and location with sortable tables and charts.
       </p>
       <div class="card-stats">
         <div class="card-stat">
-          <div class="cs-value">122</div>
+          <div class="cs-value" id="stat-hc-cases">—</div>
           <div class="cs-label">Cases (CY 2024)</div>
         </div>
         <div class="card-stat">
-          <div class="cs-value">$650M</div>
-          <div class="cs-label">Largest Settlement</div>
+          <div class="cs-value" id="stat-hc-total">—</div>
+          <div class="cs-label">Total Recovered</div>
         </div>
         <div class="card-stat">
-          <div class="cs-value">McKinsey</div>
-          <div class="cs-label">Top Defendant</div>
+          <div class="cs-value" id="stat-hc-largest">—</div>
+          <div class="cs-label">Largest Settlement</div>
         </div>
       </div>
       <div class="card-arrow">&#8594;</div>
@@ -224,21 +223,20 @@
       <div class="card-tag">SEC / Economy &amp; Politics</div>
       <div class="card-title">SEC Whistleblower <em>Program</em></div>
       <p class="card-desc">
-        NOCAs and whistleblower award/denial orders compared against S&amp;P 500 performance,
-        SEC leadership, and presidential administration. Includes the tips pipeline
-        showing how tip volume predicts future enforcement activity.
+        NOCAs and whistleblower award/denial orders by SEC Chair and presidential
+        administration, with the full tips pipeline from submission to final order.
       </p>
       <div class="card-stats">
         <div class="card-stat">
-          <div class="cs-value">325</div>
+          <div class="cs-value" id="stat-sec-awards">—</div>
           <div class="cs-label">Award Orders</div>
         </div>
         <div class="card-stat">
-          <div class="cs-value">671</div>
+          <div class="cs-value" id="stat-sec-denials">—</div>
           <div class="cs-label">Denial Orders</div>
         </div>
         <div class="card-stat">
-          <div class="cs-value">32.6%</div>
+          <div class="cs-value" id="stat-sec-rate">—</div>
           <div class="cs-label">Award Rate</div>
         </div>
       </div>
@@ -249,6 +247,45 @@
 
 
 </div><!-- /container -->
+
+<script>
+function fmt$(n) {
+  if (n >= 1e9) return '$' + (n / 1e9).toFixed(1) + 'B';
+  if (n >= 1e6) return '$' + Math.round(n / 1e6) + 'M';
+  return '$' + n.toLocaleString();
+}
+
+Promise.all([
+  fetch('data/doj_fca.json').then(r => r.json()),
+  fetch('data/doj_hc_cy2024.json').then(r => r.json()),
+  fetch('data/sec_final_orders.json').then(r => r.json())
+]).then(([fca, hc, sec]) => {
+  // DOJ FCA
+  const records = fca.records;
+  const last = records[records.length - 1];
+  const allTime = records.reduce((s, r) => s + r.t, 0);
+  const hhsPct = last.hhs ? Math.round(last.hhs / last.t * 100) : null;
+  document.getElementById('stat-fca-latest').textContent = fmt$(last.t);
+  document.getElementById('stat-fca-latest-label').textContent = 'FY ' + last.y + ' Total';
+  document.getElementById('stat-fca-total').textContent = fmt$(allTime) + '+';
+  document.getElementById('stat-fca-hhs').textContent = hhsPct ? hhsPct + '%' : '—';
+  document.getElementById('stat-fca-hhs-label').textContent = 'HHS Share (FY ' + last.y + ')';
+
+  // DOJ HC CY2024
+  const s = hc.summary;
+  document.getElementById('stat-hc-cases').textContent = s.totalCases;
+  document.getElementById('stat-hc-total').textContent = fmt$(s.totalRecovered);
+  document.getElementById('stat-hc-largest').textContent = fmt$(s.largestSettlement);
+
+  // SEC final orders
+  const awards  = Object.values(sec.awardsMonthly).reduce((a, b) => a + b, 0);
+  const denials = Object.values(sec.denialsMonthly).reduce((a, b) => a + b, 0);
+  const rate    = (awards / (awards + denials) * 100).toFixed(1);
+  document.getElementById('stat-sec-awards').textContent  = awards;
+  document.getElementById('stat-sec-denials').textContent = denials;
+  document.getElementById('stat-sec-rate').textContent    = rate + '%';
+});
+</script>
 
 <footer>
   <span>Sanford Heisler Sharp McKnight &nbsp;·&nbsp; Internal Analytics</span>
