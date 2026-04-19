@@ -370,20 +370,6 @@ const DEF_COLORS = [
   '#d946ef','#0ea5e9','#f43034','#78716c','#64748b','#888','#3b82f6'
 ];
 
-// ── SUMMARY DATA (hardcoded from doj_hc_cy2024.json) ─────────────────────────
-// Aggregations computed from RECORDS — no manual sync needed
-const BY_FRAUD = {}, BY_DEF = {}, BY_DIST = {};
-RECORDS.forEach(r => {
-  const add = (obj, key) => {
-    if (!obj[key]) obj[key] = { recovered: 0, cases: 0 };
-    obj[key].recovered += r.amount || 0;
-    obj[key].cases++;
-  };
-  add(BY_FRAUD, r.fraudType);
-  add(BY_DEF,   r.defType);
-  add(BY_DIST,  r.location);
-});
-
 // ── RECORDS (hardcoded from doj_hc_cy2024.json) ───────────────────────────────
 const RECORDS = [
   {date:"2024-12-26",defendant:"Southern California-Based Clinics, Laboratory and Their Owners",defType:"Clinic / Outpatient Facility",fraudType:"Anti-Kickback / Referral",amount:10000000,location:"Central District of California",url:"https://www.justice.gov/opa/pr/southern-california-based-clinics-laboratory-and-their-owners-pay-10m-false-claims-arising"},
@@ -496,6 +482,19 @@ const RECORDS = [
   {date:"2024-01-10",defendant:"RDx Bioscience Inc. and Its Owner and CEO",defType:"Clinical Laboratory / Diagnostic Imaging",fraudType:"Anti-Kickback / Referral",amount:13250000,location:"District of New Jersey",url:"https://www.justice.gov/opa/pr/new-jersey-laboratory-and-its-owner-and-ceo-agree-pay-over-13-million-settle-allegations"},
   {date:"2024-01-04",defendant:"H. Lee Moffitt Cancer Center & Research Institute Hospital Inc.",defType:"Hospital / Health System",fraudType:"Clinical Trial Fraud",amount:19564743,location:"Middle District of Florida",url:"https://www.justice.gov/opa/pr/florida-research-hospital-agrees-pay-more-195-million-resolve-liability-relating-self"}
 ];
+
+// Aggregations computed from RECORDS
+const BY_FRAUD = {}, BY_DEF = {}, BY_DIST = {};
+RECORDS.forEach(r => {
+  const add = (obj, key) => {
+    if (!obj[key]) obj[key] = { recovered: 0, cases: 0 };
+    obj[key].recovered += r.amount || 0;
+    obj[key].cases++;
+  };
+  add(BY_FRAUD, r.fraudType);
+  add(BY_DEF,   r.defType);
+  add(BY_DIST,  r.location);
+});
 
 // ── KPI CARDS ─────────────────────────────────────────────────────────────────
 (function() {
