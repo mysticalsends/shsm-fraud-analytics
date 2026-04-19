@@ -1,33 +1,76 @@
 /*
  * blog.css — SHSM Blog / Document Pages
- * Light editorial theme for long-form content and printable reports.
+ * Editorial content on dark-site background; white card retains print fidelity.
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Source+Sans+Pro:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Source+Sans+Pro:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap');
 
 /* ── Reset ──────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── Base ───────────────────────────────────────────────────────────────── */
+/* ── Base — dark site background ───────────────────────────────────────── */
 body {
-  background: #f8f7f4;
+  background: #040c1a;
   color: #1a1a1a;
   font-family: 'Merriweather', Georgia, serif;
   font-size: 17px;
   line-height: 1.85;
+  min-height: 100vh;
 }
 
-/* ── Page wrapper (mimics printed page) ─────────────────────────────────── */
+/* Subtle grid background (matches site) */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(#0d1f35 1px, transparent 1px),
+    linear-gradient(90deg, #0d1f35 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Back-to-hub nav ────────────────────────────────────────────────────── */
+.blog-nav {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 20px 24px 0;
+}
+
+.back-link {
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #8aaac6;
+  text-decoration: none;
+  border: 1px solid #1c3454;
+  border-radius: 4px;
+  padding: 6px 12px;
+  transition: all 0.15s;
+}
+.back-link:hover { border-color: #2e8dda; color: #2e8dda; }
+
+/* ── Page wrapper (white editorial card) ────────────────────────────────── */
 .page {
+  position: relative;
+  z-index: 1;
   max-width: 780px;
-  margin: 48px auto 80px;
+  margin: 24px auto 80px;
   background: #fff;
   padding: 72px 80px;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  box-shadow: 0 4px 40px rgba(0, 0, 0, 0.45);
 }
 
 @media (max-width: 860px) {
-  .page { padding: 40px 28px; margin: 24px auto 48px; }
+  .page { padding: 40px 28px; margin: 16px auto 48px; }
+  .blog-nav { padding: 16px 16px 0; }
 }
 
 @media print {
@@ -154,6 +197,7 @@ a:hover { text-decoration: underline; }
 .callout {
   border-left: 4px solid #1a56db;
   background: #f0f4ff;
+  border-radius: 6px;
   padding: 16px 20px;
   margin: 24px 0;
   font-family: 'Source Sans Pro', sans-serif;
@@ -168,6 +212,7 @@ a:hover { text-decoration: underline; }
   background: #fafafa;
   border: 1px solid #e0e0e0;
   border-left: 4px solid #111;
+  border-radius: 6px;
   padding: 14px 18px;
   margin: 12px 0;
   font-family: 'Source Sans Pro', sans-serif;
@@ -187,6 +232,7 @@ a:hover { text-decoration: underline; }
 .limitation {
   background: #fff9f0;
   border: 1px solid #f0d9b5;
+  border-radius: 6px;
   padding: 12px 16px;
   margin: 8px 0;
   font-family: 'Source Sans Pro', sans-serif;
@@ -224,6 +270,7 @@ a:hover { text-decoration: underline; }
   text-transform: uppercase;
   background: #111;
   color: #fff;
+  border-radius: 4px;
   padding: 3px 10px;
   margin-bottom: 8px;
   margin-top: 52px;

@@ -23,10 +23,12 @@
 
   /* Methodology callout */
   .methodology {
-    background: var(--surface); border: 1px solid var(--border);
-    border-left: 3px solid var(--denial);
+    background: color-mix(in srgb, var(--denial) 10%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--denial) 28%, var(--border));
+    border-left: 4px solid var(--denial);
+    border-radius: 6px;
     padding: 16px 20px; margin: 24px 0;
-    font-size: 10px; color: var(--muted); line-height: 1.9;
+    font-size: 11px; color: var(--muted); line-height: 1.9;
   }
   .methodology strong { color: var(--text); }
 
@@ -58,11 +60,13 @@
 
   /* Summary of Findings */
   .summary-box {
-    background: var(--surface); border: 1px solid var(--border);
-    border-left: 3px solid var(--award);
+    background: color-mix(in srgb, var(--award) 10%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--award) 28%, var(--border));
+    border-left: 4px solid var(--award);
+    border-radius: 6px;
     padding: 20px 24px; margin: 8px 0 32px;
   }
-  .summary-box p { font-size: 11px; color: var(--muted); line-height: 1.85; margin: 0 0 10px; }
+  .summary-box p { font-size: 12px; color: var(--muted); line-height: 1.85; margin: 0 0 10px; }
   .summary-box p:last-child { margin-bottom: 0; }
   .summary-box strong { color: var(--text); }
 </style>

@@ -8,33 +8,33 @@
 </head>
 <body>
 
-<div class="print-bar no-print">
-  <button onclick="window.print()">Print / Save as PDF</button>
-  <span>To save as Word: File → Save As → Word Document (.docx) in your browser's print dialog, or paste into a blank Word document.</span>
-</div>
+<nav class="blog-nav">
+  <a class="back-link" href="index.html">&#8592; Back to Dashboard Hub</a>
+</nav>
 
 <div class="page">
 
   <!-- Header -->
-  <div class="meta">Sanford Heisler Sharp McKnight &nbsp;·&nbsp; March 2026 &nbsp;·&nbsp; Analytics &amp; Data</div>
+  <div class="meta">Sanford Heisler Sharp McKnight &nbsp;&middot;&nbsp; March 2026 &nbsp;&middot;&nbsp; Analytics &amp; Data</div>
 
   <h1>Building the SHSM Fraud Analytics Dashboard Suite</h1>
 
   <p class="deck">
-    How we built three interactive dashboards to visualize federal fraud enforcement data — and what the numbers reveal about whistleblower programs, health care fraud, and the political economy of SEC oversight.
+    How we built three interactive dashboards to visualize federal fraud enforcement data &mdash; and what the numbers reveal about the trends in federal fraud enforcement and health care fraud.
   </p>
 
   <!-- ═══════════════════════════════════════════ -->
   <h2>Introduction</h2>
 
   <p>
-    Whistleblower and fraud enforcement data is public. The Department of Justice publishes annual False Claims Act statistics dating to 1987. The SEC posts every Notice of Covered Action and every final award or denial order on its website. Annual reports to Congress detail tip volumes and program outcomes. But public access is not the same as comprehension — the raw data, scattered across spreadsheets, press releases, and PDFs, tells no story on its own.
+    Whistleblower and fraud enforcement data is public. The Department of Justice (&ldquo;DOJ&rdquo;) publishes annual False Claims Act statistics dating to 1987, and publishes press releases when it enters into fraud settlements. The Securities and Exchange Commission (&ldquo;SEC&rdquo;) posts every Notice of Covered Action (&ldquo;NoCA&rdquo;) and every SEC whistleblower final order on its website. In the SEC&rsquo;s annual reports to Congress, the number of tips and program outcomes are reported. But public access does not mean the information is easily digestible. The raw data is scattered across spreadsheets, press releases, and PDFs, and does not tell a compelling story on its own.
   </p>
 
   <p>
-    The goal of this project was simple: pull that data together, give it structure, and make it explorable. The result is a suite of three interactive dashboards, each focused on a different slice of the federal fraud enforcement landscape. This post explains how each dashboard was built, what we found, where the data falls short, and where we plan to take the analysis next.
+    The goal of the fraud analytics project was simple: pull the data together, give it structure, and make it explorable. The result is a suite of three interactive dashboards, each focused on a different piece of the federal fraud enforcement landscape. This post explains how each dashboard was built, what we found, where the data falls short, and where we plan to take the analysis next.
   </p>
 
+  <!-- NOTE: stat-row numbers are manually maintained; update when underlying data refreshes -->
   <div class="stat-row">
     <div class="stat-item">
       <span class="stat-number">3</span>
@@ -42,88 +42,85 @@
     </div>
     <div class="stat-item">
       <span class="stat-number">$85.7B</span>
-      <span class="stat-label">FCA Recoveries Tracked<br>(FY1987–2025)</span>
+      <span class="stat-label">FCA Recoveries Tracked<br>(FY1987&ndash;2025)</span>
     </div>
     <div class="stat-item">
-      <span class="stat-number">2,479</span>
-      <span class="stat-label">SEC NOCAs Mapped<br>(2011–2026)</span>
+      <span class="stat-number">2,490</span>
+      <span class="stat-label">SEC NOCAs Mapped<br>(2011&ndash;2026)</span>
     </div>
     <div class="stat-item">
-      <span class="stat-number">996</span>
+      <span class="stat-number">1,016</span>
       <span class="stat-label">SEC Award / Denial<br>Orders Catalogued</span>
     </div>
   </div>
 
   <!-- ═══════════════════════════════════════════ -->
   <div class="section-tag">Dashboard 1</div>
-  <h2>DOJ False Claims Act — <a href="doj_fraud_dashboard.html">Federal Fraud Recovery Dashboard</a></h2>
+  <h2>DOJ False Claims Act &mdash; <a href="doj_fraud_dashboard.html">Federal Fraud Recovery Dashboard</a></h2>
 
   <h3>What It Covers</h3>
   <p>
-    The <a href="doj_fraud_dashboard.html"><strong>DOJ FCA Federal Fraud Recovery Dashboard</strong></a> tracks False Claims Act settlements and judgments from fiscal year 1987 through fiscal year 2025. The FCA, originally enacted during the Civil War and substantially strengthened in 1986, is the federal government's primary civil tool for recovering money lost to fraud. The dashboard covers the full 38-year statutory history of modern FCA enforcement — nearly $85.7 billion recovered in total.
+    The <a href="doj_fraud_dashboard.html"><strong>DOJ FCA Federal Fraud Recovery Dashboard</strong></a> tracks False Claims Act (&ldquo;FCA&rdquo;) settlements and judgments from fiscal year 1987 through fiscal year 2025. The FCA, originally enacted during the Civil War and substantially strengthened in 1986, is the federal government&rsquo;s primary civil tool for recovering money lost to fraud against the government. The dashboard covers the full 38-year statutory history of modern FCA enforcement, totaling nearly $85.7 billion recovered in total.
   </p>
 
-  <h3>How It Was Built</h3>
+  <h3>The Data</h3>
   <p>
-    The data backbone is the DOJ's official <em>Fraud Statistics Overview</em> spreadsheet, which the Civil Division publishes and updates annually. That document provides fiscal-year totals for all agencies combined. Agency-specific breakdowns — distinguishing Health and Human Services / health care, Department of Defense, and all other agencies — are available beginning in FY 2007 from DOJ annual press releases and reports. Both streams were hardcoded into the dashboard as a single JavaScript data array covering all 39 data points.
-  </p>
-  <p>
-    The dashboard was built as a single self-contained HTML file using Chart.js 4.4.1. It features a stacked bar chart (with toggles for grouped and percentage-share views), a dual-line trend chart, a donut breakdown for any selected fiscal year, and a dedicated qui tam / relator awards chart. A year-range filter allows users to narrow the view to any fiscal year window. All charts re-render dynamically client-side with no server dependency.
+    The data backbone is the DOJ&rsquo;s official <em>Fraud Statistics Overview</em> spreadsheet, which the Civil Division publishes and updates annually. The spreadsheet provides totals for all agencies combined and agency-specific breakdowns &mdash; distinguishing Health and Human Services / health care, Department of Defense, and all other agencies. It also reports how many whistleblower-filed cases and government-initiated cases were filed each year, along with the recoveries attributable to each.
   </p>
 
   <h3>Key Findings</h3>
 
   <div class="finding">
-    <span class="label">Finding 1 — Record Year</span>
-    <strong>FY2025 set an all-time record at $6.89 billion recovered</strong>, surpassing the prior record of $6.16B in FY2014. Notably, $5.7B of FY2025's total came from health care and life sciences matters — the largest single-category total in program history.
+    <span class="label">Finding 1 &mdash; Record Year</span>
+    <strong>FY2025 set an all-time record at $6.89 billion recovered</strong>, surpassing the prior record of $6.16B in FY2014. Notably, $5.7B of FY2025&rsquo;s total came from health care and life sciences matters &mdash; the largest single-category total in program history.
   </div>
 
   <div class="finding">
-    <span class="label">Finding 2 — Health Care Dominance</span>
-    Health care fraud has consistently accounted for the majority of FCA recoveries since at least FY2007. In most years, HHS-related matters represent 60–85% of total annual recoveries. Defense procurement fraud, which dominated FCA activity in the 1980s and early 1990s, has declined markedly as a share of total recoveries.
+    <span class="label">Finding 2 &mdash; Health Care Dominance</span>
+    Health care fraud has consistently accounted for the majority of FCA recoveries since at least FY2007. In most years, HHS-related matters represent 60&ndash;85% of total annual recoveries. Defense procurement fraud, which dominated FCA activity in the 1980s and early 1990s, has declined markedly as a share of total recoveries.
   </div>
 
   <div class="finding">
-    <span class="label">Finding 3 — Qui Tam Surge</span>
-    Whistleblower-filed (qui tam) lawsuits have become the engine of FCA enforcement. In FY2025, relators filed <strong>1,297 new qui tam suits</strong> — a new annual record, up from 980 in FY2024 and roughly double the pace of the early 2010s. Qui tam suits now drive approximately 83% of annual recoveries.
+    <span class="label">Finding 3 &mdash; Qui Tam Surge</span>
+    Whistleblower-filed (qui tam) lawsuits are the engine of FCA enforcement. In FY2025, relators filed <strong>1,297 new qui tam suits</strong> &mdash; a new annual record, up from 980 in FY2024 and roughly double the pace of the early 2010s. In FY2025, qui tam suits drove nearly 80% of the DOJ&rsquo;s fraud recoveries under the FCA.
   </div>
 
   <div class="finding">
-    <span class="label">Finding 4 — Relator Awards Peaked Mid-Decade</span>
-    Annual relator (whistleblower) award payments peaked around FY2014–2016 (roughly $550–720M per year) and have moderated since, averaging $400–480M annually through FY2024. This may reflect the lag between lawsuit filing and resolution, as well as the mix of case sizes in any given year.
+    <span class="label">Finding 4 &mdash; Relator Awards Peaked Mid-Decade</span>
+    Annual relator (whistleblower) award payments peaked around FY2014&ndash;2016 (roughly $550&ndash;720M per year) and have moderated since, averaging $400&ndash;480M annually through FY2024. This may reflect the lag between lawsuit filing and resolution, as well as the mix of case sizes in any given year.
   </div>
 
   <div class="finding">
-    <span class="label">Finding 5 — Defense Fraud Revival in FY2025</span>
-    After near-zero DOD recoveries in FY2019–FY2022 ($20M, $36M, $62M, $35M respectively), FY2025 saw <strong>$634M in defense fraud recoveries</strong> — the highest since FY2014. This suggests a meaningful shift in DOJ enforcement priorities or the resolution of a significant pipeline of defense matters.
+    <span class="label">Finding 5 &mdash; Defense Fraud Revival in FY2025</span>
+    After near-zero DOD recoveries in FY2019&ndash;FY2022 ($20M, $36M, $62M, $35M respectively), FY2025 saw <strong>$634M in defense fraud recoveries</strong> &mdash; the highest since FY2014. This may suggest a meaningful shift in DOJ enforcement priorities.<sup>1</sup>
   </div>
 
   <h3>Limitations</h3>
 
   <div class="limitation">
-    Fiscal-year totals are as reported by DOJ and may be restated in subsequent years as settlements finalize. Figures represent civil government recoveries only and exclude criminal fines, state Medicaid shares, and relator shares paid from government recovery.
-  </div>
-
-  <div class="limitation">
-    Agency breakdowns (HHS/DOD/Other) are available only from FY2007 onward. Pre-2007 years show total recovery only. "Other Agencies" is a residual category and includes SBA, housing, customs, cybersecurity, and other federal programs.
+    The aggregate data is high level. It does not reveal what types of health care fraud were actually enforced &mdash; whether anti-kickback violations, upcoding, false diagnosis coding, or other schemes. Nor does it break down the composition of the &ldquo;Other Agencies&rdquo; category, which encompasses customs fraud, cybersecurity, housing, PPP fraud, and other federal programs. District-level enforcement data is also unavailable from this source.
   </div>
 
   <div class="limitation">
     The qui tam filing count and relator award figures are annual totals from DOJ reports and do not represent individual case data. It is not possible from this data alone to determine which specific qui tam suits generated which recoveries or awards.
   </div>
 
+  <div class="limitation">
+    Dashboard 2 addresses some of these limitations through a case-level analysis of DOJ health care fraud enforcement in CY2024.
+  </div>
+
   <!-- ═══════════════════════════════════════════ -->
   <div class="section-tag">Dashboard 2</div>
-  <h2>DOJ Health Care Fraud Recoveries — <a href="DOJ_Health_Care_Fraud_Recoveries_2024.html">CY2024 Case-Level Dashboard</a></h2>
+  <h2>DOJ Health Care Fraud Recoveries &mdash; <a href="DOJ_Health_Care_Fraud_Recoveries_2024.html">CY2024 Case-Level Dashboard</a></h2>
 
   <h3>What It Covers</h3>
   <p>
-    Where the first dashboard provides a macro, annual view, the <a href="DOJ_Health_Care_Fraud_Recoveries_2024.html"><strong>CY2024 Health Care Fraud dashboard</strong></a> goes granular: it catalogues 122 individual False Claims Act health care cases announced by the Department of Justice during calendar year 2024, drawn directly from DOJ press releases. Each case is coded by fraud type, defendant type, and federal health program. This dashboard was built to answer questions the aggregate data cannot: What kinds of fraud dominate by dollar amount vs. by case count? Which defendant categories are most frequently pursued? Which programs are most exposed?
+    Where the first dashboard provides a macro, annual view, the <a href="DOJ_Health_Care_Fraud_Recoveries_2024.html"><strong>CY2024 Health Care Fraud dashboard</strong></a> goes granular: it catalogues 122 individual False Claims Act health care cases announced by the Department of Justice during calendar year 2024, drawn directly from DOJ press releases. Each case is coded by fraud type, defendant type, and federal health program. This dashboard was built to understand health care fraud enforcement and identify what types of actions the DOJ prioritizes.
   </p>
 
   <h3>How It Was Built</h3>
   <p>
-    The source data is DOJ's public press release feed at justice.gov. Each 2024 FCA health care press release was reviewed and structured into a case record including: announcement date, defendant name, fraud classification, defendant type, settlement amount, federal program implicated, and the originating U.S. Attorney's Office or Main Justice office. Cases without publicly announced dollar amounts were retained for count purposes but excluded from dollar aggregations.
+    The source data is DOJ&rsquo;s public press release feed at justice.gov. Each 2024 FCA health care press release was reviewed and structured into a case record including: announcement date, defendant name, fraud classification, defendant type, settlement amount, federal program implicated, and the originating U.S. Attorney&rsquo;s Office or Main Justice office. Cases without publicly announced dollar amounts were retained for count purposes but excluded from dollar aggregations.
   </p>
   <p>
     The resulting 122-case dataset was hardcoded as a JavaScript array in the dashboard. The interface features four Chart.js donut/bar charts (fraud type by dollars, fraud type by case count, defendant type by dollars, defendant type by case count), a monthly recovery timeline, and a filterable, sortable case table with direct links to the original DOJ press releases. All filtering and sorting runs client-side.
@@ -151,34 +148,34 @@
   <h3>Key Findings</h3>
 
   <div class="finding">
-    <span class="label">Finding 1 — Overbilling Dominates by Count</span>
+    <span class="label">Finding 1 &mdash; Overbilling Dominates by Count</span>
     <strong>Overbilling / false billing is the most common fraud type</strong>, accounting for 66 of 122 cases (54%). Anti-kickback and illegal referral schemes are the second most common at 31 cases (25%). These two categories together represent approximately 80% of all health care FCA cases in CY2024.
   </div>
 
   <div class="finding">
-    <span class="label">Finding 2 — Physicians Are the Most Frequent Defendants</span>
-    Physicians and physician practices are the most commonly named defendant type by case count (30 cases), followed by hospitals and health systems (20) and clinical laboratories (19). However, the largest dollar recoveries tend to come from hospitals, health systems, and Medicare Advantage plans — reflecting both the scale of those entities and the complexity of their billing systems.
+    <span class="label">Finding 2 &mdash; Physicians Are the Most Frequent Defendants</span>
+    Physicians and physician practices are the most commonly named defendant type by case count (30 cases), followed by hospitals and health systems (20) and clinical laboratories (19). However, the largest dollar recoveries tend to come from hospitals, health systems, and [___] &mdash; reflecting both the scale of those entities and the complexity of their billing systems.
   </div>
 
   <div class="finding">
-    <span class="label">Finding 3 — Medicare Remains the Primary Target Program</span>
-    Medicare and its associated programs (including Medicare Advantage) account for the majority of enforcement activity. The rise of Medicare Advantage fraud — specifically false diagnosis coding to inflate risk adjustment payments — is a notable and growing enforcement priority, with at least three significant cases in CY2024 alone.
+    <span class="label">Finding 3 &mdash; Medicare Remains the Primary Target Program</span>
+    Medicare and its associated programs (including Medicare Advantage) account for the majority of enforcement activity. The rise of Medicare Advantage fraud &mdash; specifically false diagnosis coding to inflate risk adjustment payments &mdash; is a notable and growing enforcement priority, with at least three significant cases in CY2024 alone.
   </div>
 
   <div class="finding">
-    <span class="label">Finding 4 — The McKinsey Case Stands Apart</span>
-    The largest case by dollar amount involved McKinsey &amp; Company's work with Purdue Pharma, resolving both criminal and civil investigations related to opioid consulting work. At $650M, this case alone represents approximately 30% of all dollar recoveries tracked in the CY2024 dataset. Without it, the average recovery per case would be substantially lower, highlighting the degree to which a small number of major cases drive aggregate totals in any given year.
+    <span class="label">Finding 4 &mdash; The McKinsey Case Stands Apart</span>
+    The largest case by dollar amount involved McKinsey &amp; Company&rsquo;s work with Purdue Pharma, resolving both criminal and civil investigations related to opioid consulting work. At $650M, this case alone represents approximately 30% of all dollar recoveries tracked in the CY2024 dataset. Without it, the average recovery per case would be substantially lower, highlighting the degree to which a small number of major cases drive aggregate totals in any given year.
   </div>
 
   <div class="finding">
-    <span class="label">Finding 5 — Geographic Distribution Is Broad</span>
-    Cases were brought by U.S. Attorney's Offices across the country as well as directly by Main Justice (Office of Public Affairs). This reflects both the national scope of health care fraud and the decentralized structure of FCA enforcement, where local U.S. Attorneys often lead major investigations with Civil Division support.
+    <span class="label">Finding 5 &mdash; Geographic Distribution Is Broad</span>
+    Cases were brought by U.S. Attorney&rsquo;s Offices across the country as well as directly by Main Justice (Office of Public Affairs). This reflects both the national scope of health care fraud and the decentralized structure of FCA enforcement, where local U.S. Attorneys often lead major investigations with Civil Division support.
   </div>
 
   <h3>Limitations</h3>
 
   <div class="limitation">
-    The dashboard covers calendar year 2024 (January–December 2024), which does not align with DOJ's fiscal year (October–September). Figures will not reconcile directly to DOJ's annual FY2024 report totals.
+    The dashboard covers calendar year 2024 (January&ndash;December 2024), which does not align with DOJ&rsquo;s fiscal year (October&ndash;September). Figures will not reconcile directly to DOJ&rsquo;s annual FY2024 report totals.
   </div>
 
   <div class="limitation">
@@ -186,7 +183,7 @@
   </div>
 
   <div class="limitation">
-    Defendant type and fraud type classifications are applied manually based on press release content. Classification is subject to judgment and may not match DOJ's internal categorizations. Some cases involve overlapping fraud types (e.g., a case may involve both overbilling and kickbacks).
+    Defendant type and fraud type classifications are applied manually based on press release content. Classification is subject to judgment and may not match DOJ&rsquo;s internal categorizations. Some cases involve overlapping fraud types (e.g., a case may involve both overbilling and kickbacks).
   </div>
 
   <div class="limitation">
@@ -195,11 +192,11 @@
 
   <!-- ═══════════════════════════════════════════ -->
   <div class="section-tag">Dashboard 3</div>
-  <h2>SEC Whistleblower Program — <a href="sec_macro_dashboard.html">Analysis Dashboard</a></h2>
+  <h2>SEC Whistleblower Program &mdash; <a href="sec_macro_dashboard.html">Analysis Dashboard</a></h2>
 
   <h3>What It Covers</h3>
   <p>
-    The <a href="sec_macro_dashboard.html"><strong>SEC Whistleblower Program Analysis Dashboard</strong></a> is a comprehensive tool covering the full arc of SEC whistleblower enforcement from August 2011 through early 2026. It tracks two parallel data streams: Notices of Covered Actions (NOCAs) — posted for every SEC enforcement action imposing sanctions above $1 million — and final whistleblower award and denial orders. Through March 2026, the program has posted 2,479 NOCAs and issued 996 final orders (325 awards, 671 denials), for an all-time award rate of 32.6%.
+    The <a href="sec_macro_dashboard.html"><strong>SEC Whistleblower Program Analysis Dashboard</strong></a> is a comprehensive tool covering the full arc of SEC whistleblower enforcement from August 2011 through early 2026. It tracks two parallel data streams: Notices of Covered Actions (NOCAs) &mdash; posted for every SEC enforcement action imposing sanctions above $1 million &mdash; and final whistleblower award and denial orders. Through March 2026, the program has posted 2,490 NOCAs and issued 1,016 final orders (325 awards, 671 denials), for an all-time award rate of approximately 32%.
   </p>
   <p>
     The dashboard places these data streams in institutional and political context, breaking down NOCA and order volumes by SEC Chair and by presidential administration. An annual tips pipeline chart connects tip submission volumes (from SEC Annual Reports to Congress) to enforcement outputs, illustrating the multi-year lag between a whistleblower filing a tip and the SEC issuing a NOCA or final order. A dynamic Summary of Findings section is auto-generated from the loaded data, surfacing key metrics and trends at a glance.
@@ -210,29 +207,29 @@
     Data is structured across multiple JSON files loaded asynchronously at runtime: monthly NOCA counts and S&amp;P 500 data (<code>sec_macro.json</code>), monthly award and denial order counts (<code>sec_final_orders.json</code>), SEC commissioner periods with associated colors and date ranges (<code>sec_commissioners.json</code>), and presidential periods (<code>us_presidents.json</code>). This separation keeps the dashboard HTML clean and makes individual data streams easy to update independently.
   </p>
   <p>
-    The dashboard features six analytical charts: a month/year NOCA volume chart with 1Y/3Y/5Y quick-range controls, a month/year final orders chart (awards and denials stacked), time-series charts colored by SEC Chair and by Presidential Administration using a custom Chart.js <code>periodBandPlugin</code> that draws colored background bands, grouped horizontal summary charts by Chair and by President, and an annual tips pipeline chart. Each section includes a dynamically built color legend identifying which colors correspond to which Chair or President — drawn directly from the same JSON data that drives the bar colors.
+    The dashboard features six analytical charts: a month/year NOCA volume chart with 1Y/3Y/5Y quick-range controls, a month/year final orders chart (awards and denials stacked), time-series charts colored by SEC Chair and by Presidential Administration using a custom Chart.js <code>periodBandPlugin</code> that draws colored background bands, grouped horizontal summary charts by Chair and by President, and an annual tips pipeline chart. Each section includes a dynamically built color legend identifying which colors correspond to which Chair or President &mdash; drawn directly from the same JSON data that drives the bar colors.
   </p>
 
   <h3>Key Findings</h3>
 
   <div class="finding">
-    <span class="label">Finding 1 — Award Rate Is Roughly One-in-Three</span>
-    Of the 996 final whistleblower orders issued through early 2026, <strong>325 (32.6%) resulted in awards</strong>. The majority of claimants who receive a final order are denied. This rate has been relatively stable across administrations, suggesting it reflects the statutory structure of the program more than enforcement discretion.
+    <span class="label">Finding 1 &mdash; Award Rate Is Roughly One-in-Three</span>
+    Of the 1,016 final whistleblower orders issued through early 2026, <strong>325 (approximately 32%) resulted in awards</strong>. The majority of claimants who receive a final order are denied. This rate has been relatively stable across administrations, suggesting it reflects the statutory structure of the program more than enforcement discretion.
   </div>
 
   <div class="finding">
-    <span class="label">Finding 2 — Gensler Era Produced Highest Totals</span>
-    Under Chair Gensler (April 2021 – January 2025), the SEC issued the highest combined volume of NOCAs and final orders of any Chair in program history, consistent with record award payouts during that period. The Gensler era also saw the highest annual tip volumes on record.
+    <span class="label">Finding 2 &mdash; Gensler Era Produced Highest Totals</span>
+    Under Chair Gensler (April 2021 &ndash; January 2025), the SEC issued the highest combined volume of NOCAs and final orders of any Chair in program history, consistent with record award payouts during that period. The Gensler era also saw the highest annual tip volumes on record.
   </div>
 
   <div class="finding">
-    <span class="label">Finding 3 — Multi-Year Pipeline Complicates Political Attribution</span>
-    Because tips typically take 1–3 years to generate a NOCA, and additional time before a final order is issued, the enforcement outputs visible under any given Chair or administration largely reflect investigative work — and tip submissions — of prior periods. Attributing enforcement volume to current political leadership requires care.
+    <span class="label">Finding 3 &mdash; Multi-Year Pipeline Complicates Political Attribution</span>
+    Because tips typically take 1&ndash;3 years to generate a NOCA, and additional time before a final order is issued, the enforcement outputs visible under any given Chair or administration largely reflect investigative work &mdash; and tip submissions &mdash; of prior periods. Attributing enforcement volume to current political leadership requires care.
   </div>
 
   <div class="finding">
-    <span class="label">Finding 4 — 2025 Reflects a Transitional Period</span>
-    Under acting Chair Uyeda (February–April 2025) and Chair Atkins (April 2025–present), monthly NOCA volumes and order counts have shifted compared to the late Gensler period. The tips pipeline chart provides forward context: the tip volumes of FY2022–FY2024 are likely to shape enforcement output through 2026 and beyond regardless of current administration priorities.
+    <span class="label">Finding 4 &mdash; 2025 Reflects a Transitional Period</span>
+    Under acting Chair Uyeda (February&ndash;April 2025) and Chair Atkins (April 2025&ndash;present), monthly NOCA volumes and order counts have shifted compared to the late Gensler period. The tips pipeline chart provides forward context: the tip volumes of FY2022&ndash;FY2024 are likely to shape enforcement output through 2026 and beyond regardless of current administration priorities.
   </div>
 
   <h3>Limitations</h3>
@@ -242,69 +239,16 @@
   </div>
 
   <div class="limitation">
-    The August 2011 data point contains 170 NOCAs, reflecting the SEC's initial bulk posting when the whistleblower program launched — not a genuine spike in enforcement activity. It is retained in the dataset but treated as an outlier in trend analysis.
+    The August 2011 data point contains 170 NOCAs, reflecting the SEC&rsquo;s initial bulk posting when the whistleblower program launched &mdash; not a genuine spike in enforcement activity. It is retained in the dataset but treated as an outlier in trend analysis.
   </div>
 
   <div class="limitation">
-    Tips data from SEC Annual Reports to Congress are fiscal-year totals (October–September) and do not map cleanly to the calendar-month cadence of the NOCA and order data. FY2025 figures are confirmed at 53,753 tips.
+    Tips data from SEC Annual Reports to Congress are fiscal-year totals (October&ndash;September) and do not map cleanly to the calendar-month cadence of the NOCA and order data. FY2025 figures are confirmed at 53,753 tips.
   </div>
 
   <div class="limitation">
     The transition month assignment rule (majority-of-month) is a simplification. Different assignment conventions would produce slightly different totals by Chair or administration at the margins.
   </div>
-
-  <!-- ═══════════════════════════════════════════ -->
-  <h2>Technical Overview</h2>
-
-  <p>
-    All three dashboards share a common technical foundation and visual design system:
-  </p>
-
-  <table>
-    <thead>
-      <tr>
-        <th>Component</th>
-        <th>Choice</th>
-        <th>Rationale</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Charting Library</td>
-        <td>Chart.js 4.4.1 (CDN)</td>
-        <td>Mature, well-documented, no build step required</td>
-      </tr>
-      <tr>
-        <td>Framework</td>
-        <td>Pure HTML + vanilla JavaScript</td>
-        <td>Zero dependencies, opens in any browser, no server required</td>
-      </tr>
-      <tr>
-        <td>Typography</td>
-        <td>Space Mono + Playfair Display (Google Fonts)</td>
-        <td>Playfair Display echoes the firm's website; Space Mono provides a technical, data-focused aesthetic for labels and numbers</td>
-      </tr>
-      <tr>
-        <td>Visual Theme</td>
-        <td>Dark navy mode (#040c1a background, #2e8dda accent)</td>
-        <td>Reduces eye strain for data-heavy review; navy palette echoes firm branding</td>
-      </tr>
-      <tr>
-        <td>Data Storage</td>
-        <td>JSON files in <code>data/</code> directory, loaded asynchronously</td>
-        <td>Separates data from presentation; easy to update individual datasets without touching dashboard HTML</td>
-      </tr>
-      <tr>
-        <td>Shared Styles</td>
-        <td><code>css/shared.css</code> design system</td>
-        <td>Single source of truth for tokens, typography, and component styles across all dashboards</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p>
-    The choice to load data from structured JSON files — rather than fetching from an API or embedding data directly in each HTML file — was deliberate. It makes each dashboard's data independently auditable and updatable, while keeping the HTML focused on layout and presentation logic. The tradeoff is that dashboards require a local server or hosted environment to load JSON files (the browser's same-origin policy blocks local file fetches). A simple <code>python -m http.server</code> is sufficient for local review.
-  </p>
 
   <!-- ═══════════════════════════════════════════ -->
   <h2>Future Data Exploration</h2>
@@ -316,49 +260,28 @@
   <div class="future-item">
     <span class="future-num">01</span>
     <div>
-      <strong>Tip-to-NOCA-to-Award Pipeline Modeling.</strong> The most analytically valuable work would be connecting the tips pipeline (Annual Reports to Congress) to NOCA volume and then to final award orders over time, with appropriate lag assumptions. A 2–3 year tip-to-NOCA lag model would allow us to project future enforcement output from today's tip filings — useful for both program capacity planning and client counseling.
+      <strong>SEC Award Amount Analysis.</strong> The current <a href="sec_macro_dashboard.html">SEC Whistleblower Program dashboard</a> tracks the count of awards and denials but not the dollar amounts of individual awards. The SEC publishes award amounts in its final order notices. Scraping and aggregating those amounts would allow analysis of award size distribution, average award as a percentage of sanctions collected, and trends in awards over time.
     </div>
   </div>
 
   <div class="future-item">
     <span class="future-num">02</span>
     <div>
-      <strong>SEC Award Amount Analysis.</strong> The current <a href="sec_macro_dashboard.html">SEC Whistleblower Program dashboard</a> tracks the count of awards and denials but not the dollar amounts of individual awards. The SEC publishes award amounts in its final order notices. Scraping and aggregating those amounts would allow analysis of award size distribution, average award as a percentage of sanctions collected, and trends in award generosity over time.
+      <strong>FCA Case-Level Multi-Year Dataset.</strong> The <a href="DOJ_Health_Care_Fraud_Recoveries_2024.html">CY2024 health care fraud dashboard</a> covers one calendar year for one category of fraud. Creating longer-running analyses &mdash; or analyses of different fraud types such as DOD procurement fraud or customs fraud &mdash; will provide a clearer picture of DOJ&rsquo;s enforcement priorities. The FY2025 spike in defense fraud recoveries ($634M, up from near-zero) warrants closer examination; a case-level analysis of defense-sector FCA activity, parallel to the health care CY2024 dashboard, would clarify which contractors, programs, and fraud types are driving the numbers.
     </div>
   </div>
 
   <div class="future-item">
     <span class="future-num">03</span>
     <div>
-      <strong>FCA Case-Level Multi-Year Dataset.</strong> The <a href="DOJ_Health_Care_Fraud_Recoveries_2024.html">CY2024 health care fraud dashboard</a> covers one calendar year. Extending the same case-level methodology back through CY2020–2023 would enable multi-year trend analysis at the defendant type, fraud type, and program level — answering questions like: Is Medicare Advantage fraud enforcement accelerating? Which defendant categories are receiving increasing vs. decreasing DOJ attention?
+      <strong>Geographic Heat Mapping.</strong> Both the DOJ press release data and the SEC enforcement data contain location information (U.S. District, state). Mapping enforcement activity geographically would reveal which districts or states are generating and receiving the most fraud enforcement activity.
     </div>
   </div>
 
   <div class="future-item">
     <span class="future-num">04</span>
     <div>
-      <strong>Geographic Heat Mapping.</strong> Both the DOJ press release data and the SEC enforcement data contain location information (U.S. District, state). Mapping enforcement activity geographically would reveal whether certain districts or regions are disproportionate sources or targets of fraud enforcement — useful context for understanding the national scope of the programs.
-    </div>
-  </div>
-
-  <div class="future-item">
-    <span class="future-num">05</span>
-    <div>
-      <strong>DOJ FCA Defense Contractor Drill-Down.</strong> The FY2025 spike in defense fraud recoveries ($634M, up from near-zero) warrants closer examination. A case-level analysis of defense-sector FCA activity — parallel to the <a href="DOJ_Health_Care_Fraud_Recoveries_2024.html">health care CY2024 dashboard</a> — would clarify which contractors, programs, and fraud types are driving the numbers.
-    </div>
-  </div>
-
-  <div class="future-item">
-    <span class="future-num">06</span>
-    <div>
-      <strong>SEC Denial Order Analysis.</strong> Of the 996 final orders through early 2026, 671 (67.4%) are denials. A denial order analysis — categorizing the stated grounds for denial (no original information, not employed by a covered entity, untimely, etc.) — would reveal the most common failure modes for SEC whistleblower claims and has direct value for client intake and case screening.
-    </div>
-  </div>
-
-  <div class="future-item">
-    <span class="future-num">07</span>
-    <div>
-      <strong>Integration with PACER / Court Data.</strong> Many of the FCA cases in the CY2024 dataset began as qui tam complaints that were under seal for years before unsealing and settlement. Linking press release data to court filing data (via PACER or CourtListener) would allow analysis of seal duration, investigation timeline, and the relationship between complaint filing date and settlement outcome.
+      <strong>SEC Denial Order Analysis.</strong> Of the 1,016 final orders through early 2026, the majority are denials. A denial order analysis &mdash; categorizing the stated grounds for denial (no original information, not employed by a covered entity, untimely, etc.) &mdash; would reveal the most common failure modes for SEC whistleblower claims and has direct value for client intake and case screening.
     </div>
   </div>
 
@@ -366,24 +289,29 @@
   <h2>Conclusion</h2>
 
   <p>
-    Fraud enforcement data has a transparency problem — not because the data is hidden, but because the sheer volume and fragmentation of public disclosures makes it inaccessible to anyone without significant time to compile and clean it. These dashboards are a first attempt to fix that for the specific data domains most relevant to whistleblower and fraud practice.
+    Fraud enforcement data has a transparency problem &mdash; not because the data is hidden, but because the sheer volume and fragmentation of public disclosures makes it inaccessible to anyone without significant time to compile and clean it. These dashboards are a first attempt to fix that for the specific data domains most relevant to whistleblower and fraud practice.
   </p>
 
   <p>
-    The findings reinforce several things that practitioners in this space understand intuitively: health care fraud dominates FCA enforcement; qui tam relators are the engine of recovery; the SEC's award rate is well under 50%; and enforcement output in any given year reflects investigative decisions made years earlier. What the dashboards add is a visual and interactive layer that makes these patterns concrete, comparable, and — most importantly — arguable.
+    The findings reinforce several things that practitioners in this space understand intuitively: health care fraud dominates FCA enforcement; qui tam relators are the engine of recovery; the SEC&rsquo;s award rate is well under 50%; and enforcement output in any given year reflects investigative decisions made years earlier. What the dashboards add is a visual and interactive layer that makes these patterns concrete, comparable, and &mdash; most importantly &mdash; arguable.
   </p>
 
   <div class="callout">
     <strong>Note on data currency:</strong> The <a href="doj_fraud_dashboard.html">DOJ FCA dashboard</a> reflects official DOJ statistics through FY2025. The <a href="sec_macro_dashboard.html">SEC Whistleblower Program dashboard</a> reflects data through April 12, 2026. The <a href="DOJ_Health_Care_Fraud_Recoveries_2024.html">CY2024 health care case dashboard</a> covers calendar year 2024 as reported in DOJ press releases. All data is subject to revision as final figures are released.
   </div>
 
+  <!-- Footnotes -->
+  <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid #ccc; font-size: 0.85em; color: #666; line-height: 1.6;">
+    <p><sup>1</sup> The FY2025 defense fraud spike may also reflect the resolution of a pipeline of cases initiated in prior years rather than a shift in current enforcement priorities.</p>
+  </div>
+
   <!-- Footer -->
   <div class="post-footer">
-    <p><strong>Sanford Heisler Sharp McKnight</strong> &nbsp;·&nbsp; Whistleblower &amp; Fraud Analytics Project &nbsp;·&nbsp; March 2026</p>
+    <p><strong>Sanford Heisler Sharp McKnight</strong> &nbsp;&middot;&nbsp; Whistleblower &amp; Fraud Analytics Project &nbsp;&middot;&nbsp; March 2026</p>
     <p>
-      Data sources: <a href="https://www.justice.gov/civil/false-claims-act">DOJ Civil Division — False Claims Act</a> &nbsp;·&nbsp;
-      <a href="https://www.sec.gov/enforcement-litigation/whistleblower-program/whistleblower-program-notices-covered-action">SEC NOCAs</a> &nbsp;·&nbsp;
-      <a href="https://www.sec.gov/enforcement-litigation/whistleblower-program/final-orders-whistleblower-award-determinations">SEC Final Orders</a> &nbsp;·&nbsp;
+      Data sources: <a href="https://www.justice.gov/civil/false-claims-act">DOJ Civil Division &mdash; False Claims Act</a> &nbsp;&middot;&nbsp;
+      <a href="https://www.sec.gov/enforcement-litigation/whistleblower-program/whistleblower-program-notices-covered-action">SEC NOCAs</a> &nbsp;&middot;&nbsp;
+      <a href="https://www.sec.gov/enforcement-litigation/whistleblower-program/final-orders-whistleblower-award-determinations">SEC Final Orders</a> &nbsp;&middot;&nbsp;
       <a href="https://www.sec.gov/whistleblower/annual-reports">SEC Annual Reports to Congress</a>
     </p>
   </div>

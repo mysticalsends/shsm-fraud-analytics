@@ -67,8 +67,10 @@
     color: var(--muted);
     line-height: 1.6;
     margin: 4px 0 12px;
-    padding: 6px 10px;
-    border-left: 2px solid rgba(245, 158, 11, 0.3);
+    padding: 8px 12px;
+    border-left: 3px solid color-mix(in srgb, var(--accent) 45%, var(--border));
+    background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    border-radius: 0 4px 4px 0;
   }
 </style>
 </head>
@@ -166,6 +168,16 @@
     <div class="chart-wrapper"><canvas id="qtRecoveryChart"></canvas></div>
   </div>
 
+  <!-- Qui Tam Efficiency Chart -->
+  <div class="chart-panel">
+    <div class="chart-title">
+      <span>Qui Tam Recovery &amp; Relator Award per Suit Filed</span>
+      <span style="font-size:9px;color:var(--accent)">Per-Suit Efficiency</span>
+    </div>
+    <p class="chart-desc">Average FCA recovery from qui tam cases (green, left axis) and average relator award paid (purple, right axis) per new qui tam suit filed that year. Because suits typically resolve 3–7 years after filing, these values reflect the output of prior-year filings rather than same-year resolution — read as a macro efficiency signal, not a per-case prediction.</p>
+    <div class="chart-wrapper"><canvas id="efficiencyChart"></canvas></div>
+  </div>
+
   <!-- Data table -->
   <div class="table-panel">
     <div class="table-header">
@@ -205,7 +217,7 @@ let FCA_DATA = [];  // loaded from data/doj_fca.json
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let chartMode = 'stacked';  // 'stacked' | 'grouped' | 'pct'
-let mainChartInst = null, trendChartInst = null, donutChartInst = null, qtChartInst = null, qtRecoveryChartInst = null;
+let mainChartInst = null, trendChartInst = null, donutChartInst = null, qtChartInst = null, qtRecoveryChartInst = null, efficiencyChartInst = null;
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 const $  = id => document.getElementById(id);
@@ -282,6 +294,7 @@ function renderAll() {
   updateDonut();
   updateQtChart();
   updateQtRecoveryChart();
+  updateEfficiencyChart();
   updateTable();
 }
 
@@ -486,6 +499,60 @@ function updateQtRecoveryChart() {
         y: { stacked: true, grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true,
           ticks: { color: '#5a6a82', font: { family: 'Space Mono', size: 10 }, callback: v => '$' + (v/1e9).toFixed(1) + 'B' }
         }
+      }
+    }
+  });
+}
+
+// ── EFFICIENCY CHART ──────────────────────────────────────────────────────────
+function updateEfficiencyChart() {
+  const data = getRange().filter(d => d.qt > 0);
+  const labels = data.map(d => 'FY' + d.y);
+  if (efficiencyChartInst) efficiencyChartInst.destroy();
+  efficiencyChartInst = new Chart($('efficiencyChart').getContext('2d'), {
+    type: 'line',
+    data: { labels, datasets: [
+      {
+        label: 'Qui Tam Recovery per Suit Filed',
+        data: data.map(d => d.qtR / d.qt / 1e6),
+        borderColor: '#22c55e',
+        backgroundColor: 'rgba(34,197,94,0.08)',
+        borderWidth: 2, pointRadius: 2, pointHoverRadius: 5,
+        fill: true, tension: 0.3, yAxisID: 'yL',
+      },
+      {
+        label: 'Relator Award per Suit Filed',
+        data: data.map(d => d.ra / d.qt / 1e6),
+        borderColor: '#e879f9',
+        backgroundColor: 'rgba(232,121,249,0.05)',
+        borderWidth: 2, pointRadius: 2, pointHoverRadius: 5,
+        fill: true, tension: 0.3, yAxisID: 'yR',
+      },
+    ]},
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { color: '#5a6a82', font: { family: 'Space Mono', size: 10 }, boxWidth: 10, padding: 14 } },
+        tooltip: {
+          backgroundColor: '#0a0e1a', borderColor: '#1e2d45', borderWidth: 1,
+          titleFont: { family: 'Space Mono', size: 11 }, bodyFont: { family: 'Space Mono', size: 11 },
+          titleColor: '#e8edf5', bodyColor: '#e8edf5',
+          callbacks: {
+            label: ctx => {
+              const label = ctx.dataset.yAxisID === 'yL' ? 'Recovery/suit' : 'Award/suit';
+              return ` ${label}: $${ctx.raw.toFixed(1)}M`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#5a6a82', font: { family: 'Space Mono', size: 9 }, maxRotation: 45, maxTicksLimit: 20 } },
+        yL: { position: 'left',  beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' },
+          ticks: { color: '#22c55e', font: { family: 'Space Mono', size: 9 }, callback: v => '$' + v.toFixed(0) + 'M' },
+          title: { display: true, text: 'Recovery / Suit ($M)', color: '#22c55e', font: { family: 'Space Mono', size: 9 } } },
+        yR: { position: 'right', beginAtZero: true, grid: { drawOnChartArea: false },
+          ticks: { color: '#e879f9', font: { family: 'Space Mono', size: 9 }, callback: v => '$' + v.toFixed(1) + 'M' },
+          title: { display: true, text: 'Award / Suit ($M)', color: '#e879f9', font: { family: 'Space Mono', size: 9 } } },
       }
     }
   });
