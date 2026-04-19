@@ -96,18 +96,18 @@
   <!-- Year range controls -->
   <div class="controls-row">
     <span class="date-label">From FY</span>
-    <input type="number" id="yearFrom" min="1987" max="2025" value="2007" onchange="renderAll()">
+    <input type="number" id="yearFrom" min="1987" max="2025" value="1987" onchange="renderAll()">
     <span class="date-label">To FY</span>
     <input type="number" id="yearTo" min="1987" max="2025" value="2025" onchange="renderAll()">
     <button class="btn" id="btnAll"  onclick="setRange(1987,2025)">All Years</button>
     <button class="btn" id="btn10"   onclick="setRange(2016,2025)">Last 10 Yrs</button>
     <button class="btn" id="btn5"    onclick="setRange(2021,2025)">Last 5 Yrs</button>
-    <button class="btn" id="btnAgency" onclick="setRange(2007,2025)">Agency Data Era</button>
+    <button class="btn" id="btnAgency" onclick="setRange(2000,2025)">Since 2000</button>
   </div>
 
   <div class="note">
     <strong>Data note:</strong> Total FCA recoveries (all years) are from DOJ's official Fraud Statistics Overview document.
-    Agency-specific breakdowns (HHS/DOD/Other) are available for FY 2007–2025 from DOJ annual press releases and reports.
+    Agency-specific breakdowns (HHS/DOD/Other) are sourced from DOJ annual press releases and reports going back to FY 1987.
     HHS figures reflect health care and life sciences fraud matters. DOD figures reflect defense procurement fraud.
     "Other" includes all remaining federal agencies (SBA, housing, customs, cybersecurity, etc.).
   </div>
@@ -125,7 +125,7 @@
         <button class="toggle-btn" id="btnPct"     onclick="setChartMode('pct')">% Share</button>
       </div>
     </div>
-    <p class="chart-desc">Annual FCA recovery totals broken down by agency sector. Health &amp; Human Services (HHS) covers Medicare, Medicaid, and life-sciences fraud; DOD covers defense procurement; Other includes SBA, housing, customs, and cybersecurity matters. Toggle between Stacked, Grouped, and % Share views. Agency-level data is available for FY 2007–2025 only.</p>
+    <p class="chart-desc">Annual FCA recovery totals broken down by agency sector. Health &amp; Human Services (HHS) covers Medicare, Medicaid, and life-sciences fraud; DOD covers defense procurement; Other includes SBA, housing, customs, and cybersecurity matters. Toggle between Stacked, Grouped, and % Share views.</p>
     <div class="chart-subtitle" id="mainChartSub">Stacked bars show total and composition per year</div>
     <div class="chart-wrapper"><canvas id="mainChart"></canvas></div>
   </div>
@@ -133,8 +133,8 @@
   <!-- Two-column: line trend + donut current year -->
   <div class="two-col">
     <div class="chart-panel">
-      <div class="chart-title">Trend: HHS vs DOD vs Total</div>
-      <p class="chart-desc">Lines trace the dollar trajectory of Health &amp; Human Services, Department of Defense, and combined total recoveries over the selected period, highlighting years of peak enforcement activity.</p>
+      <div class="chart-title">Trend: HHS vs DOD vs Other Agencies vs Total</div>
+      <p class="chart-desc">Lines trace the dollar trajectory of Health &amp; Human Services, Department of Defense, Other Agencies, and combined total recoveries over the selected period.</p>
       <div class="chart-wrapper short"><canvas id="trendChart"></canvas></div>
     </div>
     <div class="chart-panel">
@@ -212,7 +212,7 @@
 <script>
 // ── DATA ─────────────────────────────────────────────────────────────────────
 // Totals (in dollars) from DOJ Fraud Statistics Overview spreadsheet
-// Agency breakdown from DOJ annual press releases (FY2007-2025)
+// Agency breakdown from DOJ annual press releases (FY1987-2025)
 let FCA_DATA = [];  // loaded from data/doj_fca.json
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
@@ -260,7 +260,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       sel.appendChild(opt);
     }
   });
-  setRange(2007, 2025);
+  setRange(1987, 2025);
 });
 
 function setRange(from, to) {
@@ -270,7 +270,7 @@ function setRange(from, to) {
   if (from===1987 && to===2025) $('btnAll').classList.add('active');
   else if (from===2016 && to===2025) $('btn10').classList.add('active');
   else if (from===2021 && to===2025) $('btn5').classList.add('active');
-  else if (from===2007 && to===2025) $('btnAgency').classList.add('active');
+  else if (from===2000 && to===2025) $('btnAgency').classList.add('active');
   renderAll();
 }
 
@@ -390,9 +390,10 @@ function updateTrendChart() {
   trendChartInst = new Chart($('trendChart').getContext('2d'), {
     type:'line',
     data:{ labels, datasets:[
-      { label:'Total', data:data.map(d=>d.t), borderColor:'#00d4ff', backgroundColor:'rgba(0,212,255,0.05)', borderWidth:2, pointRadius:2, pointHoverRadius:5, fill:true, tension:0.3 },
-      { label:'HHS',   data:data.map(d=>d.hhs), borderColor:'#f59e0b', backgroundColor:'rgba(245,158,11,0.08)', borderWidth:2, pointRadius:2, pointHoverRadius:5, fill:true, tension:0.3 },
-      { label:'DOD',   data:data.map(d=>d.dod), borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,0.08)', borderWidth:2, pointRadius:2, pointHoverRadius:5, fill:true, tension:0.3 },
+      { label:'Total',  data:data.map(d=>d.t),     borderColor:'#00d4ff', backgroundColor:'rgba(0,212,255,0.05)',   borderWidth:2, pointRadius:2, pointHoverRadius:5, fill:false, tension:0.3 },
+      { label:'HHS',    data:data.map(d=>d.hhs),   borderColor:'#f59e0b', backgroundColor:'rgba(245,158,11,0.08)', borderWidth:2, pointRadius:2, pointHoverRadius:5, fill:false, tension:0.3 },
+      { label:'DOD',    data:data.map(d=>d.dod),   borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,0.08)', borderWidth:2, pointRadius:2, pointHoverRadius:5, fill:false, tension:0.3 },
+      { label:'Other',  data:data.map(d=>d.other), borderColor:'#8b5cf6', backgroundColor:'rgba(139,92,246,0.08)', borderWidth:2, pointRadius:2, pointHoverRadius:5, fill:false, tension:0.3 },
     ]},
     options:{ responsive:true, maintainAspectRatio:false,
       plugins:{ legend:{ display:true, position:'top', labels:{ color:'#5a6a82', font:{family:'Space Mono',size:9}, boxWidth:8, padding:12 }},

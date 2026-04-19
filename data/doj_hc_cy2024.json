@@ -1,12 +1,12 @@
 {
   "description": "DOJ healthcare FCA recoveries \u2014 calendar year 2024",
   "source": "DOJ_FCA_HealthCare_CY2024.xlsx",
-  "totalRecords": 111,
+  "totalRecords": 110,
   "summary": {
-    "totalRecovered": 2647604481.09,
-    "totalCases": 111,
-    "casesWithAmounts": 111,
-    "avgRecovery": 23852292.62,
+    "totalRecovered": 2640104481.09,
+    "totalCases": 110,
+    "casesWithAmounts": 110,
+    "avgRecovery": 24001004.37,
     "largestSettlement": 650000000,
     "byFraudType": {
       "Anti-Kickback / Referral": {
@@ -50,8 +50,8 @@
         "cases": 1
       },
       "Drug Dispensing / Opioids": {
-        "recovered": 1143088378,
-        "cases": 6
+        "recovered": 1135588378,
+        "cases": 5
       }
     },
     "byDefendantType": {
@@ -60,8 +60,8 @@
         "cases": 3
       },
       "Pharmacy": {
-        "recovered": 146013530.21,
-        "cases": 8
+        "recovered": 138513530.21,
+        "cases": 7
       },
       "Clinical Laboratory / Diagnostic Imaging": {
         "recovered": 164321088.78,
@@ -258,8 +258,8 @@
         "cases": 5
       },
       "Northern District of Ohio": {
-        "recovered": 120700000,
-        "cases": 4
+        "recovered": 113200000,
+        "cases": 3
       },
       "District of Minnesota": {
         "recovered": 13630000,
@@ -1055,18 +1055,6 @@
       "amountStr": "$2.5M",
       "location": "Middle District of Florida",
       "prefix": "usao-mdfl"
-    },
-    {
-      "date": "2024-07-11",
-      "title": "Rite Aid Corporation and Affiliates (CSA)",
-      "url": "https://www.justice.gov/usao-ndoh/pr/rite-aid-corporation-and-affiliates-agree-settle-false-claims-act-and-controlled",
-      "defendant": "Rite Aid Corporation and Affiliates (CSA)",
-      "defType": "Pharmacy",
-      "fraudType": "Drug Dispensing / Opioids",
-      "amount": 7500000,
-      "amountStr": "$7.5M",
-      "location": "Northern District of Ohio",
-      "prefix": "usao-ndoh"
     },
     {
       "date": "2024-07-10",

@@ -81,7 +81,7 @@
   </header>
 
   <div class="methodology">
-    <strong>Methodology note:</strong> This report analyzes SEC's notices of covered actions and the final orders, published on the SEC's website.
+    <strong>Data note:</strong> This report analyzes SEC's notices of covered actions and the final orders, published on the SEC's website.
   </div>
 
   <div class="stats">
@@ -124,7 +124,7 @@
   <!-- SECTION 3 -->
   <div class="section-divider">
     <h2>By SEC Commissioner</h2>
-    <p>Actions grouped by the chair in office when each order was published. Acting chairs marked (A). Transition months assigned to the chair holding office for the majority of that month.</p>
+    <p>Actions grouped by the chair in office when each order was published. Transition months assigned to the chair holding office for the majority of that month.</p>
   </div>
 
   <div id="commissionerLegend" class="legend-row" style="margin-bottom:16px;flex-wrap:wrap;gap:10px;"></div>
@@ -182,7 +182,7 @@
 
   <div class="chart-panel">
     <div class="chart-title">Chart 5 — Annual Tips vs. NOCAs vs. Final Orders</div>
-    <div class="chart-sub">Bars: tip submissions (left axis, fiscal year) · Lines: annual NOCAs and final orders (right axis, calendar year) · FY2024 pending SEC Annual Report</div>
+    <div class="chart-sub">Bars: tip submissions (left axis) · Lines: NOCAs and final orders (right axis) · All counts aligned to fiscal year (Oct–Sep)</div>
     <div class="chart-wrapper"><canvas id="chart5"></canvas></div>
   </div>
 
@@ -543,14 +543,7 @@ function renderChart3a(months, years) {
     options: {
       ...baseChartOpts({ y: { ...DARK_OPTS, stacked: true } }),
       plugins: {
-        legend: {
-          labels: { color: '#5a6a82', font: { family: 'Space Mono', size: 9 },
-            generateLabels: () => [
-              {text:'Awards (solid)',fillStyle:'#ffffff99',strokeStyle:'#fff',lineWidth:1},
-              {text:'Denials (muted)',fillStyle:'#ffffff44',strokeStyle:'#fff',lineWidth:1}
-            ]
-          }
-        },
+        legend: { display: false },
         periodBands: { periods: COMMISSIONERS }
       }
     }
@@ -653,14 +646,7 @@ function renderChart4a(months, years) {
     options: {
       ...baseChartOpts({ y: { ...DARK_OPTS, stacked: true } }),
       plugins: {
-        legend: {
-          labels: { color: '#5a6a82', font: { family: 'Space Mono', size: 9 },
-            generateLabels: () => [
-              {text:'Awards (solid)',   fillStyle:'#ffffff99', strokeStyle:'#fff', lineWidth:1},
-              {text:'Denials (muted)', fillStyle:'#ffffff44', strokeStyle:'#fff', lineWidth:1}
-            ]
-          }
-        },
+        legend: { display: false },
         periodBands: { periods: PRESIDENTS }
       }
     }
@@ -721,11 +707,11 @@ function renderChart5() {
   const tipCounts = TIPS.map(t => t.count);
 
   const nocaByYear  = TIPS.map(t => {
-    const ms = monthsInRange(`${t.fy}-01`, `${t.fy}-12`);
+    const ms = monthsInRange(`${t.fy - 1}-10`, `${t.fy}-09`);
     return sumMonths(NOCA_MONTHLY, ms);
   });
   const ordersByYear = TIPS.map(t => {
-    const ms = monthsInRange(`${t.fy}-01`, `${t.fy}-12`);
+    const ms = monthsInRange(`${t.fy - 1}-10`, `${t.fy}-09`);
     return sumMonths(AWARDS_MONTHLY, ms) + sumMonths(DENIALS_MONTHLY, ms);
   });
 
